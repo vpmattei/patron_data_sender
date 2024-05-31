@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Data Post Handler</title>
+    <!-- Include the hosted JavaScript file -->
+    <script>
+      window.onload = function () {
+        // Parse the URL parameters to get data
+        const params = new URLSearchParams(window.location.search);
+        const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
+
+        // Here, post the data to the actual endpoint
+        fetch("https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/", {
+          // Replace with your actual endpoint
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log("Success:", result);
+            alert("Data posted successfully");
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Failed to post data");
+          });
+      };
+    </script>
+  </head>
+  <body>
+    <h1>Processing your data...</h1>
+  </body>
+</html>
