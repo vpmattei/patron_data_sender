@@ -18,11 +18,35 @@
         padding: 20px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
       }
+      #redirectButton {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      #redirectButton:hover {
+        background-color: #0056b3;
+      }
     </style>
   </head>
   <body>
     <div id="message">Processing your data...</div>
+    <button
+      id="redirectButton"
+      style="display: none"
+      onclick="redirectToGoogleEarth()"
+    >
+      Go to Google Earth
+    </button>
     <script>
+      function redirectToGoogleEarth() {
+        window.location.href = "https://earth.google.com/web";
+      }
+
       window.onload = function () {
         // Parse the URL parameters to get data and return URL
         const params = new URLSearchParams(window.location.search);
@@ -62,21 +86,13 @@
           .then((response) => response.json())
           .then((result) => {
             console.log("Success:", result);
-            messageDiv.innerHTML +=
-              "<p>Data posted successfully. Redirecting...</p>";
-            // Redirect back to the original page with success status after 1.5 seconds
-            setTimeout(() => {
-              window.location.href = "https://earth.google.com/web";
-            }, 1500);
+            messageDiv.innerHTML += "<p>Data posted successfully.</p>";
+            document.getElementById("redirectButton").style.display = "block";
           })
           .catch((error) => {
             console.error("Error:", error);
-            messageDiv.innerHTML +=
-              "<p>Failed to post data. Redirecting...</p>";
-            // Redirect back to the original page with error status after 1.5 seconds
-            setTimeout(() => {
-              window.location.href = "https://earth.google.com/web";
-            }, 1500);
+            messageDiv.innerHTML += "<p>Failed to post data.</p>";
+            document.getElementById("redirectButton").style.display = "block";
           });
       };
     </script>
