@@ -60,32 +60,6 @@
           body: JSON.stringify(data),
         })
           .then((response) => response.json())
-          .then((result) => {
-            console.log("Success:", result);
-            messageDiv.innerHTML +=
-              "<p>Data posted successfully. You can close this window.</p>";
-            // Post to Google Earth
-            fetch(
-              "https://earth.google.com/earth/rpc/cc/u/0/getmapdata?at=AAX3J7BDMY0PaU5hl-Q4649gnb2Fsq68Ow:1717170939805&rt=b",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-              .then((response) => response.json())
-              .then((result) => {
-                console.log("POST to Google Earth success:", result);
-                messageDiv.innerHTML +=
-                  "<p>POST to Google Earth was successful.</p>";
-              })
-              .catch((error) => {
-                console.error("Error during POST to Google Earth:", error);
-                messageDiv.innerHTML +=
-                  "<p>Failed to POST to Google Earth.</p>";
-              });
-          })
           .catch((error) => {
             console.error("Error:", error);
             messageDiv.innerHTML +=
