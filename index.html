@@ -6,12 +6,13 @@
     <!-- Include the hosted JavaScript file -->
     <script>
       window.onload = function () {
-        // Parse the URL parameters to get data
+        // Parse the URL parameters to get data and return URL
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
+        const returnUrl = params.get("returnUrl"); // Get the return URL parameter
 
         // Here, post the data to the actual endpoint
-        fetch("https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/", {
+        fetch("https://your-endpoint.com/post", {
           // Replace with your actual endpoint
           method: "POST",
           headers: {
@@ -23,10 +24,14 @@
           .then((result) => {
             console.log("Success:", result);
             alert("Data posted successfully");
+            // Redirect back to the original page with success status
+            window.location.href = `${returnUrl}?status=success`;
           })
           .catch((error) => {
             console.error("Error:", error);
             alert("Failed to post data");
+            // Redirect back to the original page with error status
+            window.location.href = `${returnUrl}?status=error`;
           });
       };
     </script>
