@@ -1,43 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Data Post Handler</title>
-  <style>
-    body {
-      background: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    #message {
-      padding: 20px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-  </style>
-</head>
-<body>
-  <div id="message">Processing your data...</div>
-  <script>
-    window.onload = function() {
-      // Parse the URL parameters to get data and return URL
-      const params = new URLSearchParams(window.location.search);
-      const data = JSON.parse(decodeURIComponent(params.get('data'))); // Assuming data is passed as a JSON string
-      const returnUrl = params.get('returnUrl'); // Get the return URL parameter
+  <head>
+    <meta charset="UTF-8" />
+    <title>Data Post Handler</title>
+    <style>
+      body {
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      #message {
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">Processing your data...</div>
+    <script>
+      window.onload = function () {
+        // Parse the URL parameters to get data and return URL
+        const params = new URLSearchParams(window.location.search);
+        const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
+        const returnUrl = params.get("returnUrl"); // Get the return URL parameter
 
-      // Extract information from the data
-      const numNFZs = data.NFZs.length;
-      const numAOIs = data.AOIs.length;
-      const start = data.StartEnd.start ? `Start: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}` : 'Start: Not set';
-      const end = data.StartEnd.end ? `End: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}` : 'End: Not set';
+        // Extract information from the data
+        const numNFZs = data.NFZs.length;
+        const numAOIs = data.AOIs.length;
+        const start = data.StartEnd.start
+          ? `Start: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
+          : "Start: Not set";
+        const end = data.StartEnd.end
+          ? `End: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
+          : "End: Not set";
 
-      // Show a message in the middle of the screen
-      const messageDiv = document.getElementById('message');
-      messageDiv.innerHTML = `
+        // Show a message in the middle of the screen
+        const messageDiv = document.getElementById("message");
+        messageDiv.innerHTML = `
         <p>Data Summary:</p>
         <p>Number of NFZs: ${numNFZs}</p>
         <p>Number of AOIs: ${numAOIs}</p>
@@ -46,32 +50,35 @@
         <p>Posting data...</p>
       `;
 
-      // Here, post the data to the actual endpoint
-      fetch('https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/', { // Replace with your actual endpoint
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(result => {
-        console.log('Success:', result);
-        messageDiv.innerHTML += '<p>Data posted successfully. Redirecting...</p>';
-        // Redirect back to the original page with success status after 1.5 seconds
-        setTimeout(() => {
-          window.location.href = 'https://earth.google.com/web';
-        }, 1500);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        messageDiv.innerHTML += '<p>Failed to post data. Redirecting...</p>';
-        // Redirect back to the original page with error status after 1.5 seconds
-        setTimeout(() => {
-          window.location.href = 'https://earth.google.com/web';
-        }, 1500);
-      });
-    };
-  </script>
-</body>
+        // Here, post the data to the actual endpoint
+        fetch("https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/", {
+          // Replace with your actual endpoint
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            console.log("Success:", result);
+            messageDiv.innerHTML +=
+              "<p>Data posted successfully. Redirecting...</p>";
+            // Redirect back to the original page with success status after 1.5 seconds
+            setTimeout(() => {
+              window.location.href = "https://earth.google.com/web";
+            }, 1500);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            messageDiv.innerHTML +=
+              "<p>Failed to post data. Redirecting...</p>";
+            // Redirect back to the original page with error status after 1.5 seconds
+            setTimeout(() => {
+              window.location.href = "https://earth.google.com/web";
+            }, 1500);
+          });
+      };
+    </script>
+  </body>
 </html>
