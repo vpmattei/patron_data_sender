@@ -18,52 +18,11 @@
         padding: 20px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
       }
-      #redirectButton {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: white;
-        background-color: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      #redirectButton:hover {
-        background-color: #0056b3;
-      }
     </style>
   </head>
   <body>
     <div id="message">Processing your data...</div>
-    <button
-      id="redirectButton"
-      style="display: none"
-      onclick="postToGoogleEarth()"
-    >
-      Post to Google Earth
-    </button>
     <script>
-      function postToGoogleEarth() {
-        fetch(
-          "https://earth.google.com/earth/rpc/cc/u/0/getmapdata?at=AAX3J7BDMY0PaU5hl-Q4649gnb2Fsq68Ow:1717170939805&rt=b",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => response.json())
-          .then((result) => {
-            console.log("POST to Google Earth success:", result);
-            alert("POST to Google Earth was successful");
-          })
-          .catch((error) => {
-            console.error("Error during POST to Google Earth:", error);
-            alert("Failed to POST to Google Earth");
-          });
-      }
-
       window.onload = function () {
         // Parse the URL parameters to get data and return URL
         const params = new URLSearchParams(window.location.search);
@@ -103,13 +62,34 @@
           .then((response) => response.json())
           .then((result) => {
             console.log("Success:", result);
-            messageDiv.innerHTML += "<p>Data posted successfully.</p>";
-            document.getElementById("redirectButton").style.display = "block";
+            messageDiv.innerHTML +=
+              "<p>Data posted successfully. You can close this window.</p>";
+            // Post to Google Earth
+            fetch(
+              "https://earth.google.com/earth/rpc/cc/u/0/getmapdata?at=AAX3J7BDMY0PaU5hl-Q4649gnb2Fsq68Ow:1717170939805&rt=b",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((response) => response.json())
+              .then((result) => {
+                console.log("POST to Google Earth success:", result);
+                messageDiv.innerHTML +=
+                  "<p>POST to Google Earth was successful.</p>";
+              })
+              .catch((error) => {
+                console.error("Error during POST to Google Earth:", error);
+                messageDiv.innerHTML +=
+                  "<p>Failed to POST to Google Earth.</p>";
+              });
           })
           .catch((error) => {
             console.error("Error:", error);
-            messageDiv.innerHTML += "<p>Failed to post data.</p>";
-            document.getElementById("redirectButton").style.display = "block";
+            messageDiv.innerHTML +=
+              "<p>Failed to post data. Please try again with a valid .kml file.</p>";
           });
       };
     </script>
