@@ -3,20 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <title>Data Post Handler</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
-        background: white;
+        background: #f4f4f9;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
         margin: 0;
-        font-family: Arial, sans-serif;
+        font-family: "Roboto", sans-serif;
         text-align: center;
       }
       #message {
         padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        background: white;
+        border-radius: 8px;
+        max-width: 500px;
+      }
+      p {
+        margin: 10px 0;
+        font-size: 16px;
+      }
+      p.title {
+        font-size: 20px;
+        font-weight: 700;
+      }
+      p.success {
+        color: green;
+      }
+      p.error {
+        color: red;
       }
     </style>
   </head>
@@ -24,10 +45,9 @@
     <div id="message">Processing your data...</div>
     <script>
       window.onload = function () {
-        // Parse the URL parameters to get data and return URL
+        // Parse the URL parameters to get data
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
-        const returnUrl = params.get("returnUrl"); // Get the return URL parameter
 
         // Extract information from the data
         const numNFZs = data.NFZs.length;
@@ -42,7 +62,7 @@
         // Show a message in the middle of the screen
         const messageDiv = document.getElementById("message");
         messageDiv.innerHTML = `
-        <p>Data Summary:</p>
+        <p class="title">Data Summary</p>
         <p>Number of NFZs: ${numNFZs}</p>
         <p>Number of AOIs: ${numAOIs}</p>
         <p>${start}</p>
@@ -60,10 +80,15 @@
           body: JSON.stringify(data),
         })
           .then((response) => response.json())
+          .then((result) => {
+            console.log("Success:", result);
+            messageDiv.innerHTML +=
+              '<p class="success">Data posted successfully. You can close this window.</p>';
+          })
           .catch((error) => {
             console.error("Error:", error);
             messageDiv.innerHTML +=
-              "<p>Failed to post data. Please try again with a valid .kml file.</p>";
+              "<p class='error'>Failed to post data. Please try again with a valid .kml file.</p>";
           });
       };
     </script>
