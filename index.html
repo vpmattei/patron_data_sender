@@ -38,13 +38,30 @@
     <button
       id="redirectButton"
       style="display: none"
-      onclick="redirectToGoogleEarth()"
+      onclick="postToGoogleEarth()"
     >
-      Go to Google Earth
+      Post to Google Earth
     </button>
     <script>
-      function redirectToGoogleEarth() {
-        window.location.href = "https://earth.google.com/web";
+      function postToGoogleEarth() {
+        fetch(
+          "https://earth.google.com/earth/rpc/cc/u/0/getmapdata?at=AAX3J7BDMY0PaU5hl-Q4649gnb2Fsq68Ow:1717170939805&rt=b",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((result) => {
+            console.log("POST to Google Earth success:", result);
+            alert("POST to Google Earth was successful");
+          })
+          .catch((error) => {
+            console.error("Error during POST to Google Earth:", error);
+            alert("Failed to POST to Google Earth");
+          });
       }
 
       window.onload = function () {
