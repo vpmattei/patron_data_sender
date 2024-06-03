@@ -34,9 +34,11 @@
         font-weight: 700;
       }
       p.success {
+        font-size: 16px;
         color: green;
       }
       p.error {
+        font-size: 16px;
         color: red;
       }
       #loader {
@@ -68,13 +70,13 @@
         <div id="loader"></div>
       </div>
       <div id="dataSummary">
+        <div id="resultMessage"></div>
         <p class="title">Resumo dos Dados</p>
         <p id="numNFZs"></p>
         <p id="numAOIs"></p>
         <p id="startCoords"></p>
         <p id="endCoords"></p>
       </div>
-      <div id="resultMessage" style="display: none"></div>
     </div>
     <script>
       window.onload = function () {
@@ -112,7 +114,6 @@
           setTimeout(() => {
             document.getElementById("postingMessage").style.display = "none";
             document.getElementById("dataSummary").style.display = "block";
-            document.getElementById("resultMessage").style.display = "block";
             document.getElementById("resultMessage").innerHTML = resultMessage;
           }, remainingTime);
         }
