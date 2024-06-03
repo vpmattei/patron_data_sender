@@ -74,6 +74,7 @@
         <p id="startCoords"></p>
         <p id="endCoords"></p>
       </div>
+      <div id="resultMessage" style="display: none"></div>
     </div>
     <script>
       window.onload = function () {
@@ -111,7 +112,8 @@
           setTimeout(() => {
             document.getElementById("postingMessage").style.display = "none";
             document.getElementById("dataSummary").style.display = "block";
-            messageDiv.innerHTML += resultMessage;
+            document.getElementById("resultMessage").style.display = "block";
+            document.getElementById("resultMessage").innerHTML = resultMessage;
           }, remainingTime);
         }
 
