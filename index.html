@@ -56,10 +56,25 @@
           transform: rotate(360deg);
         }
       }
+      #dataSummary {
+        display: none;
+      }
     </style>
   </head>
   <body>
-    <div id="message">Processando seus dados...</div>
+    <div id="message">
+      <div id="postingMessage">
+        <p>Enviando dados...</p>
+        <div id="loader"></div>
+      </div>
+      <div id="dataSummary">
+        <p class="title">Resumo dos Dados</p>
+        <p id="numNFZs"></p>
+        <p id="numAOIs"></p>
+        <p id="startCoords"></p>
+        <p id="endCoords"></p>
+      </div>
+    </div>
     <script>
       window.onload = function () {
         // Parse the URL parameters to get data
@@ -76,19 +91,15 @@
           ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
           : "Fim: Não definido";
 
-        // Show a message in the middle of the screen
-        const messageDiv = document.getElementById("message");
-        messageDiv.innerHTML = `
-        <p class="title">Resumo dos Dados</p>
-        <p>Número de NFZs: ${numNFZs}</p>
-        <p>Número de AOIs: ${numAOIs}</p>
-        <p>${start}</p>
-        <p>${end}</p>
-        <div id="postingMessage">
-          <p>Enviando dados...</p>
-          <div id="loader"></div>
-        </div>
-      `;
+        // Populate data summary
+        document.getElementById(
+          "numNFZs"
+        ).textContent = `Número de NFZs: ${numNFZs}`;
+        document.getElementById(
+          "numAOIs"
+        ).textContent = `Número de AOIs: ${numAOIs}`;
+        document.getElementById("startCoords").textContent = start;
+        document.getElementById("endCoords").textContent = end;
 
         // Show loading animation and ensure minimum display time of 2 seconds
         const postStartTime = Date.now();
@@ -99,6 +110,7 @@
           const remainingTime = Math.max(0, 2000 - elapsedTime);
           setTimeout(() => {
             document.getElementById("postingMessage").style.display = "none";
+            document.getElementById("dataSummary").style.display = "block";
             messageDiv.innerHTML += resultMessage;
           }, remainingTime);
         }
