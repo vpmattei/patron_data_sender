@@ -39,6 +39,23 @@
       p.error {
         color: red;
       }
+      #loader {
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #007bff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
@@ -67,8 +84,24 @@
         <p>Número de AOIs: ${numAOIs}</p>
         <p>${start}</p>
         <p>${end}</p>
-        <p id="postingMessage">Enviando dados...</p>
+        <div id="postingMessage">
+          <p>Enviando dados...</p>
+          <div id="loader"></div>
+        </div>
       `;
+
+        // Show loading animation and ensure minimum display time of 2 seconds
+        const postStartTime = Date.now();
+
+        // Function to hide loading message and show result message
+        function showResultMessage(resultMessage) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+          setTimeout(() => {
+            document.getElementById("postingMessage").style.display = "none";
+            messageDiv.innerHTML += resultMessage;
+          }, remainingTime);
+        }
 
         // Here, post the data to the actual endpoint
         fetch("https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/", {
@@ -82,14 +115,15 @@
           .then((response) => response.json())
           .then((result) => {
             console.log("Success:", result);
-            document.getElementById("postingMessage").style.display = "none";
-            messageDiv.innerHTML +=
-              '<p class="success">Dados enviados com sucesso. Você pode fechar esta janela.</p>';
+            showResultMessage(
+              '<p class="success">Dados enviados com sucesso. Você pode fechar esta janela.</p>'
+            );
           })
           .catch((error) => {
             console.error("Erro:", error);
-            document.getElementById("postingMessage").style.display = "none";
-            messageDiv.innerHTML += `<p class='error'>Falha ao enviar os dados. Por favor, tente novamente com um arquivo .kml válido. Erro: ${error.message}</p>`;
+            showResultMessage(
+              `<p class='error'>Falha ao enviar os dados. Por favor, tente novamente com um arquivo .kml válido. Erro: ${error.message}</p>`
+            );
           });
       };
     </script>
