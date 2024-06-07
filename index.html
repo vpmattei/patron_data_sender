@@ -94,8 +94,10 @@
       <div id="dataSummary">
         <div id="resultMessage"></div>
         <p class="title">Resumo dos Dados</p>
+        <h2>No-Fly-Zones (NFZs)</h2>
         <p id="numNFZsZones"></p>
         <p id="numNFZsPaths"></p>
+        <h2>Regiões de Interesse</h2>
         <p id="numAOIsZones"></p>
         <p id="numAOIsPaths"></p>
         <p id="startCoords"></p>
@@ -123,16 +125,16 @@
         // Populate data summary
         document.getElementById(
           "numNFZsZones"
-        ).textContent = `Número de No-Fly-Zones: ${numNFZsZones}`;
+        ).textContent = `Número de Áreas: ${numNFZsZones}`;
         document.getElementById(
           "numNFZsPaths"
-        ).textContent = `Número de No-Fly-Paths: ${numNFZsPaths}`;
+        ).textContent = `Número de Trajetos: ${numNFZsPaths}`;
         document.getElementById(
           "numAOIsZones"
-        ).textContent = `Número de Zonas de Interesse: ${numAOIsZones}`;
+        ).textContent = `Número de Áreas: ${numAOIsZones}`;
         document.getElementById(
           "numAOIsPaths"
-        ).textContent = `Número de Linhas de Interesse: ${numAOIsPaths}`;
+        ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
         document.getElementById("startCoords").textContent = start;
         document.getElementById("endCoords").textContent = end;
 
