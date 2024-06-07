@@ -109,10 +109,10 @@
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
 
         // Extract information from the data
-        const numNFZsZones = data.NFZs.Zones.length;
-        const numNFZsPaths = data.NFZs.Paths.length;
-        const numAOIsZones = data.AOIs.Zones.length;
-        const numAOIsPaths = data.AOIs.Paths.length;
+        const numNFZsZones = data.NFZs.polygons.length;
+        const numNFZsPaths = data.NFZs.paths.length;
+        const numAOIsZones = data.AOIs.polygons.length;
+        const numAOIsPaths = data.AOIs.paths.length;
         const start = data.StartEnd.start
           ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
           : "Início: Não definido";
