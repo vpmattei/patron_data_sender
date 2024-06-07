@@ -94,8 +94,10 @@
       <div id="dataSummary">
         <div id="resultMessage"></div>
         <p class="title">Resumo dos Dados</p>
-        <p id="numNFZs"></p>
-        <p id="numAOIs"></p>
+        <p id="numNFZsZones"></p>
+        <p id="numNFZsPaths"></p>
+        <p id="numAOIsZones"></p>
+        <p id="numAOIsPaths"></p>
         <p id="startCoords"></p>
         <p id="endCoords"></p>
       </div>
@@ -107,8 +109,10 @@
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
 
         // Extract information from the data
-        const numNFZs = data.NFZs.length;
-        const numAOIs = data.AOIs.length;
+        const numNFZsZones = data.NFZs.Zones.length;
+        const numNFZsPaths = data.NFZs.Paths.length;
+        const numAOIsZones = data.AOIs.Zones.length;
+        const numAOIsPaths = data.AOIs.Paths.length;
         const start = data.StartEnd.start
           ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
           : "Início: Não definido";
@@ -118,11 +122,17 @@
 
         // Populate data summary
         document.getElementById(
-          "numNFZs"
-        ).textContent = `Número de NFZs: ${numNFZs}`;
+          "numNFZsZones"
+        ).textContent = `Número de No-Fly-Zones: ${numNFZsZones}`;
         document.getElementById(
-          "numAOIs"
-        ).textContent = `Número de AOIs: ${numAOIs}`;
+          "numNFZsPaths"
+        ).textContent = `Número de No-Fly-Paths: ${numNFZsPaths}`;
+        document.getElementById(
+          "numAOIsZones"
+        ).textContent = `Número de Zonas de Interesse: ${numAOIsZones}`;
+        document.getElementById(
+          "numAOIsPaths"
+        ).textContent = `Número de Linhas de Interesse: ${numAOIsPaths}`;
         document.getElementById("startCoords").textContent = start;
         document.getElementById("endCoords").textContent = end;
 
