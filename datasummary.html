@@ -78,7 +78,9 @@
         <p id="numAOIsPaths"></p>
         <p id="startCoords"></p>
         <p id="endCoords"></p>
-        <button id="viewMissionSummary">View Mission Summary</button>
+        <button onclick="redirectToMissionSummary()">
+          Ver resumo da missão
+        </button>
       </div>
     </div>
     <script>
@@ -115,8 +117,8 @@
         document.getElementById("startCoords").textContent = start;
         document.getElementById("endCoords").textContent = end;
 
-        // Add event listener to the button to redirect to mission summary
-        document.getElementById("viewMissionSummary").onclick = function () {
+        // Function to redirect to mission summary
+        window.redirectToMissionSummary = function () {
           window.location.href = `/missionsummary.html?data=${encodeURIComponent(
             JSON.stringify(data)
           )}`;
