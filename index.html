@@ -108,6 +108,7 @@
         fetch("http://127.0.0.1:8083/api/services/planner_json", {
           method: "POST",
           headers: {
+            "accept": "application/json",
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
