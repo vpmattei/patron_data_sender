@@ -88,6 +88,7 @@
         // Parse the URL parameters to get data
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
+        console.log(data);
 
         // Show loading animation and ensure minimum display time of 2 seconds
         const postStartTime = Date.now();
