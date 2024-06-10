@@ -97,7 +97,7 @@
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
           setTimeout(() => {
-            window.location.href = `/datasummary?data=${encodeURIComponent(
+            window.location.href = `/datasummary.html?data=${encodeURIComponent(
               JSON.stringify(data)
             )}`;
           }, remainingTime);
