@@ -74,10 +74,6 @@
           transform: rotate(360deg);
         }
       }
-
-      #dataSummary {
-        display: none;
-      }
     </style>
   </head>
   <body>
@@ -86,18 +82,6 @@
         <p>Enviando dados...</p>
         <div id="loader"></div>
       </div>
-      <div id="dataSummary">
-        <div id="resultMessage"></div>
-        <h1>Resumo dos Dados</h1>
-        <h2>No-Fly-Zones (NFZs)</h2>
-        <p id="numNFZsZones"></p>
-        <p id="numNFZsPaths"></p>
-        <h2>Regiões de Interesse</h2>
-        <p id="numAOIsZones"></p>
-        <p id="numAOIsPaths"></p>
-        <p id="startCoords"></p>
-        <p id="endCoords"></p>
-      </div>
     </div>
     <script>
       window.onload = function () {
@@ -105,45 +89,17 @@
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
 
-        // Extract information from the data
-        const numNFZsZones = data.NFZs.polygons.length;
-        const numNFZsPaths = data.NFZs.paths.length;
-        const numAOIsZones = data.AOIs.polygons.length;
-        const numAOIsPaths = data.AOIs.paths.length;
-        const start = data.StartEnd.start
-          ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
-          : "Início: Não definido";
-        const end = data.StartEnd.end
-          ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
-          : "Fim: Não definido";
-
-        // Populate data summary
-        document.getElementById(
-          "numNFZsZones"
-        ).textContent = `Número de Áreas: ${numNFZsZones}`;
-        document.getElementById(
-          "numNFZsPaths"
-        ).textContent = `Número de Trajetos: ${numNFZsPaths}`;
-        document.getElementById(
-          "numAOIsZones"
-        ).textContent = `Número de Áreas: ${numAOIsZones}`;
-        document.getElementById(
-          "numAOIsPaths"
-        ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
-        document.getElementById("startCoords").textContent = start;
-        document.getElementById("endCoords").textContent = end;
-
         // Show loading animation and ensure minimum display time of 2 seconds
         const postStartTime = Date.now();
 
-        // Function to hide loading message and show result message
-        function showResultMessage(resultMessage) {
+        // Function to redirect to data summary page
+        function redirectToSummary(resultMessage) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
           setTimeout(() => {
-            document.getElementById("postingMessage").style.display = "none";
-            document.getElementById("dataSummary").style.display = "block";
-            document.getElementById("resultMessage").innerHTML = resultMessage;
+            window.location.href = `/datasummary?data=${encodeURIComponent(
+              JSON.stringify(data)
+            )}`;
           }, remainingTime);
         }
 
@@ -159,15 +115,11 @@
           .then((response) => response.json())
           .then((result) => {
             console.log("Success:", result);
-            showResultMessage(
-              '<p class="success">Dados enviados com sucesso. Você pode fechar esta janela.</p>'
-            );
+            redirectToSummary();
           })
           .catch((error) => {
             console.error("Erro:", error);
-            showResultMessage(
-              `<p class='error'>Falha ao enviar os dados. Por favor, tente novamente com um arquivo .kml válido. Erro: ${error.message}</p>`
-            );
+            redirectToSummary();
           });
       };
     </script>
