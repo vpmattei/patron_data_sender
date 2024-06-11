@@ -105,14 +105,13 @@
         }
 
         // Here, post the data to the actual endpoint
-        fetch("http://127.0.0.1:8083/api/services/planner_json", {
+        fetch("https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/", {
           method: "POST",
           headers: {
             "accept": "application/json",
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
-          mode: 'no-cors' // This disables CORS but may not work as expected for JSON responses
         })
           .then((response) => response.json())
           .then((result) => {
