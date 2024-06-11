@@ -92,17 +92,15 @@
 
           // Extract information from the data
           const numNFZsZones = data.NFZs.length;
-          const numNFZsPaths = 0;
-          // data.NFZs.reduce(
-          //   (acc, nfz) => acc + nfz.coords.length,
-          //   0
-          // );
+          const numNFZsPaths = data.NFZs.reduce(
+            (acc, nfz) => acc + nfz.coords.length,
+            0
+          );
           const numAOIsZones = data.AOIs.length;
-          const numAOIsPaths = 0;
-          // data.AOIs.reduce(
-          //   (acc, aoi) => acc + aoi.coords.length,
-          //   0
-          // );
+          const numAOIsPaths = data.AOIs.reduce(
+            (acc, aoi) => acc + aoi.coords.length,
+            0
+          );
           const start = data.StartEnd.start
             ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
             : "Início: Não definido";
@@ -126,18 +124,14 @@
           document.getElementById("startCoords").textContent = start;
           document.getElementById("endCoords").textContent = end;
 
-          // Optionally, clear the local storage if the data is no longer needed
-          localStorage.removeItem("responseData");
+          // Define the redirectToMissionSummary function
+          window.redirectToMissionSummary = function () {
+            localStorage.setItem("responseData", JSON.stringify(data));
+            window.location.href = "/missionsummary.html";
+          };
         } else {
           console.error("No data found in local storage");
         }
-
-        // Function to redirect to mission summary
-        window.redirectToMissionSummary = function () {
-          window.location.href = `/missionsummary.html?data=${encodeURIComponent(
-            JSON.stringify(data)
-          )}`;
-        };
       };
     </script>
   </body>

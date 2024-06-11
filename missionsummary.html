@@ -61,53 +61,60 @@
     </div>
     <script>
       window.onload = function () {
-        // Parse the URL parameters to get data
-        const params = new URLSearchParams(window.location.search);
-        const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
+        // Retrieve the JSON data from local storage
+        const storedData = localStorage.getItem("responseData");
+        if (storedData) {
+          const data = JSON.parse(storedData);
 
-        // Calculate the distance between two geographical points using the Haversine formula
-        function haversineDistance(coords1, coords2) {
-          const toRad = (x) => (x * Math.PI) / 180;
-          const R = 6371; // Radius of the Earth in km
+          // Calculate the distance between two geographical points using the Haversine formula
+          function haversineDistance(coords1, coords2) {
+            const toRad = (x) => (x * Math.PI) / 180;
+            const R = 6371; // Radius of the Earth in km
 
-          const dLat = toRad(coords2.lat - coords1.lat);
-          const dLng = toRad(coords2.lng - coords1.lng);
+            const dLat = toRad(coords2.lat - coords1.lat);
+            const dLng = toRad(coords2.lng - coords1.lng);
 
-          const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(toRad(coords1.lat)) *
-              Math.cos(toRad(coords2.lat)) *
-              Math.sin(dLng / 2) *
-              Math.sin(dLng / 2);
+            const a =
+              Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(toRad(coords1.lat)) *
+                Math.cos(toRad(coords2.lat)) *
+                Math.sin(dLng / 2) *
+                Math.sin(dLng / 2);
 
-          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          return R * c;
-        }
-
-        // Extract information about missions
-        const missions = data.Mission;
-        const numMissions = missions.length;
-        let missionDetailsHtml = "";
-
-        missions.forEach((mission, index) => {
-          const coords = mission.coords;
-          let totalDistance = 0;
-
-          for (let i = 0; i < coords.length - 1; i++) {
-            totalDistance += haversineDistance(coords[i], coords[i + 1]);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
           }
 
-          missionDetailsHtml += `<p>Missão ${
-            index + 1
-          }: ${totalDistance.toFixed(2)} km</p>`;
-        });
+          // Extract information about missions
+          const missions = data.Mission;
+          const numMissions = missions.length;
+          let missionDetailsHtml = "";
 
-        // Populate mission summary
-        document.getElementById(
-          "numMissions"
-        ).textContent = `Número de Missões: ${numMissions}`;
-        document.getElementById("missionDetails").innerHTML =
-          missionDetailsHtml;
+          missions.forEach((mission, index) => {
+            const coords = mission.coords;
+            let totalDistance = 0;
+
+            for (let i = 0; i < coords.length - 1; i++) {
+              totalDistance += haversineDistance(coords[i], coords[i + 1]);
+            }
+
+            missionDetailsHtml += `<p>Missão ${
+              index + 1
+            }: ${totalDistance.toFixed(2)} km</p>`;
+          });
+
+          // Populate mission summary
+          document.getElementById(
+            "numMissions"
+          ).textContent = `Número de Missões: ${numMissions}`;
+          document.getElementById("missionDetails").innerHTML =
+            missionDetailsHtml;
+
+          // Optionally, clear the local storage if the data is no longer needed
+          localStorage.removeItem("responseData");
+        } else {
+          console.error("No data found in local storage");
+        }
       };
     </script>
   </body>
