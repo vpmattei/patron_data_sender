@@ -105,7 +105,7 @@
         }
 
         // Here, post the data to the actual endpoint
-        fetch("https://bfc87a537da149f4a46f5c85e074e83c.api.mockbin.io/", {
+        fetch("http://127.0.0.1:8083/api/services/planner_json", {
           method: "POST",
           headers: {
             "accept": "application/json",
@@ -116,7 +116,7 @@
           .then((response) => response.json())
           .then((result) => {
             console.log("Success:", result);
-            redirectToSummary(data);
+            redirectToSummary(result);
           })
           .catch((error) => {
             console.error("Erro:", error);
