@@ -131,7 +131,7 @@
           // Optionally, clear the local storage if the data is no longer needed
           localStorage.removeItem("responseData");
 
-          function redirectToDataSummary() {
+          window.redirectToDataSummary = function () {
             window.location.href = "/datasummary.html";
           };
         } else {
