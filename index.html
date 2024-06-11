@@ -104,6 +104,17 @@
           }, remainingTime);
         }
 
+        // Function to redirect to data error page
+        function redirectToError(error) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+          setTimeout(() => {
+            window.location.href = `/datasummary.html?error=${encodeURIComponent(
+              JSON.stringify(error)
+            )}`;
+          }, remainingTime);
+        }
+
         // Here, post the data to the actual endpoint
         fetch("http://127.0.0.1:8083/api/services/planner_json", {
           method: "POST",
@@ -120,7 +131,7 @@
           })
           .catch((error) => {
             console.error("Erro:", error);
-            redirectToSummary({ error: error.message });
+            redirectToError({ error: error.message });
           });
       };
     </script>
