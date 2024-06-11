@@ -92,15 +92,17 @@
 
           // Extract information from the data
           const numNFZsZones = data.NFZs.length;
-          const numNFZsPaths = data.NFZs.reduce(
-            (acc, nfz) => acc + nfz.coords.length,
-            0
-          );
+          const numNFZsPaths = 0;
+          // data.NFZs.reduce(
+          //   (acc, nfz) => acc + nfz.coords.length,
+          //   0
+          // );
           const numAOIsZones = data.AOIs.length;
-          const numAOIsPaths = data.AOIs.reduce(
-            (acc, aoi) => acc + aoi.coords.length,
-            0
-          );
+          const numAOIsPaths = 0;
+          // data.AOIs.reduce(
+          //   (acc, aoi) => acc + aoi.coords.length,
+          //   0
+          // );
           const start = data.StartEnd.start
             ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
             : "Início: Não definido";
