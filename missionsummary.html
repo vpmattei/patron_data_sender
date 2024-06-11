@@ -57,6 +57,9 @@
         <h2>Missões</h2>
         <p id="numMissions">Número de Missões:</p>
         <div id="missionDetails"></div>
+        <button onclick="redirectToMissionSummary()">
+          Ver resumo dos dados enviados
+        </button>
       </div>
     </div>
     <script>
@@ -112,6 +115,10 @@
 
           // Optionally, clear the local storage if the data is no longer needed
           localStorage.removeItem("responseData");
+
+          function redirectToDataSummary() {
+            window.location.href = "/datasummary.html";
+          };
         } else {
           console.error("No data found in local storage");
         }

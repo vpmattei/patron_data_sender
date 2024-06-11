@@ -119,8 +119,7 @@
           document.getElementById("endCoords").textContent = end;
 
           // Define the redirectToMissionSummary function
-          window.redirectToMissionSummary = function () {
-            localStorage.setItem("responseData", JSON.stringify(data));
+          function redirectToMissionSummary() {
             window.location.href = "/missionsummary.html";
           };
         } else {
