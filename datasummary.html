@@ -85,43 +85,50 @@
     </div>
     <script>
       window.onload = function () {
-        // Parse the URL parameters to get data
-        const params = new URLSearchParams(window.location.search);
-        const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
+        // Retrieve the JSON data from local storage
+        const storedData = localStorage.getItem("responseData");
+        if (storedData) {
+          const data = JSON.parse(storedData);
 
-        // Extract information from the data
-        const numNFZsZones = data.NFZs.length;
-        const numNFZsPaths = data.NFZs.reduce(
-          (acc, nfz) => acc + nfz.coords.length,
-          0
-        );
-        const numAOIsZones = data.AOIs.length;
-        const numAOIsPaths = data.AOIs.reduce(
-          (acc, aoi) => acc + aoi.coords.length,
-          0
-        );
-        const start = data.StartEnd.start
-          ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
-          : "Início: Não definido";
-        const end = data.StartEnd.end
-          ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
-          : "Fim: Não definido";
+          // Extract information from the data
+          const numNFZsZones = data.NFZs.length;
+          const numNFZsPaths = data.NFZs.reduce(
+            (acc, nfz) => acc + nfz.coords.length,
+            0
+          );
+          const numAOIsZones = data.AOIs.length;
+          const numAOIsPaths = data.AOIs.reduce(
+            (acc, aoi) => acc + aoi.coords.length,
+            0
+          );
+          const start = data.StartEnd.start
+            ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
+            : "Início: Não definido";
+          const end = data.StartEnd.end
+            ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
+            : "Fim: Não definido";
 
-        // Populate data summary
-        document.getElementById(
-          "numNFZsZones"
-        ).textContent = `Número de Áreas: ${numNFZsZones}`;
-        document.getElementById(
-          "numNFZsPaths"
-        ).textContent = `Número de Trajetos: ${numNFZsPaths}`;
-        document.getElementById(
-          "numAOIsZones"
-        ).textContent = `Número de Áreas: ${numAOIsZones}`;
-        document.getElementById(
-          "numAOIsPaths"
-        ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
-        document.getElementById("startCoords").textContent = start;
-        document.getElementById("endCoords").textContent = end;
+          // Populate data summary
+          document.getElementById(
+            "numNFZsZones"
+          ).textContent = `Número de Áreas: ${numNFZsZones}`;
+          document.getElementById(
+            "numNFZsPaths"
+          ).textContent = `Número de Trajetos: ${numNFZsPaths}`;
+          document.getElementById(
+            "numAOIsZones"
+          ).textContent = `Número de Áreas: ${numAOIsZones}`;
+          document.getElementById(
+            "numAOIsPaths"
+          ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
+          document.getElementById("startCoords").textContent = start;
+          document.getElementById("endCoords").textContent = end;
+
+          // Optionally, clear the local storage if the data is no longer needed
+          localStorage.removeItem("responseData");
+        } else {
+          console.error("No data found in local storage");
+        }
 
         // Function to redirect to mission summary
         window.redirectToMissionSummary = function () {
