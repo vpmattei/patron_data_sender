@@ -88,7 +88,6 @@
         // Parse the URL parameters to get data
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get("data"))); // Assuming data is passed as a JSON string
-        console.log(data);
 
         // Show loading animation and ensure minimum display time of 2 seconds
         const postStartTime = Date.now();
@@ -104,34 +103,40 @@
           }, remainingTime);
         }
 
-        // Function to redirect to data error page
-        function redirectToError(error) {
+        // Function to redirect to error page
+        function redirectToError(errorMessage) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
           setTimeout(() => {
-            window.location.href = `/datasummary.html?error=${encodeURIComponent(
-              JSON.stringify(error)
+            window.location.href = `/error.html?error=${encodeURIComponent(
+              errorMessage
             )}`;
           }, remainingTime);
         }
 
         // Here, post the data to the actual endpoint
-        fetch("http://15.228.232.229:8083/api/services/planner_json", {
+        fetch("http://127.0.0.1:8083/api/services/planner_json", {
           method: "POST",
           headers: {
-            "accept": "application/json",
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
           .then((result) => {
             console.log("Success:", result);
             redirectToSummary(result);
           })
           .catch((error) => {
             console.error("Erro:", error);
-            redirectToError({ error: error.message });
+            redirectToError(error.message);
           });
       };
     </script>

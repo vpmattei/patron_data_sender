@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <title>Resumo dos Dados</title>
+    <title>Erro</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -28,7 +28,7 @@
         align-items: center;
       }
 
-      #container {
+      #message {
         padding: 20px;
         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
         background: #00092f;
@@ -44,28 +44,44 @@
         font-size: 16px;
       }
 
-      h1,
-      h2 {
-        margin: 10px 0;
+      p.error {
+        font-size: 24px;
+        font-weight: 700;
+        color: red;
+      }
+
+      button {
+        background-color: #0f3460;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background-color: #1a3cdb;
       }
     </style>
   </head>
   <body>
-    <div id="container">
-      <div id="error">
-        
-      </div>
+    <div id="message">
+      <p class="error">Erro ao enviar os dados</p>
+      <p id="errorMessage"></p>
+      <button onclick="goBack()">Tentar novamente</button>
     </div>
     <script>
       window.onload = function () {
-        // Parse the URL parameters to get data
         const params = new URLSearchParams(window.location.search);
-        const data = JSON.parse(decodeURIComponent(params.get("error"))); // Assuming error is passed as a JSON string
-
-        document.getElementById(
-          "error"
-        ).textContent = `Erro: ${data}`;
+        const errorMessage = decodeURIComponent(params.get("error"));
+        document.getElementById("errorMessage").textContent = errorMessage;
       };
+
+      function goBack() {
+        window.history.back();
+      }
     </script>
   </body>
 </html>
