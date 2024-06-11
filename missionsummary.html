@@ -132,6 +132,7 @@
           localStorage.removeItem("responseData");
 
           window.redirectToDataSummary = function () {
+            localStorage.setItem("responseData", JSON.stringify(data));
             window.location.href = "/datasummary.html";
           };
         } else {
