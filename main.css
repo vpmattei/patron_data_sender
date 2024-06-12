@@ -1,6 +1,5 @@
 body {
   font-family: Roboto, sans-serif;
-  background-color: #00051e;
   background: linear-gradient(to top, #00051e, #020b45), no-repeat top center;
   color: #fff;
   margin: 0;
@@ -56,4 +55,27 @@ button {
 
 button:hover {
   background-color: #1a3cdb;
+}
+
+#loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #1a3cdb;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.hidden {
+  display: none;
 }
