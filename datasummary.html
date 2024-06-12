@@ -84,6 +84,7 @@
         }
 
         const data = JSON.parse(storedData);
+        console.log("Data given:", data)
 
         fetch("http://127.0.0.1:8083/api/services/planner_kml", {
           method: "POST",
@@ -101,6 +102,8 @@
             return response.json();
           })
           .then((data) => {
+            console.log("Downloaded data:");
+            console.log(data);
             const kmlLink = data.kml_url;
             const link = document.createElement("a");
             link.href = kmlLink;
