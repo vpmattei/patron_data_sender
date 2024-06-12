@@ -84,6 +84,9 @@
       </div>
     </div>
     <script>
+      const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
+      const cloudEndpoint = "https://ec2-15-228-232-229.sa-east-1.compute.amazonaws.com/api/services/planner_json";
+
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
         const data = JSON.parse(decodeURIComponent(params.get("data")));
@@ -112,7 +115,7 @@
           }, remainingTime);
         }
 
-        fetch("https://ec2-15-228-232-229.sa-east-1.compute.amazonaws.com/api/services/planner_json", {
+        fetch(localEndpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
