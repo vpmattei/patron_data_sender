@@ -97,7 +97,7 @@
 
         const postStartTime = Date.now();
 
-        fetch(localEndpoint, {
+        fetch(cloudEndpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -222,7 +222,7 @@
           return;
         }
 
-        fetch("http://127.0.0.1:8083/api/services/planner_kml", {
+        fetch("https://ec2-15-228-232-229.sa-east-1.compute.amazonaws.com/api/services/planner_kml", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
