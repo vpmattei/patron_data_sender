@@ -80,9 +80,6 @@
           document.getElementById("missionDetails").innerHTML =
             missionDetailsHtml;
 
-          // Optionally, clear the local storage if the data is no longer needed
-          localStorage.removeItem("responseData");
-
           window.redirectToDataSummary = function () {
             localStorage.setItem("responseData", JSON.stringify(data));
             window.location.href = "/datasummary.html";
