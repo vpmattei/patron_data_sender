@@ -41,12 +41,12 @@
     </style>
   </head>
   <body>
-    <div id="container" class="hidden">
+    <div id="postingMessage" class="container hidden">
       <p>Enviando dados...</p>
       <div id="loader"></div>
     </div>
 
-    <div id="container" class="hidden">
+    <div id="dataSummary" class="container hidden">
       <div id="resultMessage"></div>
       <h1>Resumo dos Dados</h1>
       <h2>No-Fly-Zones (NFZs)</h2>
@@ -60,7 +60,7 @@
       <button onclick="showMissionSummary()">Ver missão</button>
     </div>
 
-    <div id="container" class="hidden">
+    <div id="missionSummary" class="container hidden">
       <h1>Resumo da Missão</h1>
       <h2>Missões</h2>
       <p id="numMissions">Número de Missões:</p>
@@ -69,7 +69,7 @@
       <button onclick="downloadKML()">Baixar missão</button>
     </div>
 
-    <div id="container" class="hidden">
+    <div id="errorMessage" class="container hidden">
       <h1>Erro</h1>
       <p id="errorText"></p>
     </div>
