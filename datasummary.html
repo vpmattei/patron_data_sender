@@ -30,9 +30,8 @@
         <p id="startCoords"></p>
         <p id="endCoords"></p>
         <button onclick="redirectToMissionSummary()">
-          Ver resumo da missão
+          Ver missão
         </button>
-        <button onclick="downloadKML()">Baixar missão</button>
       </div>
     </div>
     <script>
@@ -75,48 +74,6 @@
           console.error("No data found in local storage");
         }
       };
-
-      function downloadKML() {
-        const storedData = localStorage.getItem("responseData");
-        if (!storedData) {
-          console.error("No data found in local storage");
-          return;
-        }
-
-        const data = JSON.parse(storedData);
-
-        fetch("http://127.0.0.1:8083/api/services/planner_kml", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-            return response.blob();
-          })
-          .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "mission.kml";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-          })
-          .catch((error) => {
-            console.error(
-              "There was an error downloading the KML file:",
-              error
-            );
-          });
-      }
     </script>
   </body>
 </html>
