@@ -14,48 +14,8 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="stylesheet" type="text/scss" href="main.scss" />
     <style>
-      body {
-        font-family: Roboto, sans-serif;
-        background-color: #00051e;
-        background: linear-gradient(to top, #00051e, #020b45),
-          no-repeat top center;
-        color: #fff;
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #message {
-        padding: 20px;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-        background: #00092f;
-        border: 2px solid #0f3460;
-        border-radius: 35px;
-        max-width: 500px;
-        width: 90%;
-        text-align: center;
-      }
-
-      p {
-        margin: 10px 0;
-        font-size: 16px;
-      }
-
-      p.success {
-        font-size: 24px;
-        font-weight: 700;
-        color: green;
-      }
-
-      p.error {
-        font-size: 24px;
-        font-weight: 700;
-        color: red;
-      }
-
       #loader {
         border: 6px solid #f3f3f3;
         border-top: 6px solid #1a3cdb;
@@ -77,7 +37,7 @@
     </style>
   </head>
   <body>
-    <div id="message">
+    <div id="container">
       <div id="postingMessage">
         <p>Enviando dados...</p>
         <div id="loader"></div>
