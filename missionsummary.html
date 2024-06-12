@@ -32,7 +32,7 @@
     <script>
       window.onload = function () {
         // Retrieve the JSON data from local storage
-        const storedData = localStorage.getItem("responseData");
+        const storedData = sessionStorage.getItem("responseData");
         if (storedData) {
           const data = JSON.parse(storedData);
 
@@ -81,7 +81,7 @@
             missionDetailsHtml;
 
           window.redirectToDataSummary = function () {
-            localStorage.setItem("responseData", JSON.stringify(data));
+            sessionStorage.setItem("responseData", JSON.stringify(data));
             window.location.href = "/datasummary.html";
           };
         } else {
@@ -90,7 +90,7 @@
       };
 
       function downloadKML() {
-        const storedData = localStorage.getItem("responseData");
+        const storedData = sessionStorage.getItem("responseData");
         if (!storedData) {
           console.error("No data found in local storage");
           return;

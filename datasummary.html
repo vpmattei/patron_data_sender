@@ -36,7 +36,7 @@
     </div>
     <script>
       window.onload = function () {
-        const storedData = localStorage.getItem("responseData");
+        const storedData = sessionStorage.getItem("responseData");
         if (storedData) {
           const data = JSON.parse(storedData);
 
@@ -67,7 +67,7 @@
           document.getElementById("endCoords").textContent = end;
 
           window.redirectToMissionSummary = function () {
-            localStorage.setItem("responseData", JSON.stringify(data));
+            sessionStorage.setItem("responseData", JSON.stringify(data));
             window.location.href = "/missionsummary.html";
           };
         } else {
