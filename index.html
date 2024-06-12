@@ -15,14 +15,38 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <style>
+      #loader {
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #1a3cdb;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body>
-    <div id="container" class="hidden">
+    <div id="postingMessage" class="hidden">
       <p>Enviando dados...</p>
       <div id="loader"></div>
     </div>
 
-    <div id="container" class="hidden">
+    <div id="dataSummary" class="hidden">
       <div id="resultMessage"></div>
       <h1>Resumo dos Dados</h1>
       <h2>No-Fly-Zones (NFZs)</h2>
@@ -36,7 +60,7 @@
       <button onclick="showMissionSummary()">Ver missão</button>
     </div>
 
-    <div id="container" class="hidden">
+    <div id="missionSummary" class="hidden">
       <h1>Resumo da Missão</h1>
       <h2>Missões</h2>
       <p id="numMissions">Número de Missões:</p>
