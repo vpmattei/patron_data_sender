@@ -77,7 +77,7 @@
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
       const cloudEndpoint =
-        "https://ec2-15-228-232-229.sa-east-1.compute.amazonaws.com/api/services/planner_json";
+        "https://patronrouteplanner.zapto.org/api/services";
       let globalResponseData = null;
 
       window.onload = function () {
@@ -97,7 +97,7 @@
 
         const postStartTime = Date.now();
 
-        fetch(cloudEndpoint, {
+        fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -222,7 +222,7 @@
           return;
         }
 
-        fetch("https://ec2-15-228-232-229.sa-east-1.compute.amazonaws.com/api/services/planner_kml", {
+        fetch(cloudEndpoint + "/planner_kml", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
