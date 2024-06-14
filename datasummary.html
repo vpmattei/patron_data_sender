@@ -87,14 +87,10 @@
           const numAOIsZones = data.AOIs.polygons.length;
           const numAOIsPaths = data.AOIs.paths.length;
           const start = data.StartEnd.start
-            ? `Início: ${data.StartEnd.start.coords.lat.toFixed(
-                3
-              )}, ${data.StartEnd.start.coords.lng.toFixed(3)}`
+            ? `Início: ${convertToDMS(data.StartEnd.start.coords.lat, true)} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
             : "Início: Não definido";
           const end = data.StartEnd.end
-            ? `Fim: ${data.StartEnd.end.coords.lat.toFixed(
-                3
-              )}, ${data.StartEnd.end.coords.lng.toFixed(3)}`
+            ? `Fim: ${convertToDMS(data.StartEnd.start.coords.lat, true)} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
             : "Fim: Não definido";
 
           document.getElementById(
@@ -120,6 +116,17 @@
           console.error("No data found in local storage");
         }
       };
+
+      function convertToDMS(decimalDegree, isLat) {
+        const degree = Math.floor(Math.abs(decimalDegree));
+        const minutesNotTruncated = (Math.abs(decimalDegree) - degree) * 60;
+        const minutes = Math.floor(minutesNotTruncated);
+        const seconds = Math.floor((minutesNotTruncated - minutes) * 60);
+        const direction =
+          decimalDegree >= 0 ? (isLat ? "N" : "E") : isLat ? "S" : "W";
+
+        return `${degree}°${minutes}'${seconds}" ${direction}`;
+      }
     </script>
   </body>
 </html>
