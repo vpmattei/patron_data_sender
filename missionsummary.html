@@ -15,6 +15,13 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <style>
+      .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
   </head>
   <body>
     <div id="container" class="container">
@@ -23,10 +30,12 @@
         <h2>Missões</h2>
         <p id="numMissions">Número de Missões:</p>
         <div id="missionDetails"></div>
-        <button onclick="redirectToDataSummary()">
-          Ver resumo dos dados enviados
-        </button>
-        <button onclick="downloadKML()"><i class="fa-solid fa-download"></i> Baixar missão</button>
+        <div class="buttons">
+          <button onclick="redirectToDataSummary()">
+            Ver resumo dos dados enviados
+          </button>
+          <button onclick="downloadKML()"><i class="fa-solid fa-download"></i> Baixar missão</button>
+        </div>
       </div>
     </div>
     <script>
