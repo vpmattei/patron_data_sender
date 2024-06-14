@@ -15,18 +15,35 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <style>
+      .NFZs {
+        color: red;
+      }
+      
+      .nfz {
+        color: tomato;
+      }
+
+      .AOIs {
+        color: limegreen;
+      }
+
+      .aoi {
+        color: lightgreen;
+      }
+    </style>
   </head>
   <body>
     <div id="container" class="container">
       <div id="dataSummary">
         <div id="resultMessage"></div>
         <h1>Resumo dos Dados</h1>
-        <h2>No-Fly-Zones (NFZs)</h2>
-        <p id="numNFZsZones"></p>
-        <p id="numNFZsPaths"></p>
-        <h2>Regiões de Interesse</h2>
-        <p id="numAOIsZones"></p>
-        <p id="numAOIsPaths"></p>
+        <h2 class="NFZs">No-Fly-Zones (NFZs)</h2>
+        <p class="nfz" id="numNFZsZones"></p>
+        <p class="nfz" id="numNFZsPaths"></p>
+        <h2 class="AOIs">Regiões de Interesse</h2>
+        <p class="aoi" id="numAOIsZones"></p>
+        <p class="aoi" id="numAOIsPaths"></p>
         <p id="startCoords"></p>
         <p id="endCoords"></p>
         <button onclick="redirectToMissionSummary()">
