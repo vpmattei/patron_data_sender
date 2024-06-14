@@ -43,18 +43,19 @@ h2 {
 }
 
 button {
-  background-color: #0f3460;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1a3cdb;
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  border-radius: 50px;
   font-size: 16px;
-  border-radius: 5px;
   cursor: pointer;
-  margin-top: 20px;
+  box-shadow: 0px 0px 15px #000724;
 }
 
 button:hover {
-  background-color: #1a3cdb;
+  background-color: #e94560;
 }
 
 #loader {
