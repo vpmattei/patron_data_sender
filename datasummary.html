@@ -35,15 +35,15 @@
       .start {
         display: flex;
         justify-content: center;
-        align-items: center;
-        flex-direction: column;
+        align-items: baseline;
+        flex-direction: row;
       }
 
       .end {
         display: flex;
         justify-content: center;
-        align-items: center;
-        flex-direction: column;
+        align-items: baseline;
+        flex-direction: row;
       }
     </style>
   </head>
@@ -58,18 +58,22 @@
         <h2 class="AOIs">Regiões de Interesse</h2>
         <p class="aoi" id="numAOIsZones"></p>
         <p class="aoi" id="numAOIsPaths"></p>
-        <br>
+        <br />
         <div class="start">
-          <i class="fa-solid fa-location-dot" style="font-size: 24px; color: limegreen;"></i>
+          <i
+            class="fa-solid fa-location-dot"
+            style="margin: 10px; font-size: 24px; color: limegreen"
+          ></i>
           <p id="startCoords"></p>
         </div>
         <div class="end">
-          <i class="fa-solid fa-location-dot" style="font-size: 24px; color: red;"></i>
+          <i
+            class="fa-solid fa-location-dot"
+            style="margin: 10px; font-size: 24px; color: red"
+          ></i>
           <p id="endCoords"></p>
         </div>
-        <button onclick="redirectToMissionSummary()">
-          Ver missão
-        </button>
+        <button onclick="redirectToMissionSummary()">Ver missão</button>
       </div>
     </div>
     <script>
@@ -83,10 +87,14 @@
           const numAOIsZones = data.AOIs.polygons.length;
           const numAOIsPaths = data.AOIs.paths.length;
           const start = data.StartEnd.start
-            ? `Início: ${data.StartEnd.start.coords.lat.toFixed(3)}, ${data.StartEnd.start.coords.lng.toFixed(3)}`
+            ? `Início: ${data.StartEnd.start.coords.lat.toFixed(
+                3
+              )}, ${data.StartEnd.start.coords.lng.toFixed(3)}`
             : "Início: Não definido";
           const end = data.StartEnd.end
-            ? `Fim: ${data.StartEnd.end.coords.lat.toFixed(3)}, ${data.StartEnd.end.coords.lng.toFixed(3)}`
+            ? `Fim: ${data.StartEnd.end.coords.lat.toFixed(
+                3
+              )}, ${data.StartEnd.end.coords.lng.toFixed(3)}`
             : "Fim: Não definido";
 
           document.getElementById(
