@@ -44,9 +44,9 @@
         <h2 class="AOIs">Regiões de Interesse</h2>
         <p class="aoi" id="numAOIsZones"></p>
         <p class="aoi" id="numAOIsPaths"></p>
-        <i class="fa-solid fa-location-dot" style="color: limegreen;"></i>
+        <i class="fa-solid fa-location-dot" style="font-size: 24px; color: limegreen;"></i>
         <p id="startCoords"></p>
-        <i class="fa-solid fa-location-dot" style="color: red;"></i>
+        <i class="fa-solid fa-location-dot" style="font-size: 24px; color: red;"></i>
         <p id="endCoords"></p>
         <button onclick="redirectToMissionSummary()">
           Ver missão
@@ -64,10 +64,10 @@
           const numAOIsZones = data.AOIs.polygons.length;
           const numAOIsPaths = data.AOIs.paths.length;
           const start = data.StartEnd.start
-            ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
+            ? `Início: ${data.StartEnd.start.coords.lat.toFixed(3)}, ${data.StartEnd.start.coords.lng.toFixed(3)}`
             : "Início: Não definido";
           const end = data.StartEnd.end
-            ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
+            ? `Fim: ${data.StartEnd.end.coords.lat.toFixed(3)}, ${data.StartEnd.end.coords.lng.toFixed(3)}`
             : "Fim: Não definido";
 
           document.getElementById(
