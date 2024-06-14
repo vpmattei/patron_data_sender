@@ -31,6 +31,20 @@
       .aoi {
         color: lightgreen;
       }
+
+      .start {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .end {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
     </style>
   </head>
   <body>
@@ -44,10 +58,15 @@
         <h2 class="AOIs">Regiões de Interesse</h2>
         <p class="aoi" id="numAOIsZones"></p>
         <p class="aoi" id="numAOIsPaths"></p>
-        <i class="fa-solid fa-location-dot" style="font-size: 24px; color: limegreen;"></i>
-        <p id="startCoords"></p>
-        <i class="fa-solid fa-location-dot" style="font-size: 24px; color: red;"></i>
-        <p id="endCoords"></p>
+        <br>
+        <div class="start">
+          <i class="fa-solid fa-location-dot" style="font-size: 24px; color: limegreen;"></i>
+          <p id="startCoords"></p>
+        </div>
+        <div class="end">
+          <i class="fa-solid fa-location-dot" style="font-size: 24px; color: red;"></i>
+          <p id="endCoords"></p>
+        </div>
         <button onclick="redirectToMissionSummary()">
           Ver missão
         </button>
