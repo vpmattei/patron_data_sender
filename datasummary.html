@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Resumo dos Dados</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div id="dataSummary">
+        <div id="resultMessage"></div>
+        <h1>Resumo dos Dados</h1>
+        <h2>No-Fly-Zones (NFZs)</h2>
+        <p id="numNFZsZones"></p>
+        <p id="numNFZsPaths"></p>
+        <h2>Regiões de Interesse</h2>
+        <p id="numAOIsZones"></p>
+        <p id="numAOIsPaths"></p>
+        <p id="startCoords"></p>
+        <p id="endCoords"></p>
+        <button onclick="redirectToMissionSummary()">
+          Ver missão
+        </button>
+      </div>
+    </div>
+    <script>
+      window.onload = function () {
+        const storedData = sessionStorage.getItem("responseData");
+        if (storedData) {
+          const data = JSON.parse(storedData);
+
+          const numNFZsZones = data.NFZs.polygons.length;
+          const numNFZsPaths = data.NFZs.paths.length;
+          const numAOIsZones = data.AOIs.polygons.length;
+          const numAOIsPaths = data.AOIs.paths.length;
+          const start = data.StartEnd.start
+            ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
+            : "Início: Não definido";
+          const end = data.StartEnd.end
+            ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
+            : "Fim: Não definido";
+
+          document.getElementById(
+            "numNFZsZones"
+          ).textContent = `Número de Áreas: ${numNFZsZones}`;
+          document.getElementById(
+            "numNFZsPaths"
+          ).textContent = `Número de Trajetos: ${numNFZsPaths}`;
+          document.getElementById(
+            "numAOIsZones"
+          ).textContent = `Número de Áreas: ${numAOIsZones}`;
+          document.getElementById(
+            "numAOIsPaths"
+          ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
+          document.getElementById("startCoords").textContent = start;
+          document.getElementById("endCoords").textContent = end;
+
+          window.redirectToMissionSummary = function () {
+            sessionStorage.setItem("responseData", JSON.stringify(data));
+            window.location.href = "/missionsummary.html";
+          };
+        } else {
+          console.error("No data found in local storage");
+        }
+      };
+    </script>
+  </body>
+</html>

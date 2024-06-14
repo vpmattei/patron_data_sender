@@ -34,68 +34,46 @@
           transform: rotate(360deg);
         }
       }
-
-      .hidden {
-        display: none;
-      }
     </style>
   </head>
   <body>
-    <div id="postingMessage" class="container hidden">
-      <p>Enviando dados...</p>
-      <div id="loader"></div>
+    <div id="container">
+      <div id="postingMessage">
+        <p>Enviando dados...</p>
+        <div id="loader"></div>
+      </div>
     </div>
-
-    <div id="dataSummary" class="container hidden">
-      <div id="resultMessage"></div>
-      <h1>Resumo dos Dados</h1>
-      <h2>No-Fly-Zones (NFZs)</h2>
-      <p id="numNFZsZones"></p>
-      <p id="numNFZsPaths"></p>
-      <h2>Regiões de Interesse</h2>
-      <p id="numAOIsZones"></p>
-      <p id="numAOIsPaths"></p>
-      <p id="startCoords"></p>
-      <p id="endCoords"></p>
-      <button onclick="showMissionSummary()">Ver missão</button>
-    </div>
-
-    <div id="missionSummary" class="container hidden">
-      <h1>Resumo da Missão</h1>
-      <h2>Missões</h2>
-      <p id="numMissions">Número de Missões:</p>
-      <div id="missionDetails"></div>
-      <button onclick="showDataSummary()">Ver resumo dos dados enviados</button>
-      <button onclick="downloadKML()">Baixar missão</button>
-    </div>
-
-    <div id="errorMessage" class="container hidden">
-      <h1>Erro</h1>
-      <p id="errorText"></p>
-    </div>
-
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
-      const cloudEndpoint =
-        "https://patronrouteplanner.zapto.org/api/services";
-      let globalResponseData = null;
+      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
-        if (params.get("data")) {
-          const data = JSON.parse(decodeURIComponent(params.get("data")));
-          postData(data);
-        } else if (globalResponseData) {
-          showDataSummary();
-        } else {
-          showError("No data found to display.");
-        }
-      };
-
-      function postData(data) {
-        document.getElementById("postingMessage").classList.remove("hidden");
+        const data = JSON.parse(decodeURIComponent(params.get("data")));
 
         const postStartTime = Date.now();
+
+        function redirectToSummary(responseData) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+
+          // Store the JSON data in session storage
+          sessionStorage.setItem("responseData", JSON.stringify(responseData));
+
+          setTimeout(() => {
+            window.location.href = "/datasummary.html";
+          }, remainingTime);
+        }
+
+        function redirectToError(errorMessage) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+          setTimeout(() => {
+            window.location.href = `/error.html?error=${encodeURIComponent(
+              errorMessage
+            )}`;
+          }, remainingTime);
+        }
 
         fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
@@ -113,147 +91,14 @@
             return response.json();
           })
           .then((result) => {
-            globalResponseData = result;
-            showDataSummary();
+            console.log("Success:", result);
+            redirectToSummary(result);
           })
           .catch((error) => {
-            showError(error.message);
+            console.error("Erro:", error);
+            redirectToError(error.message);
           });
-      }
-
-      function showDataSummary() {
-        const data = globalResponseData;
-
-        document.getElementById("postingMessage").classList.add("hidden");
-        document.getElementById("dataSummary").classList.remove("hidden");
-        document.getElementById("missionSummary").classList.add("hidden");
-        document.getElementById("errorMessage").classList.add("hidden");
-
-        const numNFZsZones = data.NFZs.polygons.length;
-        const numNFZsPaths = data.NFZs.paths.length;
-        const numAOIsZones = data.AOIs.polygons.length;
-        const numAOIsPaths = data.AOIs.paths.length;
-        const start = data.StartEnd.start
-          ? `Início: ${data.StartEnd.start.coords.lat}, ${data.StartEnd.start.coords.lng}`
-          : "Início: Não definido";
-        const end = data.StartEnd.end
-          ? `Fim: ${data.StartEnd.end.coords.lat}, ${data.StartEnd.end.coords.lng}`
-          : "Fim: Não definido";
-
-        document.getElementById(
-          "numNFZsZones"
-        ).textContent = `Número de Áreas: ${numNFZsZones}`;
-        document.getElementById(
-          "numNFZsPaths"
-        ).textContent = `Número de Trajetos: ${numNFZsPaths}`;
-        document.getElementById(
-          "numAOIsZones"
-        ).textContent = `Número de Áreas: ${numAOIsZones}`;
-        document.getElementById(
-          "numAOIsPaths"
-        ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
-        document.getElementById("startCoords").textContent = start;
-        document.getElementById("endCoords").textContent = end;
-      }
-
-      function showMissionSummary() {
-        const data = globalResponseData;
-
-        document.getElementById("postingMessage").classList.add("hidden");
-        document.getElementById("dataSummary").classList.add("hidden");
-        document.getElementById("missionSummary").classList.remove("hidden");
-        document.getElementById("errorMessage").classList.add("hidden");
-
-        const missions = data.Mission;
-        const numMissions = missions.length;
-        let missionDetailsHtml = "";
-
-        missions.forEach((mission, index) => {
-          const coords = mission.coords;
-          let totalDistance = 0;
-
-          for (let i = 0; i < coords.length - 1; i++) {
-            totalDistance += haversineDistance(coords[i], coords[i + 1]);
-          }
-
-          missionDetailsHtml += `<p>Missão ${
-            index + 1
-          }: ${totalDistance.toFixed(2)} km</p>`;
-        });
-
-        document.getElementById(
-          "numMissions"
-        ).textContent = `Número de Missões: ${numMissions}`;
-        document.getElementById("missionDetails").innerHTML =
-          missionDetailsHtml;
-      }
-
-      function showError(errorMessage) {
-        document.getElementById("postingMessage").classList.add("hidden");
-        document.getElementById("dataSummary").classList.add("hidden");
-        document.getElementById("missionSummary").classList.add("hidden");
-        document.getElementById("errorMessage").classList.remove("hidden");
-
-        document.getElementById("errorText").textContent = errorMessage;
-      }
-
-      function haversineDistance(coords1, coords2) {
-        const toRad = (x) => (x * Math.PI) / 180;
-        const R = 6371;
-
-        const dLat = toRad(coords2.lat - coords1.lat);
-        const dLng = toRad(coords2.lng - coords1.lng);
-
-        const a =
-          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(toRad(coords1.lat)) *
-            Math.cos(toRad(coords2.lat)) *
-            Math.sin(dLng / 2) *
-            Math.sin(dLng / 2);
-
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-      }
-
-      function downloadKML() {
-        const data = globalResponseData;
-        if (!data) {
-          console.error("No data found");
-          return;
-        }
-
-        fetch(cloudEndpoint + "/planner_kml", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-            return response.blob();
-          })
-          .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "mission.kml";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-          })
-          .catch((error) => {
-            console.error(
-              "There was an error downloading the KML file:",
-              error
-            );
-          });
-      }
+      };
     </script>
   </body>
 </html>
