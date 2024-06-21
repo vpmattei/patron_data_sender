@@ -21,6 +21,8 @@
         justify-content: space-between;
         align-items: center;
         margin-top: 4rem;
+        flex-direction: row;
+        gap: 1rem;
       }
     </style>
   </head>
@@ -36,7 +38,10 @@
             Ver resumo dos dados enviados
           </button>
           <button onclick="downloadKML()">
-            <i class="fa-solid fa-download"></i> Baixar missão
+            <i class="fa-solid fa-download"></i> Baixar missão em .KML
+          </button>
+          <button onclick="downloadJSON()">
+            <i class="fa-solid fa-download"></i> Baixar missão em .JSON
           </button>
         </div>
       </div>
@@ -111,6 +116,48 @@
         const data = JSON.parse(storedData);
 
         fetch("https://patronrouteplanner.zapto.org/api/services/planner_kml", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.blob();
+          })
+          .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "mission.kml";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+          })
+          .catch((error) => {
+            console.error(
+              "There was an error downloading the KML file:",
+              error
+            );
+          });
+      }
+
+      function downloadJSON() {
+        const storedData = sessionStorage.getItem("responseData");
+        if (!storedData) {
+          console.error("No data found in local storage");
+          return;
+        }
+
+        const data = JSON.parse(storedData);
+
+        fetch("https://patronrouteplanner.zapto.org/api/services/planner_plan", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
