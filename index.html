@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <title>Manipulador de Postagem de Dados</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -14,91 +12,437 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <style>
-      #loader {
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid #1a3cdb;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        display: inline-block;
+      body {
+        font-family: Roboto, sans-serif;
+        background: linear-gradient(to top, #00051e, #020b45),
+          no-repeat top center;
+        color: #fff;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+      .data-handler-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .upload-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 400px;
+        padding: 40px;
+        background-color: #00092f;
+        border: 2px dashed #0f3460;
+        border-radius: 35px;
+        text-align: center;
+        position: relative;
+        margin-bottom: 20px;
+        transition: border-color 0.3s;
+        transition: background-color 0.3s;
+      }
+
+      .upload-container.dragover {
+        border-color: #e94560;
+        background-color: #001055;
+      }
+
+      .upload-icon {
+        font-size: 50px;
+        color: #e94560;
+        margin-bottom: 20px;
+      }
+
+      #sendDataButton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #1a3cdb;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+        box-shadow: 0px 0px 15px #000724;
+      }
+
+      #sendDataButton:disabled {
+        background-color: #d0d3df;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      #sendDataButton:hover:enabled {
+        background-color: #e94560;
+      }
+
+      .upload-text {
+        margin: 20px 0;
+        font-size: 16px;
+        color: white;
+      }
+
+      .browse-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #1a3cdb;
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0px 0px 15px #000724;
+      }
+
+      .browse-button:hover {
+        background-color: #e94560;
+      }
+
+      .file-name-wrapper {
+        margin-top: 20px;
+        font-size: 14px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 60%;
+      }
+
+      .file-name {
+        color: white;
+      }
+
+      #removeButton {
+        background-color: transparent;
+        color: red;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        display: none;
+      }
+
+      #removeButton:hover {
+        color: darkred;
+        text-decoration: none;
+        background-color: transparent;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+
+      .warning-message {
+        color: red;
+        margin-top: 10px;
+      }
+
+      .fa-file-arrow-up {
+        font-size: 8rem;
+        color: #d0d3df;
       }
     </style>
   </head>
+
   <body>
-    <div id="container" class="container">
-      <div id="postingMessage">
-        <p>Enviando dados...</p>
-        <div id="loader"></div>
+    <div class="data-handler-container">
+      <div
+        class="upload-container"
+        id="uploadContainer"
+        ondrop="dropHandler(event);"
+        ondragover="dragOverHandler(event);"
+        ondragleave="dragLeaveHandler(event);"
+      >
+        <i class="fa-solid fa-file-arrow-up"></i>
+        <div class="upload-text">
+          Você pode arrastar e soltar seu arquivo .kml para fazer upload
+        </div>
+        <label for="fileInput" class="browse-button">Procurar Arquivo</label>
+        <input type="file" id="fileInput" onchange="updateFileName()" />
+        <div class="file-name-wrapper">
+          <div class="file-name" id="fileName"></div>
+          <button id="removeButton" onclick="removeFile()">X</button>
+        </div>
+        <div
+          class="warning-message"
+          id="warningMessage"
+          style="display: none; color: red"
+        >
+          O arquivo selecionado precisa ser um arquivo .kml
+        </div>
       </div>
+      <button id="sendDataButton" onclick="fileChanged(event)" disabled>
+        Enviar dados das Zonas
+      </button>
+      <a id="hiddenLink" href="#" target="_blank" style="display: none"
+        >Hidden Link</a
+      >
     </div>
+
     <script>
-      const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
-      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
+      let file;
 
-      window.onload = function () {
-        const params = new URLSearchParams(window.location.search);
-        const data = JSON.parse(decodeURIComponent(params.get("data")));
-
-        const postStartTime = Date.now();
-
-        function redirectToSummary(responseData) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-
-          // Store the JSON data in session storage
-          sessionStorage.setItem("responseData", JSON.stringify(responseData));
-
-          setTimeout(() => {
-            window.location.href = "/datasummary.html";
-          }, remainingTime);
+      function updateFileName() {
+        const input = document.getElementById("fileInput");
+        const fileNameDiv = document.getElementById("fileName");
+        const sendDataButton = document.getElementById("sendDataButton");
+        const removeButton = document.getElementById("removeButton");
+        const warningMessage = document.getElementById("warningMessage");
+        const file = input.files[0];
+        if (file) {
+          const fileName = file.name;
+          const fileExtension = fileName.split(".").pop().toLowerCase();
+          if (fileExtension === "kml") {
+            fileNameDiv.textContent = fileName;
+            sendDataButton.disabled = false;
+            removeButton.style.display = "block";
+            warningMessage.style.display = "none";
+          } else {
+            fileNameDiv.textContent = "";
+            sendDataButton.disabled = true;
+            removeButton.style.display = "none";
+            warningMessage.style.display = "block";
+            input.value = ""; // Clear the file input
+          }
+        } else {
+          fileNameDiv.textContent = "";
+          sendDataButton.disabled = true;
+          removeButton.style.display = "none";
+          warningMessage.style.display = "none";
         }
+      }
 
-        function redirectToError(errorMessage) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-          setTimeout(() => {
-            window.location.href = `/error.html?error=${encodeURIComponent(
-              errorMessage
-            )}`;
-          }, remainingTime);
-        }
+      function fileChanged(e) {
+        file = document.getElementById("fileInput").files[0];
+        parseDocument(file);
+      }
 
-        fetch(cloudEndpoint + "/planner_json", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
+      function removeFile() {
+        const input = document.getElementById("fileInput");
+        const fileNameDiv = document.getElementById("fileName");
+        const sendDataButton = document.getElementById("sendDataButton");
+        const removeButton = document.getElementById("removeButton");
+        const warningMessage = document.getElementById("warningMessage");
+        input.value = "";
+        fileNameDiv.textContent = "";
+        sendDataButton.disabled = true;
+        removeButton.style.display = "none";
+        warningMessage.style.display = "none";
+        file = null;
+      }
+
+      function parseDocument(file) {
+        const fileReader = new FileReader();
+        fileReader.onload = async function (e) {
+          const result = await extractGoogleCoords(e.target.result);
+          console.log(result);
+          sendDataToLocalStorage(result);
+        };
+        fileReader.readAsText(file);
+      }
+
+      async function extractGoogleCoords(plainText) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(plainText, "text/xml");
+        const PlacemarksData = {
+          NFZs: {
+            polygons: [],
+            paths: [],
           },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
+          AOIs: {
+            polygons: [],
+            paths: [],
+          },
+          StartEnd: {
+            start: null,
+            end: null,
+          },
+        };
+        if (xmlDoc.documentElement.nodeName === "kml") {
+          const folders = xmlDoc.getElementsByTagName("Folder");
+          for (let i = 0; i < folders.length; i++) {
+            const folder = folders[i];
+            const folderName = folder
+              .getElementsByTagName("name")[0]
+              .textContent.trim();
+            const placemarks = folder.getElementsByTagName("Placemark");
+            // Get all NFZs
+            if (folderName == "NFZs") {
+              PlacemarksData.NFZs = getZones(placemarks);
             }
-            return response.json();
-          })
-          .then((result) => {
-            console.log("Success:", result);
-            redirectToSummary(result);
-          })
-          .catch((error) => {
-            console.error("Erro:", error);
-            redirectToError(error.message);
-          });
-      };
+            // Get all AOIs
+            else if (folderName == "AOIs") {
+              PlacemarksData.AOIs = getZones(placemarks);
+            }
+            // Get Start and End
+            else if (folderName == "Start&End") {
+              PlacemarksData.StartEnd = getStartEnd(placemarks);
+            }
+          }
+        } else {
+          throw new Error("Error while parsing");
+        }
+        return PlacemarksData;
+      }
+
+      function getZones(placemarks) {
+        const zones = {
+          polygons: [],
+          paths: [],
+        };
+        for (let j = 0; j < placemarks.length; j++) {
+          const item = placemarks[j];
+          const nameElement = item.getElementsByTagName("name")[0];
+          const placeMarkName = nameElement.childNodes[0].nodeValue.trim();
+          const polygonsElement = item.getElementsByTagName("Polygon");
+          const pathsElement = item.getElementsByTagName("LineString");
+          const lookAt = item.getElementsByTagName("LookAt");
+          let altitude = 0;
+          if (lookAt.length > 0) {
+            const altitudeElement = lookAt[0].getElementsByTagName("altitude");
+            if (altitudeElement.length > 0) {
+              altitude = parseFloat(altitudeElement[0].textContent);
+            }
+          }
+          // Get all polygons
+          for (let k = 0; k < polygonsElement.length; k++) {
+            const polygon = polygonsElement[k];
+            const coordsElement =
+              polygon.getElementsByTagName("coordinates")[0];
+            const coords = coordsElement.childNodes[0].nodeValue.trim();
+            const points = coords.split(" ");
+            const googlePolygonsPaths = [];
+            for (let l = 0; l < points.length; l++) {
+              const point = points[l];
+              const coord = point.split(",");
+              googlePolygonsPaths.push({
+                lat: parseFloat(coord[1]),
+                lng: parseFloat(coord[0]),
+              });
+            }
+            zones.polygons.push({
+              name: placeMarkName,
+              altitude: altitude,
+              coords: googlePolygonsPaths,
+            });
+          }
+          // Get all paths
+          for (let k = 0; k < pathsElement.length; k++) {
+            const path = pathsElement[k];
+            const coordsElement = path.getElementsByTagName("coordinates")[0];
+            const coords = coordsElement.childNodes[0].nodeValue.trim();
+            const points = coords.split(" ");
+            const googleLineStringPaths = [];
+            for (let l = 0; l < points.length; l++) {
+              const point = points[l];
+              const coord = point.split(",");
+              googleLineStringPaths.push({
+                lat: parseFloat(coord[1]),
+                lng: parseFloat(coord[0]),
+              });
+            }
+            zones.paths.push({
+              name: placeMarkName,
+              altitude: altitude,
+              coords: googleLineStringPaths,
+            });
+          }
+        }
+        return zones;
+      }
+
+      function getStartEnd(placemarks) {
+        const StartEnd = {
+          start: null,
+          end: null,
+        };
+        for (let j = 0; j < placemarks.length; j++) {
+          const item = placemarks[j];
+          const nameElement = item.getElementsByTagName("name")[0];
+          const placeMarkName = nameElement.childNodes[0].nodeValue.trim();
+          const markers = item.getElementsByTagName("Point");
+          const lookAt = item.getElementsByTagName("LookAt");
+          let altitude = 0;
+          if (lookAt.length > 0) {
+            const altitudeElement = lookAt[0].getElementsByTagName("altitude");
+            if (altitudeElement.length > 0) {
+              altitude = parseFloat(altitudeElement[0].textContent);
+            }
+          }
+          for (let k = 0; k < markers.length; k++) {
+            const marker = markers[k];
+            const coordsElement = marker.getElementsByTagName("coordinates")[0];
+            const coords = coordsElement.childNodes[0].nodeValue.trim();
+            const coord = coords.split(",");
+            const latLng = {
+              lat: parseFloat(coord[1]),
+              lng: parseFloat(coord[0]),
+            };
+            if (placeMarkName.toLowerCase().includes("start")) {
+              StartEnd.start = {
+                name: placeMarkName,
+                coords: latLng,
+              };
+            } else if (placeMarkName.toLowerCase().includes("end")) {
+              StartEnd.end = {
+                name: placeMarkName,
+                coords: latLng,
+              };
+            }
+          }
+        }
+        if (StartEnd.start && !StartEnd.end) {
+          StartEnd.end = StartEnd.start;
+        }
+        return StartEnd;
+      }
+
+      function sendDataToLocalStorage(data) {
+        localStorage.setItem("zonesData", JSON.stringify(data));
+        window.location.href = "sendingdata.html";
+      }
+
+      function dropHandler(event) {
+        event.preventDefault();
+        const input = document.getElementById("fileInput");
+        const uploadContainer = document.getElementById("uploadContainer");
+        if (event.dataTransfer.items) {
+          const items = event.dataTransfer.items;
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].kind === "file") {
+              const file = items[i].getAsFile();
+              input.files = event.dataTransfer.files;
+              updateFileName();
+            }
+          }
+        } else {
+          input.files = event.dataTransfer.files;
+          updateFileName();
+        }
+        uploadContainer.classList.remove("dragover");
+      }
+
+      function dragOverHandler(event) {
+        event.preventDefault();
+        const uploadContainer = document.getElementById("uploadContainer");
+        uploadContainer.classList.add("dragover");
+      }
+
+      function dragLeaveHandler(event) {
+        const uploadContainer = document.getElementById("uploadContainer");
+        uploadContainer.classList.remove("dragover");
+      }
     </script>
   </body>
 </html>
