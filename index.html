@@ -157,13 +157,7 @@
 
   <body>
     <div class="data-handler-container">
-      <div
-        class="upload-container"
-        id="uploadContainer"
-        ondrop="dropHandler(event);"
-        ondragover="dragOverHandler(event);"
-        ondragleave="dragLeaveHandler(event);"
-      >
+      <div class="upload-container" id="uploadContainer">
         <i class="fa-solid fa-file-arrow-up"></i>
         <div class="upload-text">
           Você pode arrastar e soltar seu arquivo .kml para fazer upload
@@ -191,6 +185,11 @@
     </div>
 
     <script>
+      // Handle drag and drop events at the document level
+      document.addEventListener("dragover", dragOverHandler);
+      document.addEventListener("dragleave", dragLeaveHandler);
+      document.addEventListener("drop", dropHandler);
+
       let file;
 
       function updateFileName() {
