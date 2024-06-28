@@ -263,6 +263,10 @@
             polygons: [],
             paths: [],
           },
+          EMZs: {
+            polygons: [],
+            paths: [],
+          },
           StartEnd: {
             start: null,
             end: null,
@@ -276,13 +280,17 @@
               .getElementsByTagName("name")[0]
               .textContent.trim();
             const placemarks = folder.getElementsByTagName("Placemark");
-            // Get all NFZs
+            // Get all NFZs (No-Fly-Zones)
             if (folderName == "NFZs") {
               PlacemarksData.NFZs = getZones(placemarks);
             }
-            // Get all AOIs
+            // Get all AOIs (Areas of Interest)
             else if (folderName == "AOIs") {
               PlacemarksData.AOIs = getZones(placemarks);
+            }
+            // Get all EMZs (Emergency Zones)
+            else if (folderName == "EMZs") {
+              PlacemarksData.EMZs = getZones(placemarks);
             }
             // Get Start and End
             else if (folderName == "Start&End") {
@@ -303,6 +311,16 @@
         for (let j = 0; j < placemarks.length; j++) {
           const item = placemarks[j];
           const nameElement = item.getElementsByTagName("name")[0];
+          const visibilityElement = item.getElementsByTagName("visibility")[0];
+          const visibility = visibilityElement
+            ? visibilityElement.textContent.trim()
+            : "1";
+
+          // Skip placemarks with visibility set to 0
+          if (visibility === "0") {
+            continue;
+          }
+
           const placeMarkName = nameElement.childNodes[0].nodeValue.trim();
           const polygonsElement = item.getElementsByTagName("Polygon");
           const pathsElement = item.getElementsByTagName("LineString");
@@ -369,6 +387,16 @@
         for (let j = 0; j < placemarks.length; j++) {
           const item = placemarks[j];
           const nameElement = item.getElementsByTagName("name")[0];
+          const visibilityElement = item.getElementsByTagName("visibility")[0];
+          const visibility = visibilityElement
+            ? visibilityElement.textContent.trim()
+            : "1";
+
+          // Skip placemarks with visibility set to 0
+          if (visibility === "0") {
+            continue;
+          }
+
           const placeMarkName = nameElement.childNodes[0].nodeValue.trim();
           const markers = item.getElementsByTagName("Point");
           const lookAt = item.getElementsByTagName("LookAt");
