@@ -32,6 +32,14 @@
         color: lightgreen;
       }
 
+      .EMZs {
+        color: orange;
+      }
+
+      .emz {
+        color: rgb(255, 195, 83);
+      }
+
       .start {
         display: flex;
         justify-content: center;
@@ -58,6 +66,9 @@
         <h2 class="AOIs">Regiões de Interesse</h2>
         <p class="aoi" id="numAOIsZones"></p>
         <p class="aoi" id="numAOIsPaths"></p>
+        <h2 class="EMZs">Zonas de Emergência (EMZs)</h2>
+        <p class="emz" id="numEMZsZones"></p>
+        <p class="emz" id="numEMZsPaths"></p>
         <br />
         <div class="start">
           <i
@@ -86,11 +97,19 @@
           const numNFZsPaths = data.NFZs.paths.length;
           const numAOIsZones = data.AOIs.polygons.length;
           const numAOIsPaths = data.AOIs.paths.length;
+          const numEMZsZones = data.EMZs.polygons.length;
+          const numEMZsPaths = data.EMZs.paths.length;
           const start = data.StartEnd.start
-            ? `Início: ${convertToDMS(data.StartEnd.start.coords.lat, true)} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
+            ? `Início: ${convertToDMS(
+                data.StartEnd.start.coords.lat,
+                true
+              )} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
             : "Início: Não definido";
           const end = data.StartEnd.end
-            ? `Fim: ${convertToDMS(data.StartEnd.start.coords.lat, true)} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
+            ? `Fim: ${convertToDMS(
+                data.StartEnd.start.coords.lat,
+                true
+              )} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
             : "Fim: Não definido";
 
           document.getElementById(
@@ -105,6 +124,12 @@
           document.getElementById(
             "numAOIsPaths"
           ).textContent = `Número de Trajetos: ${numAOIsPaths}`;
+          document.getElementById(
+            "numEMZsZones"
+          ).textContent = `Número de Áreas: ${numEMZsZones}`;
+          document.getElementById(
+            "numEMZsPaths"
+          ).textContent = `Número de Trajetos: ${numEMZsPaths}`;
           document.getElementById("startCoords").textContent = start;
           document.getElementById("endCoords").textContent = end;
 
@@ -113,7 +138,7 @@
             window.location.href = "/missionsummary.html";
           };
         } else {
-          console.error("No data found in local storage");
+          console.error("No data found in session storage");
         }
       };
 
