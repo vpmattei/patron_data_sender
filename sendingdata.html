@@ -1,108 +1,104 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Manipulador de Postagem de Dados</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <style>
-      #loader {
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid #1a3cdb;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        display: inline-block;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <title>Manipulador de Postagem de Dados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <style>
+    #loader {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #1a3cdb;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
-    </style>
-  </head>
-  <body>
-    <div id="container" class="container">
-      <div id="postingMessage">
-        <p>Enviando dados...</p>
-        <div id="loader"></div>
-      </div>
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="container" class="container">
+    <div id="postingMessage">
+      <p>Enviando dados...</p>
+      <div id="loader"></div>
     </div>
-    <script>
-      const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
-      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
+  </div>
+  <script>
+    const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
+    const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
-      window.onload = function () {
-        const data = JSON.parse(localStorage.getItem("zonesData"));
+    window.onload = function () {
+      const data = JSON.parse(localStorage.getItem("zonesData"));
+      const selectedDrone = sessionStorage.getItem("selectedDrone");
+      const selectedMosa = sessionStorage.getItem("selectedMosa");
 
-        if (!data) {
-          redirectToError("No data found");
-          return;
-        }
+      if (!data) {
+        redirectToError("No data found");
+        return;
+      }
 
-        const postStartTime = Date.now();
-
-        function redirectToSummary(responseData) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-
-          // Store the JSON data in session storage
-          sessionStorage.setItem("responseData", JSON.stringify(responseData));
-
-          setTimeout(() => {
-            window.location.href = "/datasummary.html";
-          }, remainingTime);
-        }
-
-        function redirectToError(errorMessage) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-          setTimeout(() => {
-            window.location.href = `/error.html?error=${encodeURIComponent(
-              errorMessage
-            )}`;
-          }, remainingTime);
-        }
-
-        fetch(cloudEndpoint + "/planner_json", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-            return response.json();
-          })
-          .then((result) => {
-            console.log("Success:", result);
-            redirectToSummary(result);
-          })
-          .catch((error) => {
-            console.error("Erro:", error);
-            redirectToError(error.message);
-          });
+      // Add selected drone and MOSA to data
+      const requestData = {
+        ...data,
+        drone: selectedDrone,
+        mosa: selectedMosa,
       };
-    </script>
-  </body>
+
+      const postStartTime = Date.now();
+
+      function redirectToSummary(responseData) {
+        const elapsedTime = Date.now() - postStartTime;
+        const remainingTime = Math.max(0, 2000 - elapsedTime);
+
+        // Store the JSON data in session storage
+        sessionStorage.setItem("responseData", JSON.stringify(responseData));
+
+        setTimeout(() => {
+          window.location.href = "/datasummary.html";
+        }, remainingTime);
+      }
+
+      function redirectToError(errorMessage) {
+        const elapsedTime = Date.now() - postStartTime;
+        const remainingTime = Math.max(0, 2000 - elapsedTime);
+        setTimeout(() => {
+          window.location.href = `/error.html?error=${encodeURIComponent(errorMessage)}`;
+        }, remainingTime);
+      }
+
+      fetch(cloudEndpoint + "/planner_json", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok " + response.statusText);
+          }
+          return response.json();
+        })
+        .then((result) => {
+          console.log("Success:", result);
+          redirectToSummary(result);
+        })
+        .catch((error) => {
+          console.error("Erro:", error);
+          redirectToError(error.message);
+        });
+    };
+  </script>
+</body>
 </html>
