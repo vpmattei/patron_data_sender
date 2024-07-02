@@ -64,6 +64,11 @@
       const selectedMosa = sessionStorage.getItem("selectedMosa");
       const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
+      console.log("zonesData:", zonesData);
+      console.log("selectedDrone:", selectedDrone);
+      console.log("selectedMosa:", selectedMosa);
+      console.log("selectedTargetAltitude:", selectedTargetAltitude);
+
       if (!zonesData) {
         console.error("No zones data found.");
         redirectToError("No data found");
