@@ -58,12 +58,14 @@
     const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
     window.onload = function () {
+      console.log("Window loaded.");
       const zonesData = JSON.parse(localStorage.getItem("zonesData"));
       const selectedDrone = sessionStorage.getItem("selectedDrone");
       const selectedMosa = sessionStorage.getItem("selectedMosa");
       const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
       if (!zonesData) {
+        console.error("No zones data found.");
         redirectToError("No data found");
         return;
       }
@@ -96,7 +98,7 @@
 
         // Store the JSON data in session storage
         sessionStorage.setItem("responseData", JSON.stringify(responseData));
-
+        console.log("Redirecting to summary...");
         setTimeout(() => {
           window.location.href = "datasummary.html";
         }, remainingTime);
@@ -105,11 +107,13 @@
       function redirectToError(errorMessage) {
         const elapsedTime = Date.now() - postStartTime;
         const remainingTime = Math.max(0, 2000 - elapsedTime);
+        console.error("Error occurred: ", errorMessage);
         setTimeout(() => {
           window.location.href = `error.html?error=${encodeURIComponent(errorMessage)}`;
         }, remainingTime);
       }
 
+      console.log("Sending data to endpoint...");
       fetch(`${cloudEndpoint}/planner_json`, {
         method: "POST",
         headers: {
@@ -118,6 +122,7 @@
         body: JSON.stringify(requestData),
       })
         .then((response) => {
+          console.log("Received response from endpoint...");
           if (!response.ok) {
             throw new Error("Network response was not ok " + response.statusText);
           }
