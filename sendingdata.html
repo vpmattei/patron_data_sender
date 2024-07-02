@@ -35,24 +35,25 @@
     </div>
   </div>
   <script>
-    const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
     const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
     window.onload = function () {
       const zonesData = JSON.parse(localStorage.getItem("zonesData"));
       const selectedDrone = sessionStorage.getItem("selectedDrone");
       const selectedMosa = sessionStorage.getItem("selectedMosa");
+      const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
       if (!zonesData) {
         redirectToError("No data found");
         return;
       }
 
-      // Add selected drone and MOSA to data
+      // Add selected drone, MOSA and target altitude to data
       const requestData = {
         ...zonesData,
         drone: selectedDrone,
         mosa: selectedMosa,
+        targetAltitude: selectedTargetAltitude,
       };
 
       const postStartTime = Date.now();
@@ -65,7 +66,7 @@
         sessionStorage.setItem("responseData", JSON.stringify(responseData));
 
         setTimeout(() => {
-          window.location.href = "/datasummary.html";
+          window.location.href = "datasummary.html";
         }, remainingTime);
       }
 
@@ -73,7 +74,7 @@
         const elapsedTime = Date.now() - postStartTime;
         const remainingTime = Math.max(0, 2000 - elapsedTime);
         setTimeout(() => {
-          window.location.href = `/error.html?error=${encodeURIComponent(errorMessage)}`;
+          window.location.href = `error.html?error=${encodeURIComponent(errorMessage)}`;
         }, remainingTime);
       }
 
