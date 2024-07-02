@@ -97,6 +97,11 @@
       const selectedMosa = sessionStorage.getItem("selectedMosa");
       const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
+      console.log("storedData:", storedData);
+      console.log("selectedDrone:", selectedDrone);
+      console.log("selectedMosa:", selectedMosa);
+      console.log("selectedTargetAltitude:", selectedTargetAltitude);
+
       if (storedData) {
         const data = JSON.parse(storedData);
 
@@ -127,7 +132,6 @@
         document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${selectedTargetAltitude}`;
 
         window.redirectToMissionSummary = function () {
-          sessionStorage.setItem("responseData", JSON.stringify(data));
           window.location.href = "missionsummary.html";
         };
       } else {
