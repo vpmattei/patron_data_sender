@@ -281,194 +281,175 @@
               .textContent.trim();
             const placemarks = folder.getElementsByTagName("Placemark");
             // Get all NFZs (No-Fly-Zones)
-            if (folderName == "NFZs") {
-              PlacemarksData.NFZs = getZones(placemarks);
+            if (folderName === "NFZs") {
+              for (let j = 0; j < placemarks.length; j++) {
+                const placemark = placemarks[j];
+                const polygon = placemark.getElementsByTagName("Polygon")[0];
+                const path = placemark.getElementsByTagName("LineString")[0];
+                if (polygon) {
+                  const coords = polygon
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const coordsArray = coords.split(/\s+/).map((coordStr) => {
+                    const [lng, lat] = coordStr.split(",");
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  });
+                  PlacemarksData.NFZs.polygons.push(coordsArray);
+                }
+                if (path) {
+                  const coords = path
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const coordsArray = coords.split(/\s+/).map((coordStr) => {
+                    const [lng, lat] = coordStr.split(",");
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  });
+                  PlacemarksData.NFZs.paths.push(coordsArray);
+                }
+              }
             }
             // Get all AOIs (Areas of Interest)
-            else if (folderName == "AOIs") {
-              PlacemarksData.AOIs = getZones(placemarks);
+            else if (folderName === "AOIs") {
+              for (let j = 0; j < placemarks.length; j++) {
+                const placemark = placemarks[j];
+                const polygon = placemark.getElementsByTagName("Polygon")[0];
+                const path = placemark.getElementsByTagName("LineString")[0];
+                if (polygon) {
+                  const coords = polygon
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const coordsArray = coords.split(/\s+/).map((coordStr) => {
+                    const [lng, lat] = coordStr.split(",");
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  });
+                  PlacemarksData.AOIs.polygons.push(coordsArray);
+                }
+                if (path) {
+                  const coords = path
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const coordsArray = coords.split(/\s+/).map((coordStr) => {
+                    const [lng, lat] = coordStr.split(",");
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  });
+                  PlacemarksData.AOIs.paths.push(coordsArray);
+                }
+              }
             }
             // Get all EMZs (Emergency Zones)
-            else if (folderName == "EMZs") {
-              PlacemarksData.EMZs = getZones(placemarks);
+            else if (folderName === "EMZs") {
+              for (let j = 0; j < placemarks.length; j++) {
+                const placemark = placemarks[j];
+                const polygon = placemark.getElementsByTagName("Polygon")[0];
+                const path = placemark.getElementsByTagName("LineString")[0];
+                if (polygon) {
+                  const coords = polygon
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const coordsArray = coords.split(/\s+/).map((coordStr) => {
+                    const [lng, lat] = coordStr.split(",");
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  });
+                  PlacemarksData.EMZs.polygons.push(coordsArray);
+                }
+                if (path) {
+                  const coords = path
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const coordsArray = coords.split(/\s+/).map((coordStr) => {
+                    const [lng, lat] = coordStr.split(",");
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  });
+                  PlacemarksData.EMZs.paths.push(coordsArray);
+                }
+              }
             }
-            // Get Start and End
-            else if (folderName == "Start&End") {
-              PlacemarksData.StartEnd = getStartEnd(placemarks);
+            // Get Start and End Points
+            else if (folderName === "StartEnd") {
+              for (let j = 0; j < placemarks.length; j++) {
+                const placemark = placemarks[j];
+                const point = placemark.getElementsByTagName("Point")[0];
+                if (point) {
+                  const coords = point
+                    .getElementsByTagName("coordinates")[0]
+                    .textContent.trim();
+                  const [lng, lat] = coords.split(",");
+                  const pointData = { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  const name = placemark
+                    .getElementsByTagName("name")[0]
+                    .textContent.trim();
+                  if (name === "start") {
+                    PlacemarksData.StartEnd.start = pointData;
+                  } else if (name === "end") {
+                    PlacemarksData.StartEnd.end = pointData;
+                  }
+                }
+              }
             }
           }
-        } else {
-          throw new Error("Error while parsing");
         }
         return PlacemarksData;
       }
 
-      function getZones(placemarks) {
-        const zones = {
-          polygons: [],
-          paths: [],
-        };
-        for (let j = 0; j < placemarks.length; j++) {
-          const item = placemarks[j];
-          const nameElement = item.getElementsByTagName("name")[0];
-          const visibilityElement = item.getElementsByTagName("visibility")[0];
-          const visibility = visibilityElement
-            ? visibilityElement.textContent.trim()
-            : "1";
-
-          // Skip placemarks with visibility set to 0
-          if (visibility === "0") {
-            continue;
-          }
-
-          const placeMarkName = nameElement.childNodes[0].nodeValue.trim();
-          const polygonsElement = item.getElementsByTagName("Polygon");
-          const pathsElement = item.getElementsByTagName("LineString");
-          const lookAt = item.getElementsByTagName("LookAt");
-          let altitude = 0;
-          if (lookAt.length > 0) {
-            const altitudeElement = lookAt[0].getElementsByTagName("altitude");
-            if (altitudeElement.length > 0) {
-              altitude = parseFloat(altitudeElement[0].textContent);
-            }
-          }
-          // Get all polygons
-          for (let k = 0; k < polygonsElement.length; k++) {
-            const polygon = polygonsElement[k];
-            const coordsElement =
-              polygon.getElementsByTagName("coordinates")[0];
-            const coords = coordsElement.childNodes[0].nodeValue.trim();
-            const points = coords.split(" ");
-            const googlePolygonsPaths = [];
-            for (let l = 0; l < points.length; l++) {
-              const point = points[l];
-              const coord = point.split(",");
-              googlePolygonsPaths.push({
-                lat: parseFloat(coord[1]),
-                lng: parseFloat(coord[0]),
-              });
-            }
-            zones.polygons.push({
-              name: placeMarkName,
-              altitude: altitude,
-              coords: googlePolygonsPaths,
-            });
-          }
-          // Get all paths
-          for (let k = 0; k < pathsElement.length; k++) {
-            const path = pathsElement[k];
-            const coordsElement = path.getElementsByTagName("coordinates")[0];
-            const coords = coordsElement.childNodes[0].nodeValue.trim();
-            const points = coords.split(" ");
-            const googleLineStringPaths = [];
-            for (let l = 0; l < points.length; l++) {
-              const point = points[l];
-              const coord = point.split(",");
-              googleLineStringPaths.push({
-                lat: parseFloat(coord[1]),
-                lng: parseFloat(coord[0]),
-              });
-            }
-            zones.paths.push({
-              name: placeMarkName,
-              altitude: altitude,
-              coords: googleLineStringPaths,
-            });
-          }
-        }
-        return zones;
-      }
-
-      function getStartEnd(placemarks) {
-        const StartEnd = {
-          start: null,
-          end: null,
-        };
-        for (let j = 0; j < placemarks.length; j++) {
-          const item = placemarks[j];
-          const nameElement = item.getElementsByTagName("name")[0];
-          const visibilityElement = item.getElementsByTagName("visibility")[0];
-          const visibility = visibilityElement
-            ? visibilityElement.textContent.trim()
-            : "1";
-
-          // Skip placemarks with visibility set to 0
-          if (visibility === "0") {
-            continue;
-          }
-
-          const placeMarkName = nameElement.childNodes[0].nodeValue.trim();
-          const markers = item.getElementsByTagName("Point");
-          const lookAt = item.getElementsByTagName("LookAt");
-          let altitude = 0;
-          if (lookAt.length > 0) {
-            const altitudeElement = lookAt[0].getElementsByTagName("altitude");
-            if (altitudeElement.length > 0) {
-              altitude = parseFloat(altitudeElement[0].textContent);
-            }
-          }
-          for (let k = 0; k < markers.length; k++) {
-            const marker = markers[k];
-            const coordsElement = marker.getElementsByTagName("coordinates")[0];
-            const coords = coordsElement.childNodes[0].nodeValue.trim();
-            const coord = coords.split(",");
-            const latLng = {
-              lat: parseFloat(coord[1]),
-              lng: parseFloat(coord[0]),
-            };
-            if (placeMarkName.toLowerCase().includes("start")) {
-              StartEnd.start = {
-                name: placeMarkName,
-                coords: latLng,
-              };
-            } else if (placeMarkName.toLowerCase().includes("end")) {
-              StartEnd.end = {
-                name: placeMarkName,
-                coords: latLng,
-              };
-            }
-          }
-        }
-        if (StartEnd.start && !StartEnd.end) {
-          StartEnd.end = StartEnd.start;
-        }
-        return StartEnd;
-      }
-
       function sendDataToLocalStorage(data) {
-        localStorage.setItem("zonesData", JSON.stringify(data));
-        window.location.href = "sendingdata.html";
-      }
-
-      function dropHandler(event) {
-        event.preventDefault();
-        const input = document.getElementById("fileInput");
-        const uploadContainer = document.getElementById("uploadContainer");
-        if (event.dataTransfer.items) {
-          const items = event.dataTransfer.items;
-          for (let i = 0; i < items.length; i++) {
-            if (items[i].kind === "file") {
-              const file = items[i].getAsFile();
-              input.files = event.dataTransfer.files;
-              updateFileName();
-            }
-          }
-        } else {
-          input.files = event.dataTransfer.files;
-          updateFileName();
-        }
-        uploadContainer.classList.remove("dragover");
+        localStorage.setItem("PlacemarksData", JSON.stringify(data));
+        window.location.href = "selectingdrone.html";
       }
 
       function dragOverHandler(event) {
         event.preventDefault();
-        const uploadContainer = document.getElementById("uploadContainer");
-        uploadContainer.classList.add("dragover");
+        document
+          .getElementById("uploadContainer")
+          .classList.add("dragover");
       }
 
       function dragLeaveHandler(event) {
-        const uploadContainer = document.getElementById("uploadContainer");
-        uploadContainer.classList.remove("dragover");
+        document.getElementById("uploadContainer").classList.remove("dragover");
+      }
+
+      function dropHandler(event) {
+        event.preventDefault();
+        document.getElementById("uploadContainer").classList.remove("dragover");
+        const input = document.getElementById("fileInput");
+        const fileNameDiv = document.getElementById("fileName");
+        const sendDataButton = document.getElementById("sendDataButton");
+        const removeButton = document.getElementById("removeButton");
+        const warningMessage = document.getElementById("warningMessage");
+        if (event.dataTransfer.items) {
+          const file = event.dataTransfer.items[0].getAsFile();
+          const fileName = file.name;
+          const fileExtension = fileName.split(".").pop().toLowerCase();
+          if (fileExtension === "kml") {
+            fileNameDiv.textContent = fileName;
+            sendDataButton.disabled = false;
+            removeButton.style.display = "block";
+            warningMessage.style.display = "none";
+            document.getElementById("fileInput").files = event.dataTransfer.files;
+          } else {
+            fileNameDiv.textContent = "";
+            sendDataButton.disabled = true;
+            removeButton.style.display = "none";
+            warningMessage.style.display = "block";
+          }
+        } else {
+          if (event.dataTransfer.files.length > 0) {
+            const file = event.dataTransfer.files[0];
+            const fileName = file.name;
+            const fileExtension = fileName.split(".").pop().toLowerCase();
+            if (fileExtension === "kml") {
+              fileNameDiv.textContent = fileName;
+              sendDataButton.disabled = false;
+              removeButton.style.display = "block";
+              warningMessage.style.display = "none";
+              document.getElementById("fileInput").files = event.dataTransfer.files;
+            } else {
+              fileNameDiv.textContent = "";
+              sendDataButton.disabled = true;
+              removeButton.style.display = "none";
+              warningMessage.style.display = "block";
+            }
+          }
+        }
       }
     </script>
   </body>
