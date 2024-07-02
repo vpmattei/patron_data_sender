@@ -106,8 +106,26 @@
         document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${selectedTargetAltitude}`;
 
         window.redirectToDataSummary = function () {
-          sessionStorage.setItem("responseData", JSON.stringify(data));
           window.location.href = "datasummary.html";
+        };
+
+        const completeData = {
+          ...data,
+          drone: selectedDrone,
+          mosa: selectedMosa,
+          targetAltitude: selectedTargetAltitude,
+          Version: "0.1.0",
+          MissionTypes: ["Area survey", "Corridor survey"],
+          TargetAltitudes: ["ASL", "HOME", "AGL", "AGL+"],
+          VehicleTypes: ["Copter", "Plane", "VTOL"],
+          Aircrafts: [
+            { "Name":"VT-14", "Type":"VTOL", "CruiseSpeed": 22,"MinSspeed": 22, "MaxSpeed": 22, "TurnRadios":200, "ReturnAltitude": 200, "MinHome":30, "MinAGL":30, "MaxASL":1000, "MaxAGL":400, "FlitTime":240, "TurnaroundDist":50},
+            { "Name":"MR82020", "Type":"Copter", "CruiseSpeed": 21,"MinSspeed": 21, "MaxSpeed": 21, "TurnRadios":201, "ReturnAltitude": 201, "MinHome":31, "MinAGL":31, "MaxASL":1001, "MaxAGL":401, "FlitTime":241, "TurnaroundDist":51}
+          ],
+          MOSAs: [
+            { "Name":"MOSA1", "MissionType":"Area survey", "TargetAltitude":"HOME", "FlightAltitude":100, "WaypointsDist": 40, "LineDist":50 },
+            { "Name":"MOSA2", "MissionType":"Corridor survey", "TargetAltitude":"AGL", "FlightAltitude":99, "WaypointsDist": 41, "LineDist":51 }
+          ]
         };
 
         window.downloadKML = function () {
@@ -116,7 +134,7 @@
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(completeData),
           })
             .then((response) => {
               if (!response.ok) {
@@ -145,7 +163,7 @@
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(completeData),
           })
             .then((response) => {
               if (!response.ok) {
