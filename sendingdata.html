@@ -39,18 +39,18 @@
     const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
     window.onload = function () {
-      const data = JSON.parse(localStorage.getItem("zonesData"));
+      const zonesData = JSON.parse(localStorage.getItem("zonesData"));
       const selectedDrone = sessionStorage.getItem("selectedDrone");
       const selectedMosa = sessionStorage.getItem("selectedMosa");
 
-      if (!data) {
+      if (!zonesData) {
         redirectToError("No data found");
         return;
       }
 
       // Add selected drone and MOSA to data
       const requestData = {
-        ...data,
+        ...zonesData,
         drone: selectedDrone,
         mosa: selectedMosa,
       };
