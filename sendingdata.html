@@ -122,7 +122,7 @@
           redirectToSummary(result);
         })
         .catch((error) => {
-          redirectToError(error, requestData);
+          redirectToError(error.message, requestData);
         });
     };
   </script>

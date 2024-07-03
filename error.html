@@ -27,7 +27,7 @@
         const params = new URLSearchParams(window.location.search);
         const error = decodeURIComponent(params.get("error"));
         const data = decodeURIComponent(params.get("data"));
-        document.getElementById("errorMessage").textContent = error.message;
+        document.getElementById("errorMessage").textContent = error;
         console.error(error)
         console.log(data)
       };
