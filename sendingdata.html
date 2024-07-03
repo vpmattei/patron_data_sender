@@ -1,137 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <title>Manipulador de Postagem de Dados</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" type="text/css" href="main.css" />
-  <style>
-    body {
-      font-family: Roboto, sans-serif;
-      background-color: #00051e;
-      background: linear-gradient(to top, #00051e, #020b45), no-repeat top center;
-      color: #fff;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #loader {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #1a3cdb;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      margin-top: 20px;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
+  <head>
+    <meta charset="UTF-8" />
+    <title>Manipulador de Postagem de Dados</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <style>
+      body {
+        font-family: Roboto, sans-serif;
+        background-color: #00051e;
+        background: linear-gradient(to top, #00051e, #020b45),
+          no-repeat top center;
+        color: #fff;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
-      100% {
-        transform: rotate(360deg);
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
-    }
-  </style>
-</head>
-<body>
-  <div id="container" class="container">
-    <div id="postingMessage">
-      <p>Enviando dados...</p>
-      <div id="loader"></div>
+
+      #loader {
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #1a3cdb;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        margin-top: 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" class="container">
+      <div id="postingMessage">
+        <p>Enviando dados...</p>
+        <div id="loader"></div>
+      </div>
     </div>
-  </div>
-  <script>
-    const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
+    <script>
+      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
-    window.onload = function () {
-      console.log("Window loaded.");
-      const placemarksData = JSON.parse(localStorage.getItem("PlacemarksData"));
-      const selectedDrone = sessionStorage.getItem("selectedDrone");
-      const selectedMosa = sessionStorage.getItem("selectedMosa");
-      const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
+      window.onload = function () {
+        console.log("Window loaded.");
+        const placemarksData = JSON.parse(
+          localStorage.getItem("PlacemarksData")
+        );
+        const selectedDrone = sessionStorage.getItem("selectedDrone");
+        const selectedMosa = sessionStorage.getItem("selectedMosa");
+        const selectedTargetAltitude = sessionStorage.getItem(
+          "selectedTargetAltitude"
+        );
 
-      console.log("placemarksData:", placemarksData);
-      console.log("selectedDrone:", selectedDrone);
-      console.log("selectedMosa:", selectedMosa);
-      console.log("selectedTargetAltitude:", selectedTargetAltitude);
+        console.log("placemarksData:", placemarksData);
+        console.log("selectedDrone:", selectedDrone);
+        console.log("selectedMosa:", selectedMosa);
+        console.log("selectedTargetAltitude:", selectedTargetAltitude);
 
-      if (!placemarksData) {
-        console.error("No placemarks data found.");
-        redirectToError("No data found");
-        return;
-      }
+        if (!placemarksData) {
+          console.error("No placemarks data found.");
+          redirectToError("No data found");
+          return;
+        }
 
-      // Add selected drone, MOSA, and target altitude to data
-      const requestData = {
-        ...placemarksData,
-        drone: selectedDrone,
-        mosa: selectedMosa,
-        targetAltitude: selectedTargetAltitude,
-        Version: "0.1.0",
+        // Add selected drone, MOSA, and target altitude to data
+        const requestData = {
+          ...placemarksData,
+          drone: selectedDrone,
+          mosa: selectedMosa,
+          targetAltitude: selectedTargetAltitude,
+          Version: "0.1.0",
+        };
+
+        const postStartTime = Date.now();
+
+        function redirectToSummary(responseData) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+
+          // Store the JSON data in session storage
+          sessionStorage.setItem("responseData", JSON.stringify(responseData));
+          console.log("Redirecting to summary...");
+          setTimeout(() => {
+            window.location.href = "datasummary.html";
+          }, remainingTime);
+        }
+
+        function redirectToError(errorMessage, data) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+          console.error("Error occurred: ", errorMessage);
+          setTimeout(() => {
+            window.location.href = `error.html?error=${encodeURIComponent(
+              errorMessage
+            )}?data=${encodeURIComponent(data)}`;
+          }, remainingTime);
+        }
+
+        console.log("Sending data to endpoint...");
+        console.log(requestData);
+        localStorage.setItem("requestData", JSON.stringify(requestData));
+        fetch(cloudEndpoint + "/planner_json", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(placemarksData),
+        })
+          .then((response) => {
+            console.log("Received response from endpoint...");
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((result) => {
+            console.log("Success:", result);
+            redirectToSummary(result);
+          })
+          .catch((error) => {
+            redirectToError(error, requestData);
+          });
       };
-
-      const postStartTime = Date.now();
-
-      function redirectToSummary(responseData) {
-        const elapsedTime = Date.now() - postStartTime;
-        const remainingTime = Math.max(0, 2000 - elapsedTime);
-
-        // Store the JSON data in session storage
-        sessionStorage.setItem("responseData", JSON.stringify(responseData));
-        console.log("Redirecting to summary...");
-        setTimeout(() => {
-          window.location.href = "datasummary.html";
-        }, remainingTime);
-      }
-
-      function redirectToError(errorMessage, data) {
-        const elapsedTime = Date.now() - postStartTime;
-        const remainingTime = Math.max(0, 2000 - elapsedTime);
-        console.error("Error occurred: ", errorMessage);
-        setTimeout(() => {
-          window.location.href = `error.html?error=${encodeURIComponent(errorMessage)}?data=${encodeURIComponent(data)}`;
-        }, remainingTime);
-      }
-
-      console.log("Sending data to endpoint...");
-      console.log(requestData);
-      localStorage.setItem("requestData", JSON.stringify(requestData));
-      fetch(cloudEndpoint+"/planner_json", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(placemarksData),
-      })
-        .then((response) => {
-          console.log("Received response from endpoint...");
-          if (!response.ok) {
-            throw new Error("Network response was not ok " + response.statusText);
-          }
-          return response.json();
-        })
-        .then((result) => {
-          console.log("Success:", result);
-          redirectToSummary(result);
-        })
-        .catch((error) => {
-          redirectToError(error, requestData);
-        });
-    };
-  </script>
-</body>
+    </script>
+  </body>
 </html>
