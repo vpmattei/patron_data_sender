@@ -59,25 +59,25 @@
 
     window.onload = function () {
       console.log("Window loaded.");
-      const zonesData = JSON.parse(localStorage.getItem("zonesData"));
+      const placemarksData = JSON.parse(localStorage.getItem("PlacemarksData"));
       const selectedDrone = sessionStorage.getItem("selectedDrone");
       const selectedMosa = sessionStorage.getItem("selectedMosa");
       const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
-      console.log("zonesData:", zonesData);
+      console.log("placemarksData:", placemarksData);
       console.log("selectedDrone:", selectedDrone);
       console.log("selectedMosa:", selectedMosa);
       console.log("selectedTargetAltitude:", selectedTargetAltitude);
 
-      if (!zonesData) {
-        console.error("No zones data found.");
+      if (!placemarksData) {
+        console.error("No placemarks data found.");
         redirectToError("No data found");
         return;
       }
 
       // Add selected drone, MOSA, and target altitude to data
       const requestData = {
-        ...zonesData,
+        ...placemarksData,
         drone: selectedDrone,
         mosa: selectedMosa,
         targetAltitude: selectedTargetAltitude,
