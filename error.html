@@ -26,8 +26,10 @@
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
         const error = decodeURIComponent(params.get("error"));
+        const data = decodeURIComponent(params.get("data"));
         document.getElementById("errorMessage").textContent = error.message;
         console.error(error)
+        console.log(data)
       };
 
       function goBack() {
