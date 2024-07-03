@@ -98,16 +98,17 @@
         }, remainingTime);
       }
 
-      function redirectToError(errorMessage) {
+      function redirectToError(errorMessage, data) {
         const elapsedTime = Date.now() - postStartTime;
         const remainingTime = Math.max(0, 2000 - elapsedTime);
         console.error("Error occurred: ", errorMessage);
         setTimeout(() => {
-          window.location.href = `error.html?error=${encodeURIComponent(errorMessage)}`;
+          window.location.href = `error.html?error=${encodeURIComponent(errorMessage)}?data=${encodeURIComponent(data)}`;
         }, remainingTime);
       }
 
       console.log("Sending data to endpoint...");
+      console.log(requestData);
       fetch(`${cloudEndpoint}/planner_json`, {
         method: "POST",
         headers: {
@@ -127,7 +128,7 @@
           redirectToSummary(result);
         })
         .catch((error) => {
-          redirectToError(error);
+          redirectToError(error, requestData);
         });
     };
   </script>
