@@ -109,6 +109,7 @@
 
       console.log("Sending data to endpoint...");
       console.log(requestData);
+      localStorage.setItem("requestData", JSON.stringify(requestData));
       fetch(`${cloudEndpoint}/planner_json`, {
         method: "POST",
         headers: {
