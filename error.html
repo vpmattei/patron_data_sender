@@ -25,8 +25,9 @@
     <script>
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
-        const errorMessage = decodeURIComponent(params.get("error"));
-        document.getElementById("errorMessage").textContent = errorMessage;
+        const error = decodeURIComponent(params.get("error"));
+        document.getElementById("errorMessage").textContent = error.message;
+        console.error(error)
       };
 
       function goBack() {
