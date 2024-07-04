@@ -326,7 +326,7 @@
         altitude: selectedTargetAltitude
       }
 
-      localStorage.setItem("droneMosaData", droneMosaData);
+      localStorage.setItem("droneMosaData", JSON.stringify(droneMosaData));
       loader.style.display = 'flex';
       sendButton.style.display = 'none';
 
