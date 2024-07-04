@@ -51,12 +51,12 @@
         const zonesData = JSON.parse(localStorage.getItem("zonesData"));
         const droneMosaData = JSON.parse(localStorage.getItem("droneMosaData"));
         const dataTest = {
-          ...data,
+          ...zonesData,
           ...droneMosaData
         }
 
-        if (!data) {
-          redirectToError("No data found");
+        if (!zonesData) {
+          redirectToError("No zonesData found");
           return;
         }
 
@@ -66,7 +66,7 @@
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
 
-          // Store the JSON data in session storage
+          // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
 
           setTimeout(() => {
