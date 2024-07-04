@@ -92,9 +92,9 @@
         // Add selected drone, MOSA, and target altitude to data
         const requestData = {
           ...placemarksData,
-          drone: selectedDrone,
-          mosa: selectedMosa,
-          targetAltitude: selectedTargetAltitude,
+          drone:" DRONE1",
+          mosa: "selectedMosa",
+          targetAltitude: "selectedTargetAltitude",
           Version: "0.1.0",
         };
 
@@ -131,7 +131,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(placemarksData),
+          body: JSON.stringify(requestData),
         })
           .then((response) => {
             console.log("Received response from endpoint...");
