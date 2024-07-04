@@ -48,12 +48,11 @@
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       window.onload = function () {
-        const data = JSON.parse(localStorage.getItem("zonesData"));
+        const zonesData = JSON.parse(localStorage.getItem("zonesData"));
+        const droneMosaData = JSON.parse(localStorage.getItem("droneMosaData"));
         const dataTest = {
           ...data,
-          drone: "drone1",
-          mosa: "mosa1",
-          altitude: "500m"
+          ...droneMosaData
         }
 
         if (!data) {
