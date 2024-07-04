@@ -49,6 +49,12 @@
 
       window.onload = function () {
         const data = JSON.parse(localStorage.getItem("zonesData"));
+        const dataTest = {
+          ...data,
+          drone: "drone1",
+          mosa: "mosa1",
+          altitude: "500m"
+        }
 
         if (!data) {
           redirectToError("No data found");
@@ -84,7 +90,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(dataTest),
         })
           .then((response) => {
             if (!response.ok) {
