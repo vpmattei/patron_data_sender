@@ -92,7 +92,6 @@
       .buttons {
         display: flex;
         justify-content: space-between;
-        width: 50%;
         margin-top: 20px;
       }
     </style>
@@ -288,10 +287,10 @@
       />
       <div class="selection-container">
         <div class="selection-row">
-          <label for="drone">Sélectionnez un Drone</label>
+          <label for="drone">Escolha um Drone</label>
           <div style="display: flex; align-items: center">
             <select name="drone" id="drone" onchange="displayDroneImage()">
-              <option value="">Sélectionnez un Drone</option>
+              <option value="">Selecione um Drone</option>
             </select>
             <i
               class="fa fa-info-circle info-icon"
@@ -300,26 +299,26 @@
           </div>
         </div>
         <div class="selection-row">
-          <label for="mosa">Choisissez un MOSA</label>
+          <label for="mosa">Escolha um MOSA</label>
           <select name="mosa" id="mosa">
-            <option value="">Sélectionnez un MOSA</option>
+            <option value="">Selecione um MOSA</option>
           </select>
         </div>
         <div class="selection-row">
-          <label for="targetAltitude">Choisissez une altitude cible</label>
+          <label for="targetAltitude">Escolha uma altitude</label>
           <select name="targetAltitude" id="targetAltitude">
-            <option value="">Sélectionnez une altitude</option>
+            <option value="">Selecione uma altitude</option>
           </select>
         </div>
       </div>
       <div class="buttons">
-        <button onclick="goBack()">Retour</button>
-        <button id="sendButton" onclick="sendData()">Envoyer</button>
+        <button onclick="goBack()">Voltar</button>
+        <button id="sendButton" onclick="sendData()">Enviar</button>
       </div>
       <div id="popup" class="popup">
         <div id="popupContent"></div>
         <div class="popup-close">
-          <button onclick="closePopup()">Fermer</button>
+          <button onclick="closePopup()">Fechar</button>
         </div>
       </div>
     </div>
