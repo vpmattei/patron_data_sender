@@ -68,24 +68,15 @@
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       window.onload = function () {
-        console.log("Window loaded.");
-        const placemarksData = JSON.parse(
-          localStorage.getItem("PlacemarksData")
-        );
-        const selectedDrone = sessionStorage.getItem("selectedDrone");
-        const selectedMosa = sessionStorage.getItem("selectedMosa");
-        const selectedTargetAltitude = sessionStorage.getItem(
-          "selectedTargetAltitude"
-        );
+        const zonesData = JSON.parse(localStorage.getItem("zonesData"));
+        const droneMosaData = JSON.parse(localStorage.getItem("droneMosaData"));
+        const dataTest = {
+          ...zonesData,
+          ...droneMosaData
+        }
 
-        console.log("placemarksData:", placemarksData);
-        console.log("selectedDrone:", selectedDrone);
-        console.log("selectedMosa:", selectedMosa);
-        console.log("selectedTargetAltitude:", selectedTargetAltitude);
-
-        if (!placemarksData) {
-          console.error("No placemarks data found.");
-          redirectToError("No data found");
+        if (!zonesData) {
+          redirectToError("No zonesData found");
           return;
         }
 
@@ -104,7 +95,7 @@
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
 
-          // Store the JSON data in session storage
+          // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
           console.log("Redirecting to summary...");
           setTimeout(() => {
@@ -131,6 +122,7 @@
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(dataTest),
           body: JSON.stringify(requestData),
         })
           .then((response) => {
