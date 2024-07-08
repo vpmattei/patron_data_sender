@@ -16,6 +16,26 @@
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
     <style>
+      body {
+        font-family: Roboto, sans-serif;
+        background-color: #00051e;
+        background: linear-gradient(to top, #00051e, #020b45),
+          no-repeat top center;
+        color: #fff;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
       #loader {
         border: 6px solid #f3f3f3;
         border-top: 6px solid #1a3cdb;
@@ -24,6 +44,7 @@
         height: 30px;
         animation: spin 1s linear infinite;
         display: inline-block;
+        margin-top: 20px;
       }
 
       @keyframes spin {
@@ -44,7 +65,6 @@
       </div>
     </div>
     <script>
-      const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       window.onload = function () {
@@ -60,6 +80,15 @@
           return;
         }
 
+        // Add selected drone, MOSA, and target altitude to data
+        const requestData = {
+          ...placemarksData,
+          drone:" DRONE1",
+          mosa: "selectedMosa",
+          targetAltitude: "selectedTargetAltitude",
+          Version: "0.1.0",
+        };
+
         const postStartTime = Date.now();
 
         function redirectToSummary(responseData) {
@@ -68,30 +97,36 @@
 
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
-
+          console.log("Redirecting to summary...");
           setTimeout(() => {
-            window.location.href = "/datasummary.html";
+            window.location.href = "datasummary.html";
           }, remainingTime);
         }
 
-        function redirectToError(errorMessage) {
+        function redirectToError(errorMessage, data) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
+          console.error("Error occurred: ", errorMessage);
           setTimeout(() => {
-            window.location.href = `/error.html?error=${encodeURIComponent(
+            window.location.href = `error.html?error=${encodeURIComponent(
               errorMessage
-            )}`;
+            )}?data=${encodeURIComponent(data)}`;
           }, remainingTime);
         }
 
+        console.log("Sending data to endpoint...");
+        console.log(requestData);
+        localStorage.setItem("requestData", JSON.stringify(requestData));
         fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(dataTest),
+          body: JSON.stringify(requestData),
         })
           .then((response) => {
+            console.log("Received response from endpoint...");
             if (!response.ok) {
               throw new Error(
                 "Network response was not ok " + response.statusText
@@ -104,8 +139,7 @@
             redirectToSummary(result);
           })
           .catch((error) => {
-            console.error("Erro:", error);
-            redirectToError(error.message);
+            redirectToError(error, requestData);
           });
       };
     </script>
