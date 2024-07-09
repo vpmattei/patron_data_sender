@@ -61,9 +61,9 @@
         margin-bottom: 20px;
       }
 
-      #sendDataButton {
+      #nextButton {
         display: flex;
-        justify-content: center;
+        justify-content: right;
         align-items: center;
         padding: 10px 20px;
         background-color: #1a3cdb;
@@ -76,13 +76,13 @@
         box-shadow: 0px 0px 15px #000724;
       }
 
-      #sendDataButton:disabled {
+      #nextButton:disabled {
         background-color: #d0d3df;
         opacity: 0.5;
         cursor: not-allowed;
       }
 
-      #sendDataButton:hover:enabled {
+      #nextButton:hover:enabled {
         background-color: #e94560;
       }
 
@@ -152,6 +152,11 @@
         font-size: 8rem;
         color: #d0d3df;
       }
+      
+      .fa-arrow-right {
+        font-size: 2rem;
+        color: #d0d3df;
+      }
     </style>
   </head>
 
@@ -176,8 +181,7 @@
           O arquivo selecionado precisa ser um arquivo .kml
         </div>
       </div>
-      <button id="sendDataButton" onclick="fileChanged(event)" disabled>
-        Próximo 
+      <button id="nextButton" onclick="fileChanged(event)" disabled>
         <i class="fa-solid fa-arrow-right"></i>
       </button>
       <a id="hiddenLink" href="#" target="_blank" style="display: none"
@@ -196,7 +200,7 @@
       function updateFileName() {
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
-        const sendDataButton = document.getElementById("sendDataButton");
+        const nextButton = document.getElementById("nextButton");
         const removeButton = document.getElementById("removeButton");
         const warningMessage = document.getElementById("warningMessage");
         const file = input.files[0];
@@ -205,19 +209,19 @@
           const fileExtension = fileName.split(".").pop().toLowerCase();
           if (fileExtension === "kml") {
             fileNameDiv.textContent = fileName;
-            sendDataButton.disabled = false;
+            nextButton.disabled = false;
             removeButton.style.display = "block";
             warningMessage.style.display = "none";
           } else {
             fileNameDiv.textContent = "";
-            sendDataButton.disabled = true;
+            nextButton.disabled = true;
             removeButton.style.display = "none";
             warningMessage.style.display = "block";
             input.value = ""; // Clear the file input
           }
         } else {
           fileNameDiv.textContent = "";
-          sendDataButton.disabled = true;
+          nextButton.disabled = true;
           removeButton.style.display = "none";
           warningMessage.style.display = "none";
         }
@@ -231,12 +235,12 @@
       function removeFile() {
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
-        const sendDataButton = document.getElementById("sendDataButton");
+        const nextButton = document.getElementById("nextButton");
         const removeButton = document.getElementById("removeButton");
         const warningMessage = document.getElementById("warningMessage");
         input.value = "";
         fileNameDiv.textContent = "";
-        sendDataButton.disabled = true;
+        nextButton.disabled = true;
         removeButton.style.display = "none";
         warningMessage.style.display = "none";
         file = null;
@@ -414,7 +418,7 @@
         document.getElementById("uploadContainer").classList.remove("dragover");
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
-        const sendDataButton = document.getElementById("sendDataButton");
+        const nextButton = document.getElementById("nextButton");
         const removeButton = document.getElementById("removeButton");
         const warningMessage = document.getElementById("warningMessage");
         if (event.dataTransfer.items) {
@@ -423,14 +427,14 @@
           const fileExtension = fileName.split(".").pop().toLowerCase();
           if (fileExtension === "kml") {
             fileNameDiv.textContent = fileName;
-            sendDataButton.disabled = false;
+            nextButton.disabled = false;
             removeButton.style.display = "block";
             warningMessage.style.display = "none";
             document.getElementById("fileInput").files =
               event.dataTransfer.files;
           } else {
             fileNameDiv.textContent = "";
-            sendDataButton.disabled = true;
+            nextButton.disabled = true;
             removeButton.style.display = "none";
             warningMessage.style.display = "block";
           }
@@ -441,14 +445,14 @@
             const fileExtension = fileName.split(".").pop().toLowerCase();
             if (fileExtension === "kml") {
               fileNameDiv.textContent = fileName;
-              sendDataButton.disabled = false;
+              nextButton.disabled = false;
               removeButton.style.display = "block";
               warningMessage.style.display = "none";
               document.getElementById("fileInput").files =
                 event.dataTransfer.files;
             } else {
               fileNameDiv.textContent = "";
-              sendDataButton.disabled = true;
+              nextButton.disabled = true;
               removeButton.style.display = "none";
               warningMessage.style.display = "block";
             }
