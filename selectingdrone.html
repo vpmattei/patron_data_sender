@@ -193,6 +193,18 @@
 
       const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
 
+      function setupEventListeners() {
+        document
+          .getElementById("drone")
+          .addEventListener("change", validateSelections);
+        document
+          .getElementById("mosa")
+          .addEventListener("change", validateSelections);
+        document
+          .getElementById("targetAltitude")
+          .addEventListener("change", validateSelections);
+      }
+
       function displayDroneImage() {
         const droneSelect = document.getElementById("drone");
         const selectedDrone = droneSelect.value;
@@ -205,8 +217,6 @@
         } else {
           droneImage.style.display = "none";
         }
-
-        validateSelections();
       }
 
       function showInfo(droneName) {
