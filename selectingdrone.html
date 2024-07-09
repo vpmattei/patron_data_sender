@@ -110,6 +110,12 @@
         font-size: 1.5rem;
         color: white;
       }
+
+      #sendButton:disabled {
+        background-color: #d0d3df;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     </style>
     <script>
       const aircrafts = [
@@ -199,6 +205,8 @@
         } else {
           droneImage.style.display = "none";
         }
+
+        validateSelections();
       }
 
       function showInfo(droneName) {
@@ -209,19 +217,19 @@
         if (drone) {
           popupContent.innerHTML = `
           <h3>Informations du Drone</h3>
-          <p><strong>Nom:</strong> ${drone.Name}</p>
-          <p><strong>Type:</strong> ${drone.Type}</p>
-          <p><strong>Vitesse de croisière:</strong> ${drone.CruiseSpeed} km/h</p>
-          <p><strong>Vitesse minimale:</strong> ${drone.MinSspeed} km/h</p>
-          <p><strong>Vitesse maximale:</strong> ${drone.MaxSpeed} km/h</p>
-          <p><strong>Rayon de virage:</strong> ${drone.TurnRadios} m</p>
-          <p><strong>Altitude de retour:</strong> ${drone.ReturnAltitude} m</p>
-          <p><strong>Altitude minimale (HOME):</strong> ${drone.MinHome} m</p>
-          <p><strong>Altitude minimale (AGL):</strong> ${drone.MinAGL} m</p>
-          <p><strong>Altitude maximale (ASL):</strong> ${drone.MaxASL} m</p>
-          <p><strong>Altitude maximale (AGL):</strong> ${drone.MaxAGL} m</p>
-          <p><strong>Temps de vol:</strong> ${drone.FlitTime} minutes</p>
-          <p><strong>Distance de demi-tour:</strong> ${drone.TurnaroundDist} m</p>
+          <p>Nom: ${drone.Name}</p>
+          <p>Type: ${drone.Type}</p>
+          <p>Vitesse de croisière: ${drone.CruiseSpeed} km/h</p>
+          <p>Vitesse minimale: ${drone.MinSspeed} km/h</p>
+          <p>Vitesse maximale: ${drone.MaxSpeed} km/h</p>
+          <p>Rayon de virage: ${drone.TurnRadios} m</p>
+          <p>Altitude de retour: ${drone.ReturnAltitude} m</p>
+          <p>Altitude minimale (HOME): ${drone.MinHome} m</p>
+          <p>Altitude minimale (AGL): ${drone.MinAGL} m</p>
+          <p>Altitude maximale (ASL): ${drone.MaxASL} m</p>
+          <p>Altitude maximale (AGL): ${drone.MaxAGL} m</p>
+          <p>Temps de vol: ${drone.FlitTime} minutes</p>
+          <p>Distance de demi-tour: ${drone.TurnaroundDist} m</p>
         `;
           popup.style.display = "block";
         }
@@ -256,6 +264,15 @@
           option.textContent = altitude;
           targetAltitudeSelect.appendChild(option);
         });
+        validateSelections();
+      }
+
+      function validateSelections() {
+        const drone = document.getElementById("drone").value;
+        const mosa = document.getElementById("mosa").value;
+        const altitude = document.getElementById("targetAltitude").value;
+        const sendButton = document.getElementById("sendButton");
+        sendButton.disabled = !drone || !mosa || !altitude;
       }
 
       function sendData() {
