@@ -177,7 +177,8 @@
         </div>
       </div>
       <button id="sendDataButton" onclick="fileChanged(event)" disabled>
-        Enviar dados das Zonas
+        Próximo
+        <i class="fa-solid fa-arrow-right"></i>
       </button>
       <a id="hiddenLink" href="#" target="_blank" style="display: none"
         >Hidden Link</a
@@ -374,7 +375,10 @@
                     .getElementsByTagName("coordinates")[0]
                     .textContent.trim();
                   const [lng, lat] = coords.split(",");
-                  const pointData = { lat: parseFloat(lat), lng: parseFloat(lng) };
+                  const pointData = {
+                    lat: parseFloat(lat),
+                    lng: parseFloat(lng),
+                  };
                   const name = placemark
                     .getElementsByTagName("name")[0]
                     .textContent.trim();
@@ -398,9 +402,7 @@
 
       function dragOverHandler(event) {
         event.preventDefault();
-        document
-          .getElementById("uploadContainer")
-          .classList.add("dragover");
+        document.getElementById("uploadContainer").classList.add("dragover");
       }
 
       function dragLeaveHandler(event) {
@@ -424,7 +426,8 @@
             sendDataButton.disabled = false;
             removeButton.style.display = "block";
             warningMessage.style.display = "none";
-            document.getElementById("fileInput").files = event.dataTransfer.files;
+            document.getElementById("fileInput").files =
+              event.dataTransfer.files;
           } else {
             fileNameDiv.textContent = "";
             sendDataButton.disabled = true;
@@ -441,7 +444,8 @@
               sendDataButton.disabled = false;
               removeButton.style.display = "block";
               warningMessage.style.display = "none";
-              document.getElementById("fileInput").files = event.dataTransfer.files;
+              document.getElementById("fileInput").files =
+                event.dataTransfer.files;
             } else {
               fileNameDiv.textContent = "";
               sendDataButton.disabled = true;
