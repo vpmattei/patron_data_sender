@@ -30,7 +30,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: end;
       }
 
       .upload-container {
@@ -61,7 +61,7 @@
         margin-bottom: 20px;
       }
 
-      #sendDataButton {
+      #nextPageButton {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -76,13 +76,13 @@
         box-shadow: 0px 0px 15px #000724;
       }
 
-      #sendDataButton:disabled {
+      #nextPageButton:disabled {
         background-color: #d0d3df;
         opacity: 0.5;
         cursor: not-allowed;
       }
 
-      #sendDataButton:hover:enabled {
+      #nextPageButton:hover:enabled {
         background-color: #e94560;
       }
 
@@ -152,6 +152,11 @@
         font-size: 8rem;
         color: #d0d3df;
       }
+
+      .fa-arrow-right {
+        font-size: 1.5rem;
+        color: white;
+      }
     </style>
   </head>
 
@@ -176,8 +181,8 @@
           O arquivo selecionado precisa ser um arquivo .kml
         </div>
       </div>
-      <button id="sendDataButton" onclick="fileChanged(event)" disabled>
-        Enviar dados das Zonas
+      <button id="nextPageButton" onclick="fileChanged(event)" disabled>
+        <i class="fa-solid fa-arrow-right"></i>
       </button>
       <a id="hiddenLink" href="#" target="_blank" style="display: none"
         >Hidden Link</a
@@ -195,7 +200,7 @@
       function updateFileName() {
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
-        const sendDataButton = document.getElementById("sendDataButton");
+        const nextPageButton = document.getElementById("nextPageButton");
         const removeButton = document.getElementById("removeButton");
         const warningMessage = document.getElementById("warningMessage");
         const file = input.files[0];
@@ -204,19 +209,19 @@
           const fileExtension = fileName.split(".").pop().toLowerCase();
           if (fileExtension === "kml") {
             fileNameDiv.textContent = fileName;
-            sendDataButton.disabled = false;
+            nextPageButton.disabled = false;
             removeButton.style.display = "block";
             warningMessage.style.display = "none";
           } else {
             fileNameDiv.textContent = "";
-            sendDataButton.disabled = true;
+            nextPageButton.disabled = true;
             removeButton.style.display = "none";
             warningMessage.style.display = "block";
             input.value = ""; // Clear the file input
           }
         } else {
           fileNameDiv.textContent = "";
-          sendDataButton.disabled = true;
+          nextPageButton.disabled = true;
           removeButton.style.display = "none";
           warningMessage.style.display = "none";
         }
@@ -230,12 +235,12 @@
       function removeFile() {
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
-        const sendDataButton = document.getElementById("sendDataButton");
+        const nextPageButton = document.getElementById("nextPageButton");
         const removeButton = document.getElementById("removeButton");
         const warningMessage = document.getElementById("warningMessage");
         input.value = "";
         fileNameDiv.textContent = "";
-        sendDataButton.disabled = true;
+        nextPageButton.disabled = true;
         removeButton.style.display = "none";
         warningMessage.style.display = "none";
         file = null;
