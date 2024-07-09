@@ -259,7 +259,7 @@
       async function extractGoogleCoords(plainText) {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(plainText, "text/xml");
-        const PlacemarksData = {
+        const ZonesData = {
           NFZs: {
             polygons: [],
             paths: [],
@@ -299,7 +299,7 @@
                     const [lng, lat] = coordStr.split(",");
                     return { lat: parseFloat(lat), lng: parseFloat(lng) };
                   });
-                  PlacemarksData.NFZs.polygons.push(coordsArray);
+                  ZonesData.NFZs.polygons.push(coordsArray);
                 }
                 if (path) {
                   const coords = path
@@ -309,7 +309,7 @@
                     const [lng, lat] = coordStr.split(",");
                     return { lat: parseFloat(lat), lng: parseFloat(lng) };
                   });
-                  PlacemarksData.NFZs.paths.push(coordsArray);
+                  ZonesData.NFZs.paths.push(coordsArray);
                 }
               }
             }
@@ -327,7 +327,7 @@
                     const [lng, lat] = coordStr.split(",");
                     return { lat: parseFloat(lat), lng: parseFloat(lng) };
                   });
-                  PlacemarksData.AOIs.polygons.push(coordsArray);
+                  ZonesData.AOIs.polygons.push(coordsArray);
                 }
                 if (path) {
                   const coords = path
@@ -337,7 +337,7 @@
                     const [lng, lat] = coordStr.split(",");
                     return { lat: parseFloat(lat), lng: parseFloat(lng) };
                   });
-                  PlacemarksData.AOIs.paths.push(coordsArray);
+                  ZonesData.AOIs.paths.push(coordsArray);
                 }
               }
             }
@@ -355,7 +355,7 @@
                     const [lng, lat] = coordStr.split(",");
                     return { lat: parseFloat(lat), lng: parseFloat(lng) };
                   });
-                  PlacemarksData.EMZs.polygons.push(coordsArray);
+                  ZonesData.EMZs.polygons.push(coordsArray);
                 }
                 if (path) {
                   const coords = path
@@ -365,7 +365,7 @@
                     const [lng, lat] = coordStr.split(",");
                     return { lat: parseFloat(lat), lng: parseFloat(lng) };
                   });
-                  PlacemarksData.EMZs.paths.push(coordsArray);
+                  ZonesData.EMZs.paths.push(coordsArray);
                 }
               }
             }
@@ -387,20 +387,20 @@
                     .getElementsByTagName("name")[0]
                     .textContent.trim();
                   if (name === "start") {
-                    PlacemarksData.StartEnd.start = pointData;
+                    ZonesData.StartEnd.start = pointData;
                   } else if (name === "end") {
-                    PlacemarksData.StartEnd.end = pointData;
+                    ZonesData.StartEnd.end = pointData;
                   }
                 }
               }
             }
           }
         }
-        return PlacemarksData;
+        return ZonesData;
       }
 
       function sendDataToLocalStorage(data) {
-        localStorage.setItem("PlacemarksData", JSON.stringify(data));
+        localStorage.setItem("zonesData", JSON.stringify(data));
         window.location.href = "selectingdrone.html";
       }
 
