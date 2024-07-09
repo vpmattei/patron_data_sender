@@ -1,264 +1,197 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sélection de Drone et MOSA</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-    body {
-      font-family: Roboto, sans-serif;
-      background-color: #00051e;
-      background: linear-gradient(to top, #00051e, #020b45), no-repeat top center;
-      color: #fff;
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .container {
-      text-align: center;
-      border: 2px solid #ccc;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 50%;
-      margin-bottom: 20px;
-      background-color: #00092f;
-    }
-
-    .drone-image {
-      width: 300px;
-      height: auto;
-      display: block;
-      margin: 0 auto 20px auto;
-    }
-
-    .selection-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .selection-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    .selection-row label {
-      min-width: 150px;
-      text-align: left;
-    }
-
-    .info-icon {
-      font-size: 20px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #00092f;
-      color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-      width: 300px;
-      text-align: left;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .popup h3 {
-      margin-top: 0;
-    }
-
-    .popup p {
-      margin: 5px 0;
-    }
-
-    .popup-close {
-      display: block;
-      text-align: right;
-    }
-
-    .popup-close button {
-      background-color: #e94560;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      width: 50%;
-      margin-top: 20px;
-    }
-
-    .loader {
-      display: none;
-      margin-top: 20px;
-    }
-
-    .loader span {
-      margin-left: 10px;
-    }
-
-    .spinner {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-top: 4px solid #fff;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sélection de Drone et MOSA</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <style>
+      .drone-image {
+        width: 300px;
+        height: auto;
+        display: block;
+        margin: 0 auto 20px auto;
       }
 
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
+      .selection-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
       }
 
-      to {
-        opacity: 1;
+      .selection-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
       }
-    }
 
-    button {
-      padding: 10px 20px;
-      background-color: #1A3CDB;
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #e94560;
-    }
-  </style>
-  <script>
-    const aircrafts = [
-      {
-        Name: "VT-14",
-        Type: "VTOL",
-        CruiseSpeed: 22,
-        MinSspeed: 22,
-        MaxSpeed: 22,
-        TurnRadios: 200,
-        ReturnAltitude: 200,
-        MinHome: 30,
-        MinAGL: 30,
-        MaxASL: 1000,
-        MaxAGL: 400,
-        FlitTime: 240,
-        TurnaroundDist: 50,
-        Image: "https://fr.satuav.com/Content/uploads/2021761228/202104251129323edf13f7694c47d0b8f4e2823cdf40ae.png"
-      },
-      {
-        Name: "MR82020",
-        Type: "Copter",
-        CruiseSpeed: 21,
-        MinSspeed: 21,
-        MaxSpeed: 21,
-        TurnRadios: 201,
-        ReturnAltitude: 201,
-        MinHome: 31,
-        MinAGL: 31,
-        MaxASL: 1001,
-        MaxAGL: 401,
-        FlitTime: 241,
-        TurnaroundDist: 51,
-        Image: "https://guide-images.cdn.ifixit.com/igi/PArTwJRgvPcAQp4J.large"
-      },
-      {
-        Name: "PLN-400",
-        Type: "Plane",
-        CruiseSpeed: 30,
-        MinSspeed: 28,
-        MaxSpeed: 35,
-        TurnRadios: 150,
-        ReturnAltitude: 500,
-        MinHome: 50,
-        MinAGL: 50,
-        MaxASL: 2000,
-        MaxAGL: 500,
-        FlitTime: 360,
-        TurnaroundDist: 100,
-        Image: "https://upload.wikimedia.org/wikipedia/commons/b/b8/USMC-01522.jpg"
+      .selection-row label {
+        min-width: 150px;
+        text-align: left;
       }
-    ];
 
-    const mosas = [
-      {
-        Name: "MOSA1",
-        MissionType: "Area survey",
-        TargetAltitude: "HOME",
-        FlightAltitude: 100,
-        WaypointsDist: 40,
-        LineDist: 50
-      },
-      {
-        Name: "MOSA2",
-        MissionType: "Corridor survey",
-        TargetAltitude: "AGL",
-        FlightAltitude: 99,
-        WaypointsDist: 41,
-        LineDist: 51
+      .info-icon {
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 10px;
       }
-    ];
 
-    const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
-
-    function displayDroneImage() {
-      const droneSelect = document.getElementById('drone');
-      const selectedDrone = droneSelect.value;
-      const droneImage = document.getElementById('droneImage');
-      const drone = aircrafts.find(a => a.Name === selectedDrone);
-
-      if (drone) {
-        droneImage.src = drone.Image;
-        droneImage.style.display = 'block';
-      } else {
-        droneImage.style.display = 'none';
+      .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #00092f;
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        width: 300px;
+        text-align: left;
+        animation: fadeIn 0.3s ease-in-out;
       }
-    }
 
-    function showInfo(droneName) {
-      const popup = document.getElementById('popup');
-      const popupContent = document.getElementById('popupContent');
-      const drone = aircrafts.find(a => a.Name === droneName);
+      .popup h3 {
+        margin-top: 0;
+      }
 
-      if (drone) {
-        popupContent.innerHTML = `
+      .popup p {
+        margin: 5px 0;
+      }
+
+      .popup-close {
+        display: block;
+        text-align: right;
+      }
+
+      .popup-close button {
+        background-color: #e94560;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+    </style>
+    <script>
+      const aircrafts = [
+        {
+          Name: "VT-14",
+          Type: "VTOL",
+          CruiseSpeed: 22,
+          MinSspeed: 22,
+          MaxSpeed: 22,
+          TurnRadios: 200,
+          ReturnAltitude: 200,
+          MinHome: 30,
+          MinAGL: 30,
+          MaxASL: 1000,
+          MaxAGL: 400,
+          FlitTime: 240,
+          TurnaroundDist: 50,
+          Image:
+            "https://fr.satuav.com/Content/uploads/2021761228/202104251129323edf13f7694c47d0b8f4e2823cdf40ae.png",
+        },
+        {
+          Name: "MR82020",
+          Type: "Copter",
+          CruiseSpeed: 21,
+          MinSspeed: 21,
+          MaxSpeed: 21,
+          TurnRadios: 201,
+          ReturnAltitude: 201,
+          MinHome: 31,
+          MinAGL: 31,
+          MaxASL: 1001,
+          MaxAGL: 401,
+          FlitTime: 241,
+          TurnaroundDist: 51,
+          Image:
+            "https://guide-images.cdn.ifixit.com/igi/PArTwJRgvPcAQp4J.large",
+        },
+        {
+          Name: "PLN-400",
+          Type: "Plane",
+          CruiseSpeed: 30,
+          MinSspeed: 28,
+          MaxSpeed: 35,
+          TurnRadios: 150,
+          ReturnAltitude: 500,
+          MinHome: 50,
+          MinAGL: 50,
+          MaxASL: 2000,
+          MaxAGL: 500,
+          FlitTime: 360,
+          TurnaroundDist: 100,
+          Image:
+            "https://upload.wikimedia.org/wikipedia/commons/b/b8/USMC-01522.jpg",
+        },
+      ];
+
+      const mosas = [
+        {
+          Name: "MOSA1",
+          MissionType: "Area survey",
+          TargetAltitude: "HOME",
+          FlightAltitude: 100,
+          WaypointsDist: 40,
+          LineDist: 50,
+        },
+        {
+          Name: "MOSA2",
+          MissionType: "Corridor survey",
+          TargetAltitude: "AGL",
+          FlightAltitude: 99,
+          WaypointsDist: 41,
+          LineDist: 51,
+        },
+      ];
+
+      const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
+
+      function displayDroneImage() {
+        const droneSelect = document.getElementById("drone");
+        const selectedDrone = droneSelect.value;
+        const droneImage = document.getElementById("droneImage");
+        const drone = aircrafts.find((a) => a.Name === selectedDrone);
+
+        if (drone) {
+          droneImage.src = drone.Image;
+          droneImage.style.display = "block";
+        } else {
+          droneImage.style.display = "none";
+        }
+      }
+
+      function showInfo(droneName) {
+        const popup = document.getElementById("popup");
+        const popupContent = document.getElementById("popupContent");
+        const drone = aircrafts.find((a) => a.Name === droneName);
+
+        if (drone) {
+          popupContent.innerHTML = `
           <h3>Informations du Drone</h3>
           <p><strong>Nom:</strong> ${drone.Name}</p>
           <p><strong>Type:</strong> ${drone.Type}</p>
@@ -274,114 +207,120 @@
           <p><strong>Temps de vol:</strong> ${drone.FlitTime} minutes</p>
           <p><strong>Distance de demi-tour:</strong> ${drone.TurnaroundDist} m</p>
         `;
-        popup.style.display = 'block';
+          popup.style.display = "block";
+        }
       }
-    }
 
-    function closePopup() {
-      const popup = document.getElementById('popup');
-      popup.style.display = 'none';
-    }
+      function closePopup() {
+        const popup = document.getElementById("popup");
+        popup.style.display = "none";
+      }
 
-    function populateSelectOptions() {
-      const droneSelect = document.getElementById('drone');
-      aircrafts.forEach((aircraft) => {
-        const option = document.createElement('option');
-        option.value = aircraft.Name;
-        option.textContent = `${aircraft.Name} (${aircraft.Type})`;
-        droneSelect.appendChild(option);
-      });
+      function populateSelectOptions() {
+        const droneSelect = document.getElementById("drone");
+        aircrafts.forEach((aircraft) => {
+          const option = document.createElement("option");
+          option.value = aircraft.Name;
+          option.textContent = `${aircraft.Name} (${aircraft.Type})`;
+          droneSelect.appendChild(option);
+        });
 
-      const mosaSelect = document.getElementById('mosa');
-      mosas.forEach((mosa) => {
-        const option = document.createElement('option');
-        option.value = mosa.Name;
-        option.textContent = `${mosa.Name} (${mosa.MissionType})`;
-        mosaSelect.appendChild(option);
-      });
+        const mosaSelect = document.getElementById("mosa");
+        mosas.forEach((mosa) => {
+          const option = document.createElement("option");
+          option.value = mosa.Name;
+          option.textContent = `${mosa.Name} (${mosa.MissionType})`;
+          mosaSelect.appendChild(option);
+        });
 
-      const targetAltitudeSelect = document.getElementById('targetAltitude');
-      targetAltitudes.forEach((altitude) => {
-        const option = document.createElement('option');
-        option.value = altitude;
-        option.textContent = altitude;
-        targetAltitudeSelect.appendChild(option);
-      });
-    }
+        const targetAltitudeSelect = document.getElementById("targetAltitude");
+        targetAltitudes.forEach((altitude) => {
+          const option = document.createElement("option");
+          option.value = altitude;
+          option.textContent = altitude;
+          targetAltitudeSelect.appendChild(option);
+        });
+      }
 
-    function sendData() {
-      const loader = document.getElementById('loader');
-      const sendButton = document.getElementById('sendButton');
-      const droneSelect = document.getElementById('drone');
-      const mosaSelect = document.getElementById('mosa');
-      const targetAltitudeSelect = document.getElementById('targetAltitude');
+      function sendData() {
+        const sendButton = document.getElementById("sendButton");
+        const droneSelect = document.getElementById("drone");
+        const mosaSelect = document.getElementById("mosa");
+        const targetAltitudeSelect = document.getElementById("targetAltitude");
 
-      const selectedDrone = droneSelect.value;
-      const selectedMosa = mosaSelect.value;
-      const selectedTargetAltitude = targetAltitudeSelect.value;
+        const selectedDrone = droneSelect.value;
+        const selectedMosa = mosaSelect.value;
+        const selectedTargetAltitude = targetAltitudeSelect.value;
 
-      sessionStorage.setItem("selectedDrone", selectedDrone);
-      sessionStorage.setItem("selectedMosa", selectedMosa);
-      sessionStorage.setItem("selectedTargetAltitude", selectedTargetAltitude);
-      loader.style.display = 'flex';
-      sendButton.style.display = 'none';
+        const droneMosaData = {
+          drone: selectedDrone,
+          mosa: selectedMosa,
+          altitude: selectedTargetAltitude,
+        };
 
-      // Redirection vers sendingdata.html
-      window.location.href = "sendingdata.html";
-    }
+        localStorage.setItem("droneMosaData", JSON.stringify(droneMosaData));
+        sendButton.style.display = "none";
 
-    function goBack() {
-      window.location.href = "index.html";
-    }
+        // Redirection vers sendingdata.html
+        window.location.href = "sendingdata.html";
+      }
 
-    window.onload = function () {
-      populateSelectOptions();
-      displayDroneImage();
-    }
-  </script>
-</head>
+      function goBack() {
+        window.location.href = "index.html";
+      }
 
-<body>
-  <div class="container">
-    <img id="droneImage" src="" alt="Image du drone" class="drone-image" style="display:none;">
-    <div class="selection-container">
-      <div class="selection-row">
-        <label for="drone">Sélectionnez un Drone</label>
-        <div style="display: flex; align-items: center;">
-          <select name="drone" id="drone" onchange="displayDroneImage()">
-            <option value="">Sélectionnez un Drone</option>
+      window.onload = function () {
+        populateSelectOptions();
+        displayDroneImage();
+      };
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <img
+        id="droneImage"
+        src=""
+        alt="Image du drone"
+        class="drone-image"
+        style="display: none"
+      />
+      <div class="selection-container">
+        <div class="selection-row">
+          <label for="drone">Escolha um Drone</label>
+          <div style="display: flex; align-items: center">
+            <select name="drone" id="drone" onchange="displayDroneImage()">
+              <option value="">Selecione um Drone</option>
+            </select>
+            <i
+              class="fa fa-info-circle info-icon"
+              onclick="showInfo(document.getElementById('drone').value)"
+            ></i>
+          </div>
+        </div>
+        <div class="selection-row">
+          <label for="mosa">Escolha um MOSA</label>
+          <select name="mosa" id="mosa">
+            <option value="">Selecione um MOSA</option>
           </select>
-          <i class="fa fa-info-circle info-icon" onclick="showInfo(document.getElementById('drone').value)"></i>
+        </div>
+        <div class="selection-row">
+          <label for="targetAltitude">Escolha uma altitude</label>
+          <select name="targetAltitude" id="targetAltitude">
+            <option value="">Selecione uma altitude</option>
+          </select>
         </div>
       </div>
-      <div class="selection-row">
-        <label for="mosa">Choisissez un MOSA</label>
-        <select name="mosa" id="mosa">
-          <option value="">Sélectionnez un MOSA</option>
-        </select>
+      <div class="buttons">
+        <button onclick="goBack()">Voltar</button>
+        <button id="sendButton" onclick="sendData()">Enviar</button>
       </div>
-      <div class="selection-row">
-        <label for="targetAltitude">Choisissez une altitude cible</label>
-        <select name="targetAltitude" id="targetAltitude">
-          <option value="">Sélectionnez une altitude</option>
-        </select>
+      <div id="popup" class="popup">
+        <div id="popupContent"></div>
+        <div class="popup-close">
+          <button onclick="closePopup()">Fechar</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="buttons">
-    <button onclick="goBack()">Retour</button>
-    <button id="sendButton" onclick="sendData()">Envoyer</button>
-  </div>
-  <div id="loader" class="loader">
-    <div class="spinner"></div>
-    <span>Envoi...</span>
-  </div>
-  <div id="popup" class="popup">
-    <div id="popupContent"></div>
-    <div class="popup-close">
-      <button onclick="closePopup()">Fermer</button>
-    </div>
-  </div>
-</body>
-
+  </body>
 </html>
