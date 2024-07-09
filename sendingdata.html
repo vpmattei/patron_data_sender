@@ -70,7 +70,7 @@
       window.onload = function () {
         const zonesData = JSON.parse(localStorage.getItem("zonesData"));
         const droneMosaData = JSON.parse(localStorage.getItem("droneMosaData"));
-        const dataTest = {
+        const requestData = {
           ...zonesData,
           ...droneMosaData
         }
@@ -79,15 +79,6 @@
           redirectToError("No zonesData found");
           return;
         }
-
-        // Add selected drone, MOSA, and target altitude to data
-        const requestData = {
-          ...placemarksData,
-          drone:" DRONE1",
-          mosa: "selectedMosa",
-          targetAltitude: "selectedTargetAltitude",
-          Version: "0.1.0",
-        };
 
         const postStartTime = Date.now();
 
@@ -122,7 +113,6 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(dataTest),
           body: JSON.stringify(requestData),
         })
           .then((response) => {
