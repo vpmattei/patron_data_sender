@@ -93,14 +93,8 @@
   <script>
     window.onload = function () {
       const storedData = sessionStorage.getItem("responseData");
-      const selectedDrone = sessionStorage.getItem("selectedDrone");
-      const selectedMosa = sessionStorage.getItem("selectedMosa");
-      const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
       console.log("storedData:", storedData);
-      console.log("selectedDrone:", selectedDrone);
-      console.log("selectedMosa:", selectedMosa);
-      console.log("selectedTargetAltitude:", selectedTargetAltitude);
 
       if (storedData) {
         const data = JSON.parse(storedData);
@@ -111,6 +105,10 @@
         const numAOIsPaths = data.AOIs.paths.length;
         const numEMZsZones = data.EMZs.polygons.length;
         const numEMZsPaths = data.EMZs.paths.length;
+        const droneSelected = data.drone;
+        const mosaSelected = data.mosa;
+        const altitudeSelected = data.altitude;
+
         const start = data.StartEnd.start
           ? `Início: ${convertToDMS(data.StartEnd.start.coords.lat, true)} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
           : "Início: Não definido";
@@ -127,9 +125,9 @@
         document.getElementById("startCoords").textContent = start;
         document.getElementById("endCoords").textContent = end;
 
-        document.getElementById("droneInfo").textContent = `Drone Selecionado: ${selectedDrone}`;
-        document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${selectedMosa}`;
-        document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${selectedTargetAltitude}`;
+        document.getElementById("droneInfo").textContent = `Drone Selecionado: ${droneSelected}`;
+        document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${mosaSelected}`;
+        document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${altitudeSelected}`;
 
         window.redirectToMissionSummary = function () {
           window.location.href = "missionsummary.html";
