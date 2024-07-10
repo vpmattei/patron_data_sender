@@ -90,15 +90,6 @@
         text-align: right;
       }
 
-      .popup-close button {
-        background-color: #e94560;
-        color: #fff;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
       .buttons {
         display: flex;
         justify-content: space-between;
@@ -206,8 +197,8 @@
       }
 
       function displayDroneImage() {
-        const droneSelect = document.getElementById("drone");
-        const selectedDrone = droneSelect.value;
+        const aircraftSelected = document.getElementById("drone");
+        const selectedDrone = aircraftSelected.value;
         const droneImage = document.getElementById("droneImage");
         const drone = aircrafts.find((a) => a.Name === selectedDrone);
 
@@ -219,10 +210,10 @@
         }
       }
 
-      function showInfo(droneName) {
+      function showInfo(aircraftName) {
         const popup = document.getElementById("popup");
         const popupContent = document.getElementById("popupContent");
-        const drone = aircrafts.find((a) => a.Name === droneName);
+        const drone = aircrafts.find((a) => a.Name === aircraftName);
 
         if (drone) {
           popupContent.innerHTML = `
@@ -251,57 +242,44 @@
       }
 
       function populateSelectOptions() {
-        const droneSelect = document.getElementById("drone");
+        const aircraftSelected = document.getElementById("drone");
         aircrafts.forEach((aircraft) => {
           const option = document.createElement("option");
           option.value = aircraft.Name;
           option.textContent = `${aircraft.Name} (${aircraft.Type})`;
-          droneSelect.appendChild(option);
+          aircraftSelected.appendChild(option);
         });
 
-        const mosaSelect = document.getElementById("mosa");
+        const mosaSelected = document.getElementById("mosa");
         mosas.forEach((mosa) => {
           const option = document.createElement("option");
           option.value = mosa.Name;
           option.textContent = `${mosa.Name} (${mosa.MissionType})`;
-          mosaSelect.appendChild(option);
+          mosaSelected.appendChild(option);
         });
 
-        const targetAltitudeSelect = document.getElementById("targetAltitude");
-        targetAltitudes.forEach((altitude) => {
-          const option = document.createElement("option");
-          option.value = altitude;
-          option.textContent = altitude;
-          targetAltitudeSelect.appendChild(option);
-        });
         validateSelections();
       }
 
       function validateSelections() {
         const drone = document.getElementById("drone").value;
         const mosa = document.getElementById("mosa").value;
-        const altitude = document.getElementById("targetAltitude").value;
         const sendButton = document.getElementById("sendButton");
-        sendButton.disabled = !drone || !mosa || !altitude;
+        sendButton.disabled = !drone || !mosa;
       }
 
       function sendData() {
         const sendButton = document.getElementById("sendButton");
-        const droneSelect = document.getElementById("drone");
-        const mosaSelect = document.getElementById("mosa");
-        const targetAltitudeSelect = document.getElementById("targetAltitude");
+        const aircraftSelected = document.getElementById("drone");
+        const mosaSelected = document.getElementById("mosa");
 
-        const droneName = droneSelect.value;
-        const mosaName = mosaSelect.value;
+        const aircraftName = aircraftSelected.value;
+        const mosaName = mosaSelected.value;
         const selectedTargetAltitude = targetAltitudeSelect.value;
 
-        const drone = aircrafts.find((a) => a.Name === droneName);
-        const mosa = mosas.find((m) => m.Name === mosaName);
-
         const droneMosaData = {
-          drone: drone,
-          mosa: mosa,
-          altitude: selectedTargetAltitude,
+          Aircraft: aircraftName,
+          MOSA: mosaName,
         };
 
         localStorage.setItem("droneMosaData", JSON.stringify(droneMosaData));
@@ -352,12 +330,6 @@
               <option value="">Selecione um MOSA</option>
             </select>
           </div>
-          <div class="selection-row">
-            <label for="targetAltitude">Escolha uma altitude</label>
-            <select name="targetAltitude" id="targetAltitude">
-              <option value="">Selecione uma altitude</option>
-            </select>
-          </div>
         </div>
       </div>
       <div class="buttons">
@@ -368,7 +340,7 @@
       </div>
       <div id="popup" class="popup">
         <div id="popupContent"></div>
-        <div class="popup-close">
+        <div class="button">
           <button onclick="closePopup()">Fechar</button>
         </div>
       </div>

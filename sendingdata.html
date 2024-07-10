@@ -50,7 +50,7 @@
       window.onload = function () {
         const zonesData = JSON.parse(localStorage.getItem("zonesData"));
         const droneMosaData = JSON.parse(localStorage.getItem("droneMosaData"));
-        const dataTest = {
+        const requestData = {
           ...zonesData,
           ...droneMosaData
         }
@@ -89,7 +89,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(dataTest),
+          body: JSON.stringify(requestData),
         })
           .then((response) => {
             if (!response.ok) {
