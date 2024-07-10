@@ -55,6 +55,8 @@
           ...droneMosaData
         }
 
+        localStorage.setItem("requestData", JSON.stringify(requestData));
+
         if (!zonesData) {
           redirectToError("No zonesData found");
           return;
