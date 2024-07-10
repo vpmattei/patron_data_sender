@@ -98,12 +98,12 @@
   </div>
   <script>
     window.onload = function () {
-      const storedData = sessionStorage.getItem("responseData");
+      const reponseData = sessionStorage.getItem("responseData");
 
-      console.log("storedData:", storedData);
+      console.log("reponseData:", reponseData);
 
-      if (storedData) {
-        const data = JSON.parse(storedData);
+      if (reponseData) {
+        const data = JSON.parse(reponseData);
 
         const numNFZsZones = data.NFZs.polygons.length;
         const numNFZsPaths = data.NFZs.paths.length;
