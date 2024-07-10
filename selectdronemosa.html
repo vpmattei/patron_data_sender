@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sélection de Drone et MOSA</title>
+    <title>Sélection de Aircraft et MOSA</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -17,7 +17,7 @@
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
     <style>
-      .selecting-drone-container {
+      .selecting-aircraft-container {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -27,7 +27,7 @@
         width: 150%;
       }
 
-      .drone-image {
+      .aircraft-image {
         width: 300px;
         height: auto;
         display: block;
@@ -186,7 +186,7 @@
 
       function setupEventListeners() {
         document
-          .getElementById("drone")
+          .getElementById("aircraft")
           .addEventListener("change", validateSelections);
         document
           .getElementById("mosa")
@@ -196,41 +196,41 @@
           .addEventListener("change", validateSelections);
       }
 
-      function displayDroneImage() {
-        const aircraftSelected = document.getElementById("drone");
-        const selectedDrone = aircraftSelected.value;
-        const droneImage = document.getElementById("droneImage");
-        const drone = aircrafts.find((a) => a.Name === selectedDrone);
+      function displayAircraftImage() {
+        const aircraftSelected = document.getElementById("aircraft");
+        const selectedAircraft = aircraftSelected.value;
+        const aircraftImage = document.getElementById("aircraftImage");
+        const aircraft = aircrafts.find((a) => a.Name === selectedAircraft);
 
-        if (drone) {
-          droneImage.src = drone.Image;
-          droneImage.style.display = "block";
+        if (aircraft) {
+          aircraftImage.src = aircraft.Image;
+          aircraftImage.style.display = "block";
         } else {
-          droneImage.style.display = "none";
+          aircraftImage.style.display = "none";
         }
       }
 
       function showInfo(aircraftName) {
         const popup = document.getElementById("popup");
         const popupContent = document.getElementById("popupContent");
-        const drone = aircrafts.find((a) => a.Name === aircraftName);
+        const aircraft = aircrafts.find((a) => a.Name === aircraftName);
 
-        if (drone) {
+        if (aircraft) {
           popupContent.innerHTML = `
-          <h3>Informations du Drone</h3>
-          <p>Nom: ${drone.Name}</p>
-          <p>Type: ${drone.Type}</p>
-          <p>Vitesse de croisière: ${drone.CruiseSpeed} km/h</p>
-          <p>Vitesse minimale: ${drone.MinSspeed} km/h</p>
-          <p>Vitesse maximale: ${drone.MaxSpeed} km/h</p>
-          <p>Rayon de virage: ${drone.TurnRadios} m</p>
-          <p>Altitude de retour: ${drone.ReturnAltitude} m</p>
-          <p>Altitude minimale (HOME): ${drone.MinHome} m</p>
-          <p>Altitude minimale (AGL): ${drone.MinAGL} m</p>
-          <p>Altitude maximale (ASL): ${drone.MaxASL} m</p>
-          <p>Altitude maximale (AGL): ${drone.MaxAGL} m</p>
-          <p>Temps de vol: ${drone.FlitTime} minutes</p>
-          <p>Distance de demi-tour: ${drone.TurnaroundDist} m</p>
+          <h3>Informations du Aircraft</h3>
+          <p>Nom: ${aircraft.Name}</p>
+          <p>Type: ${aircraft.Type}</p>
+          <p>Vitesse de croisière: ${aircraft.CruiseSpeed} km/h</p>
+          <p>Vitesse minimale: ${aircraft.MinSspeed} km/h</p>
+          <p>Vitesse maximale: ${aircraft.MaxSpeed} km/h</p>
+          <p>Rayon de virage: ${aircraft.TurnRadios} m</p>
+          <p>Altitude de retour: ${aircraft.ReturnAltitude} m</p>
+          <p>Altitude minimale (HOME): ${aircraft.MinHome} m</p>
+          <p>Altitude minimale (AGL): ${aircraft.MinAGL} m</p>
+          <p>Altitude maximale (ASL): ${aircraft.MaxASL} m</p>
+          <p>Altitude maximale (AGL): ${aircraft.MaxAGL} m</p>
+          <p>Temps de vol: ${aircraft.FlitTime} minutes</p>
+          <p>Distance de demi-tour: ${aircraft.TurnaroundDist} m</p>
         `;
           popup.style.display = "block";
         }
@@ -242,7 +242,7 @@
       }
 
       function populateSelectOptions() {
-        const aircraftSelected = document.getElementById("drone");
+        const aircraftSelected = document.getElementById("aircraft");
         aircrafts.forEach((aircraft) => {
           const option = document.createElement("option");
           option.value = aircraft.Name;
@@ -262,27 +262,27 @@
       }
 
       function validateSelections() {
-        const drone = document.getElementById("drone").value;
+        const aircraft = document.getElementById("aircraft").value;
         const mosa = document.getElementById("mosa").value;
         const sendButton = document.getElementById("sendButton");
-        sendButton.disabled = !drone || !mosa;
+        sendButton.disabled = !aircraft || !mosa;
       }
 
       function sendData() {
         const sendButton = document.getElementById("sendButton");
-        const aircraftSelected = document.getElementById("drone");
+        const aircraftSelected = document.getElementById("aircraft");
         const mosaSelected = document.getElementById("mosa");
 
         const aircraftName = aircraftSelected.value;
         const mosaName = mosaSelected.value;
         const selectedTargetAltitude = targetAltitudeSelect.value;
 
-        const droneMosaData = {
+        const aircraftMosaData = {
           Aircraft: aircraftName,
           MOSA: mosaName,
         };
 
-        localStorage.setItem("droneMosaData", JSON.stringify(droneMosaData));
+        localStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
         sendButton.style.display = "none";
 
         // Redirection vers sendingdata.html
@@ -296,31 +296,31 @@
       window.onload = function () {
         setupEventListeners();
         populateSelectOptions();
-        displayDroneImage();
+        displayAircraftImage();
       };
     </script>
   </head>
 
   <body>
-    <div class="selecting-drone-container">
+    <div class="selecting-aircraft-container">
       <div class="container">
         <img
-          id="droneImage"
+          id="aircraftImage"
           src=""
-          alt="Image du drone"
-          class="drone-image"
+          alt="Imagem do avião"
+          class="aircraft-image"
           style="display: none"
         />
         <div class="selection-container">
           <div class="selection-row">
-            <label for="drone">Escolha um Drone</label>
+            <label for="aircraft">Escolha um Aircraft</label>
             <div style="display: flex; align-items: center">
-              <select name="drone" id="drone" onchange="displayDroneImage()">
-                <option value="">Selecione um Drone</option>
+              <select name="aircraft" id="aircraft" onchange="displayAircraftImage()">
+                <option value="">Selecione um Aircraft</option>
               </select>
               <i
                 class="fa fa-info-circle info-icon"
-                onclick="showInfo(document.getElementById('drone').value)"
+                onclick="showInfo(document.getElementById('aircraft').value)"
               ></i>
             </div>
           </div>
