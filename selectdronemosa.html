@@ -254,7 +254,7 @@
         const droneSelect = document.getElementById("drone");
         aircrafts.forEach((aircraft) => {
           const option = document.createElement("option");
-          option.value = aircraft;
+          option.value = JSON.stringify(aircraft);
           option.textContent = `${aircraft.Name} (${aircraft.Type})`;
           droneSelect.appendChild(option);
         });
@@ -262,7 +262,7 @@
         const mosaSelect = document.getElementById("mosa");
         mosas.forEach((mosa) => {
           const option = document.createElement("option");
-          option.value = mosa;
+          option.value = JSON.stringify(mosa);
           option.textContent = `${mosa.Name} (${mosa.MissionType})`;
           mosaSelect.appendChild(option);
         });
@@ -283,7 +283,7 @@
         const altitude = document.getElementById("targetAltitude").value;
         const sendButton = document.getElementById("sendButton");
         console.log((drone));
-        console.log(JSON.stringify(mosa));
+        console.log((mosa));
         sendButton.disabled = !drone || !mosa || !altitude;
       }
 
