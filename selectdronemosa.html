@@ -191,9 +191,6 @@
         document
           .getElementById("mosa")
           .addEventListener("change", validateSelections);
-        document
-          .getElementById("targetAltitude")
-          .addEventListener("change", validateSelections);
       }
 
       function displayAircraftImage() {
@@ -275,7 +272,6 @@
 
         const aircraftName = aircraftSelected.value;
         const mosaName = mosaSelected.value;
-        const selectedTargetAltitude = targetAltitudeSelect.value;
 
         const aircraftMosaData = {
           Aircraft: aircraftName,
