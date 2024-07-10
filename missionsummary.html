@@ -45,7 +45,7 @@
       <p id="numMissions">Número de Missões:</p>
       <div id="missionDetails"></div>
       <h2>Informações da Missão</h2>
-      <p id="droneInfo"></p>
+      <p id="aircraftInfo"></p>
       <p id="mosaInfo"></p>
       <p id="targetAltitudeInfo"></p>
       <div class="buttons">
@@ -58,7 +58,7 @@
   <script>
     window.onload = function () {
       const reponseData = sessionStorage.getItem("responseData");
-      const selectedDrone = sessionStorage.getItem("selectedDrone");
+      const selectedAircraft = sessionStorage.getItem("selectedAircraft");
       const selectedMosa = sessionStorage.getItem("selectedMosa");
       const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
@@ -101,7 +101,7 @@
         document.getElementById("numMissions").textContent = `Número de Missões: ${numMissions}`;
         document.getElementById("missionDetails").innerHTML = missionDetailsHtml;
 
-        document.getElementById("droneInfo").textContent = `Drone Selecionado: ${selectedDrone}`;
+        document.getElementById("aircraftInfo").textContent = `Drone Selecionado: ${selectedAircraft}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${selectedMosa}`;
         document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${selectedTargetAltitude}`;
 
@@ -111,8 +111,8 @@
 
         const completeData = {
           ...data,
-          drone: selectedDrone,
-          mosa: selectedMosa,
+          Aircraft: selectedAircraft,
+          MOSA: selectedMosa,
           targetAltitude: selectedTargetAltitude,
           Version: "0.1.0",
           MissionTypes: ["Area survey", "Corridor survey"],
