@@ -291,6 +291,9 @@
         const mosaSelect = document.getElementById("mosa");
         const targetAltitudeSelect = document.getElementById("targetAltitude");
 
+        console.log(JSON.stringify(droneSelect.value));
+        console.log(JSON.stringify(mosaSelect.value));
+
         const selectedDrone = JSON.stringify(droneSelect.value);
         const selectedMosa = JSON.stringify(mosaSelect.value);
         const selectedTargetAltitude = targetAltitudeSelect.value;
