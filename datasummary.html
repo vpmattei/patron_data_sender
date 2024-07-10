@@ -98,28 +98,32 @@
   </div>
   <script>
     window.onload = function () {
+      const requestData = localStorage.getItem("requestData");
       const reponseData = sessionStorage.getItem("responseData");
 
       console.log("reponseData:", reponseData);
+      console.log("requestData:", requestData);
 
       if (reponseData) {
-        const data = JSON.parse(reponseData);
+        const reqData = null;
+        if (requestData) reqData = JSON.parse(requestData);
+        const repData = JSON.parse(reponseData);
 
-        const numNFZsZones = data.NFZs.polygons.length;
-        const numNFZsPaths = data.NFZs.paths.length;
-        const numAOIsZones = data.AOIs.polygons.length;
-        const numAOIsPaths = data.AOIs.paths.length;
-        const numEMZsZones = data.EMZs.polygons.length;
-        const numEMZsPaths = data.EMZs.paths.length;
-        const droneSelected = data.Aircraft;
-        const mosaSelected = data.MOSA;
-        const altitudeSelected = data.altitude;
+        const numNFZsZones = repData.NFZs.polygons.length;
+        const numNFZsPaths = repData.NFZs.paths.length;
+        const numAOIsZones = repData.AOIs.polygons.length;
+        const numAOIsPaths = repData.AOIs.paths.length;
+        const numEMZsZones = repData.EMZs.polygons.length;
+        const numEMZsPaths = repData.EMZs.paths.length;
+        const droneSelected = reqData?.Aircraft;
+        const mosaSelected = reqData?.MOSA;
+        const altitudeSelected = repData.altitude;
 
-        const start = data.StartEnd.start
-          ? `Início: ${convertToDMS(data.StartEnd.start.coords.lat, true)} ${convertToDMS(data.StartEnd.start.coords.lng, false)}`
+        const start = repData.StartEnd.start
+          ? `Início: ${convertToDMS(repData.StartEnd.start.coords.lat, true)} ${convertToDMS(repData.StartEnd.start.coords.lng, false)}`
           : "Início: Não definido";
-        const end = data.StartEnd.end
-          ? `Fim: ${convertToDMS(data.StartEnd.end.coords.lat, true)} ${convertToDMS(data.StartEnd.end.coords.lng, false)}`
+        const end = repData.StartEnd.end
+          ? `Fim: ${convertToDMS(repData.StartEnd.end.coords.lat, true)} ${convertToDMS(repData.StartEnd.end.coords.lng, false)}`
           : "Fim: Não definido";
 
         document.getElementById("numNFZsZones").textContent = `Número de Áreas: ${numNFZsZones}`;
