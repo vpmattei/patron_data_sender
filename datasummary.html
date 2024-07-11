@@ -101,13 +101,14 @@
       const requestData = localStorage.getItem("requestData");
       const reponseData = sessionStorage.getItem("responseData");
 
-      console.log("reponseData:", reponseData);
-      console.log("requestData:", requestData);
-
+      
       if (reponseData) {
         let reqData = null;
         if (requestData) reqData = JSON.parse(requestData);
         const repData = JSON.parse(reponseData);
+
+        console.log("reponse data:", repData);
+        console.log("request data:", reqData);
 
         const numNFZsZones = repData.NFZs.polygons.length;
         const numNFZsPaths = repData.NFZs.paths.length;
