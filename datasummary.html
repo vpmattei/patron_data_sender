@@ -92,7 +92,6 @@
       <h2>Informações da Missão</h2>
       <p id="aircraftInfo"></p>
       <p id="mosaInfo"></p>
-      <p id="targetAltitudeInfo"></p>
       <button onclick="redirectToMissionSummary()">Ver missão</button>
     </div>
   </div>
@@ -118,7 +117,6 @@
         const numEMZsPaths = repData.EMZs.paths.length;
         const aircraftSelected = reqData?.Aircraft;
         const mosaSelected = reqData?.MOSA;
-        const altitudeSelected = repData.altitude;
 
         const start = repData.StartEnd.start
           ? `Início: ${convertToDMS(repData.StartEnd.start.coords.lat, true)} ${convertToDMS(repData.StartEnd.start.coords.lng, false)}`
@@ -138,7 +136,6 @@
 
         document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${aircraftSelected}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${mosaSelected}`;
-        document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${altitudeSelected}`;
 
         window.redirectToMissionSummary = function () {
           window.location.href = "missionsummary.html";

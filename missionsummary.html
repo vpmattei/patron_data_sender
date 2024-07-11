@@ -47,7 +47,6 @@
       <h2>Informações da Missão</h2>
       <p id="aircraftInfo"></p>
       <p id="mosaInfo"></p>
-      <p id="targetAltitudeInfo"></p>
       <div class="buttons">
         <button onclick="redirectToDataSummary()">Ver resumo dos dados enviados</button>
         <button onclick="downloadKML()"><i class="fa-solid fa-download"></i> Baixar missão em .KML</button>
@@ -60,7 +59,6 @@
       const reponseData = sessionStorage.getItem("responseData");
       const selectedAircraft = sessionStorage.getItem("selectedAircraft");
       const selectedMosa = sessionStorage.getItem("selectedMosa");
-      const selectedTargetAltitude = sessionStorage.getItem("selectedTargetAltitude");
 
       if (reponseData) {
         const data = JSON.parse(reponseData);
@@ -103,7 +101,6 @@
 
         document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${selectedAircraft}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${selectedMosa}`;
-        document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${selectedTargetAltitude}`;
 
         window.redirectToDataSummary = function () {
           window.location.href = "datasummary.html";
@@ -113,7 +110,6 @@
           ...data,
           Aircraft: selectedAircraft,
           MOSA: selectedMosa,
-          targetAltitude: selectedTargetAltitude,
           Version: "0.1.0",
           MissionTypes: ["Area survey", "Corridor survey"],
           TargetAltitudes: ["ASL", "HOME", "AGL", "AGL+"],
