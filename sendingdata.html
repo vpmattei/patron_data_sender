@@ -49,11 +49,13 @@
 
       window.onload = function () {
         const zonesData = JSON.parse(sessionStorage.getItem("zonesData"));
-        const aircraftMosaData = JSON.parse(sessionStorage.getItem("aircraftMosaData"));
+        const aircraftMosaData = JSON.parse(
+          sessionStorage.getItem("aircraftMosaData")
+        );
         const requestData = {
           ...zonesData,
-          ...aircraftMosaData
-        }
+          ...aircraftMosaData,
+        };
 
         sessionStorage.setItem("requestData", JSON.stringify(requestData));
 
@@ -61,6 +63,10 @@
           redirectToError("No zonesData found");
           return;
         }
+
+        setTimeout(() => {
+          document.getElementById("postingMessage").textContent = "Calculando missão...";
+        }, 2000);
 
         const postStartTime = Date.now();
 
