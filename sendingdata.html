@@ -57,17 +57,53 @@
         };
 
         sessionStorage.setItem("requestData", JSON.stringify(requestData));
+        const postingMessageElement = document.getElementById("postingMessage");
+        postingMessageElement.textContent = "Enviando dados...";
 
         if (!zonesData) {
-          redirectToError("No zonesData found");
+          setTimeout(() => {
+            redirectToError("No zonesData found");
+          }, 2000);
           return;
         }
 
         const postStartTime = Date.now();
-        const postingMessageElement = document.getElementById("postingMessage");
+        let hasPosted = false; // Flag to check if POST has been completed
 
-        // Change the message right before sending the request
-        postingMessageElement.textContent = "Calculando missão...";
+        // Initiate the POST request immediately
+        fetch(cloudEndpoint + "/planner_json", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok: " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((result) => {
+            console.log("Success:", result);
+            hasPosted = true;
+            redirectToSummary(result);
+          })
+          .catch((error) => {
+            console.error("Erro:", error);
+            hasPosted = true;
+            redirectToError(error.message);
+          });
+
+        // Change the message after 2 seconds if the POST request has already been initiated
+        setTimeout(() => {
+          if (hasPosted) {
+            // Only change the message if POST is done
+            postingMessageElement.textContent = "Calculando missão...";
+          }
+        }, 2000);
 
         function redirectToSummary(responseData) {
           const elapsedTime = Date.now() - postStartTime;
@@ -91,31 +127,6 @@
             )}`;
           }, remainingTime);
         }
-
-        fetch(cloudEndpoint + "/planner_json", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok: " + response.statusText
-              );
-            }
-            return response.json();
-          })
-          .then((result) => {
-            console.log("Success:", result);
-            redirectToSummary(result);
-          })
-          .catch((error) => {
-            console.error("Erro:", error);
-            postingMessageElement.textContent = "Erro ao enviar dados"; // Change message on error
-            redirectToError(error.message);
-          });
       };
     </script>
   </body>
