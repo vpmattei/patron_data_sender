@@ -116,8 +116,8 @@
         const numAOIsPaths = repData.AOIs.paths.length;
         const numEMZsZones = repData.EMZs.polygons.length;
         const numEMZsPaths = repData.EMZs.paths.length;
-        const droneSelected = reqData?.Aircraft;
-        const mosaSelected = reqData?.MOSA;
+        const droneSelected = reqData?.Aircraft.Name;
+        const mosaSelected = reqData?.MOSA.Name;
         const altitudeSelected = repData.altitude;
 
         const start = repData.StartEnd.start
