@@ -44,33 +44,49 @@
       </div>
     </div>
     <script>
+      const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       window.onload = function () {
         const zonesData = JSON.parse(sessionStorage.getItem("zonesData"));
-        const aircraftMosaData = JSON.parse(
-          sessionStorage.getItem("aircraftMosaData")
-        );
+        const aircraftMosaData = JSON.parse(sessionStorage.getItem("aircraftMosaData"));
         const requestData = {
           ...zonesData,
-          ...aircraftMosaData,
-        };
+          ...aircraftMosaData
+        }
 
         sessionStorage.setItem("requestData", JSON.stringify(requestData));
-        const postingMessageElement = document.getElementById("postingMessage");
-        postingMessageElement.textContent = "Enviando dados...";
 
         if (!zonesData) {
-          setTimeout(() => {
-            redirectToError("No zonesData found");
-          }, 2000);
+          redirectToError("No zonesData found");
           return;
         }
 
         const postStartTime = Date.now();
-        let hasPosted = false; // Flag to check if POST has been completed
 
-        // Initiate the POST request immediately
+        function redirectToSummary(responseData) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+
+          // Store the JSON zonesData in session storage
+          sessionStorage.setItem("responseData", JSON.stringify(responseData));
+
+          setTimeout(() => {
+            window.location.href = "/datasummary.html";
+          }, remainingTime);
+        }
+
+        function redirectToError(error) {
+          const elapsedTime = Date.now() - postStartTime;
+          const remainingTime = Math.max(0, 2000 - elapsedTime);
+          sessionStorage.setItem("error", error);
+          setTimeout(() => {
+            window.location.href = `/error.html?error=${encodeURIComponent(
+              error.message
+            )}`;
+          }, remainingTime);
+        }
+
         fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
           headers: {
@@ -81,52 +97,19 @@
           .then((response) => {
             if (!response.ok) {
               throw new Error(
-                "Network response was not ok: " + response.statusText
+                "Network response was not ok " + response.statusText
               );
             }
             return response.json();
           })
           .then((result) => {
             console.log("Success:", result);
-            hasPosted = true;
             redirectToSummary(result);
           })
           .catch((error) => {
             console.error("Erro:", error);
-            hasPosted = true;
-            redirectToError(error.message);
+            redirectToError(error);
           });
-
-        // Change the message after 2 seconds if the POST request has already been initiated
-        setTimeout(() => {
-          if (hasPosted) {
-            // Only change the message if POST is done
-            postingMessageElement.textContent = "Calculando missão...";
-          }
-        }, 2000);
-
-        function redirectToSummary(responseData) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-
-          sessionStorage.setItem("responseData", JSON.stringify(responseData));
-
-          setTimeout(() => {
-            window.location.href = "/datasummary.html";
-          }, remainingTime);
-        }
-
-        function redirectToError(errorMessage) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-          sessionStorage.setItem("error", errorMessage);
-
-          setTimeout(() => {
-            window.location.href = `/error.html?error=${encodeURIComponent(
-              errorMessage
-            )}`;
-          }, remainingTime);
-        }
       };
     </script>
   </body>
