@@ -90,7 +90,7 @@
         <p id="endCoords"></p>
       </div>
       <h2>Informações da Missão</h2>
-      <p id="droneInfo"></p>
+      <p id="aircraftInfo"></p>
       <p id="mosaInfo"></p>
       <p id="targetAltitudeInfo"></p>
       <button onclick="redirectToMissionSummary()">Ver missão</button>
@@ -98,7 +98,7 @@
   </div>
   <script>
     window.onload = function () {
-      const requestData = localStorage.getItem("requestData");
+      const requestData = sessionStorage.getItem("requestData");
       const reponseData = sessionStorage.getItem("responseData");
 
       
@@ -116,7 +116,7 @@
         const numAOIsPaths = repData.AOIs.paths.length;
         const numEMZsZones = repData.EMZs.polygons.length;
         const numEMZsPaths = repData.EMZs.paths.length;
-        const droneSelected = reqData?.Aircraft;
+        const aircraftSelected = reqData?.Aircraft;
         const mosaSelected = reqData?.MOSA;
         const altitudeSelected = repData.altitude;
 
@@ -136,7 +136,7 @@
         document.getElementById("startCoords").textContent = start;
         document.getElementById("endCoords").textContent = end;
 
-        document.getElementById("droneInfo").textContent = `Drone Selecionado: ${droneSelected}`;
+        document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${aircraftSelected}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${mosaSelected}`;
         document.getElementById("targetAltitudeInfo").textContent = `Altitude Alvo: ${altitudeSelected}`;
 

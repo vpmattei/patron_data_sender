@@ -251,7 +251,7 @@
         fileReader.onload = async function (e) {
           const result = await extractGoogleCoords(e.target.result);
           console.log(result);
-          sendDataToLocalStorage(result);
+          sendDataToSessionStorage(result);
         };
         fileReader.readAsText(file);
       }
@@ -440,8 +440,8 @@
         return StartEnd;
       }
 
-      function sendDataToLocalStorage(data) {
-        localStorage.setItem("zonesData", JSON.stringify(data));
+      function sendDataToSessionStorage(data) {
+        sessionStorage.setItem("zonesData", JSON.stringify(data));
         window.location.href = "selectdronemosa.html";
       }
 
