@@ -16,14 +16,20 @@
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
     <style>
-      #loader {
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid #1a3cdb;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        display: inline-block;
+      .loader {
+        width: 100%;
+        background-color: #ddd;
+        padding: 3px;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+
+      .loading-bar {
+        height: 20px;
+        width: 0%;
+        background-color: #1a3cdb;
+        border-radius: 5px;
+        transition: width 0.4s ease-in-out;
       }
 
       @keyframes spin {
@@ -40,14 +46,37 @@
     <div id="container" class="container">
       <div>
         <p id="postingMessage">Enviando dados...</p>
-        <div id="loader"></div>
+        <!-- <div id="loader"></div> -->
+        <div id="loader" class="loader" style="display: none">
+          <div id="loadingBar" class="loading-bar"></div>
+        </div>
       </div>
     </div>
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
+      // Loading bar
+      function updateLoadingBar(percent) {
+        const loadingBar = document.getElementById("loadingBar");
+        loadingBar.style.width = percent + "%";
+      }
+
+      // Example of incrementally updating the loading bar
+      function simulateProgress() {
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 10; // Incrementing the progress
+          updateLoadingBar(progress);
+          if (progress >= 100) {
+            clearInterval(interval);
+          }
+        }, 200); // Update every 200 milliseconds
+      }
+
       window.onload = function () {
+        document.getElementById("loader").style.display = "block";
+        simulateProgress(); // Start simulating progress when the page loads
         const zonesData = JSON.parse(sessionStorage.getItem("zonesData"));
         const aircraftMosaData = JSON.parse(
           sessionStorage.getItem("aircraftMosaData")
@@ -65,7 +94,8 @@
         }
 
         setTimeout(() => {
-          document.getElementById("postingMessage").textContent = "Calculando missão...";
+          document.getElementById("postingMessage").textContent =
+            "Calculando missão...";
         }, 2000);
 
         const postStartTime = Date.now();
@@ -93,6 +123,7 @@
           }, remainingTime);
         }
 
+        simulateProgress(); // Start simulating loading progress
         fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
           headers: {
@@ -110,10 +141,12 @@
           })
           .then((result) => {
             console.log("Success:", result);
+            simulateProgress(); // Start simulating loading progress
             redirectToSummary(result);
           })
           .catch((error) => {
             console.error("Erro:", error);
+            simulateProgress(); // Start simulating loading progress
             redirectToError(error);
           });
       };
