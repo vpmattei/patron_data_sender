@@ -38,8 +38,8 @@
   </head>
   <body>
     <div id="container" class="container">
-      <div id="postingMessage">
-        <p>Enviando dados...</p>
+      <div>
+        <p id="postingMessage">Enviando dados...</p>
         <div id="loader"></div>
       </div>
     </div>
@@ -73,6 +73,7 @@
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
+            document.getElementById("numMissions").textContent = "Calculando Missão. . .";
           }, remainingTime);
         }
 
