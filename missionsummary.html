@@ -56,15 +56,13 @@
   </div>
   <script>
     window.onload = function () {
-      const requestData = sessionStorage.getItem("requestData");
       const reponseData = sessionStorage.getItem("responseData");
 
       if (reponseData) {
-        const reqData = JSON.parse(requestData);
         const repData = JSON.parse(reponseData);
 
-        const selectedAircraft = reqData.Aircraft;
-        const selectedMosa = reqData.MOSA;
+        const selectedAircraft = repData.Aircraft;
+        const selectedMosa = repData.MOSA;
 
         // Calculate the distance between two geographical points using the Haversine formula
         function haversineDistance(coords1, coords2) {

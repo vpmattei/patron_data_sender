@@ -97,13 +97,10 @@
   </div>
   <script>
     window.onload = function () {
-      const requestData = sessionStorage.getItem("requestData");
       const reponseData = sessionStorage.getItem("responseData");
 
       
       if (reponseData) {
-        let reqData = null;
-        if (requestData) reqData = JSON.parse(requestData);
         const repData = JSON.parse(reponseData);
 
         console.log("reponse data:", repData);
@@ -115,8 +112,8 @@
         const numAOIsPaths = repData.AOIs.paths.length;
         const numEMZsZones = repData.EMZs.polygons.length;
         const numEMZsPaths = repData.EMZs.paths.length;
-        const aircraftSelected = reqData?.Aircraft;
-        const mosaSelected = reqData?.MOSA;
+        const aircraftSelected = repData.Aircraft;
+        const mosaSelected = repData.MOSA;
 
         const start = repData.StartEnd.start
           ? `Início: ${convertToDMS(repData.StartEnd.start.coords.lat, true)} ${convertToDMS(repData.StartEnd.start.coords.lng, false)}`

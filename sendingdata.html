@@ -76,12 +76,13 @@
           }, remainingTime);
         }
 
-        function redirectToError(errorMessage) {
+        function redirectToError(error) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
+          sessionStorage.setItem("error", error);
           setTimeout(() => {
             window.location.href = `/error.html?error=${encodeURIComponent(
-              errorMessage
+              error.message
             )}`;
           }, remainingTime);
         }
@@ -107,7 +108,7 @@
           })
           .catch((error) => {
             console.error("Erro:", error);
-            redirectToError(error.message);
+            redirectToError(error);
           });
       };
     </script>
