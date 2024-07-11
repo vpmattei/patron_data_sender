@@ -56,12 +56,15 @@
   </div>
   <script>
     window.onload = function () {
+      const requestData = sessionStorage.getItem("requestData");
       const reponseData = sessionStorage.getItem("responseData");
-      const selectedAircraft = sessionStorage.getItem("selectedAircraft");
-      const selectedMosa = sessionStorage.getItem("selectedMosa");
 
       if (reponseData) {
-        const data = JSON.parse(reponseData);
+        const reqData = JSON.parse(requestData);
+        const repData = JSON.parse(reponseData);
+
+        const selectedAircraft = reqData.Aircraft;
+        const selectedMosa = reqData.MOSA;
 
         // Calculate the distance between two geographical points using the Haversine formula
         function haversineDistance(coords1, coords2) {
@@ -80,7 +83,7 @@
         }
 
         // Extract information about missions
-        const missions = data.missions || [];
+        const missions = repData.missions || [];
         const numMissions = missions.length;
         let missionDetailsHtml = "";
 
@@ -107,7 +110,7 @@
         };
 
         const completeData = {
-          ...data,
+          ...repData,
           Aircraft: selectedAircraft,
           MOSA: selectedMosa,
           Version: "0.1.0",
@@ -182,7 +185,7 @@
             });
         };
       } else {
-        console.error("No data found in session storage");
+        console.error("No reponseData found in session storage");
       }
     };
   </script>
