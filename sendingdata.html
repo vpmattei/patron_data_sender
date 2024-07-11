@@ -31,8 +31,6 @@
         border-radius: 5px;
         transition: width 0.4s ease-in-out;
       }
-
-      
     </style>
   </head>
   <body>
@@ -89,6 +87,7 @@
         setTimeout(() => {
           document.getElementById("postingMessage").textContent =
             "Calculando missão...";
+          simulateProgress(); // Start simulating loading progress
         }, 2000);
 
         const postStartTime = Date.now();
@@ -99,6 +98,7 @@
 
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
+          simulateProgress(); // Start simulating loading progress
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
@@ -108,7 +108,10 @@
         function redirectToError(error) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
+
           sessionStorage.setItem("error", error);
+          simulateProgress(); // Start simulating loading progress
+
           setTimeout(() => {
             window.location.href = `/error.html?error=${encodeURIComponent(
               error.message
@@ -116,7 +119,6 @@
           }, remainingTime);
         }
 
-        simulateProgress(); // Start simulating loading progress
         fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
           headers: {
@@ -134,12 +136,10 @@
           })
           .then((result) => {
             console.log("Success:", result);
-            simulateProgress(); // Start simulating loading progress
             redirectToSummary(result);
           })
           .catch((error) => {
             console.error("Erro:", error);
-            simulateProgress(); // Start simulating loading progress
             redirectToError(error);
           });
       };
