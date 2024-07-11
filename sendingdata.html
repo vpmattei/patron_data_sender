@@ -44,16 +44,17 @@
       </div>
     </div>
     <script>
-      const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       window.onload = function () {
         const zonesData = JSON.parse(sessionStorage.getItem("zonesData"));
-        const aircraftMosaData = JSON.parse(sessionStorage.getItem("aircraftMosaData"));
+        const aircraftMosaData = JSON.parse(
+          sessionStorage.getItem("aircraftMosaData")
+        );
         const requestData = {
           ...zonesData,
-          ...aircraftMosaData
-        }
+          ...aircraftMosaData,
+        };
 
         sessionStorage.setItem("requestData", JSON.stringify(requestData));
 
@@ -63,27 +64,30 @@
         }
 
         const postStartTime = Date.now();
+        const postingMessageElement = document.getElementById("postingMessage");
+
+        // Change the message right before sending the request
+        postingMessageElement.textContent = "Calculando missão...";
 
         function redirectToSummary(responseData) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
 
-          // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
-            document.getElementById("numMissions").textContent = "Calculando Missão. . .";
           }, remainingTime);
         }
 
-        function redirectToError(error) {
+        function redirectToError(errorMessage) {
           const elapsedTime = Date.now() - postStartTime;
           const remainingTime = Math.max(0, 2000 - elapsedTime);
-          sessionStorage.setItem("error", error);
+          sessionStorage.setItem("error", errorMessage);
+
           setTimeout(() => {
             window.location.href = `/error.html?error=${encodeURIComponent(
-              error.message
+              errorMessage
             )}`;
           }, remainingTime);
         }
@@ -98,7 +102,7 @@
           .then((response) => {
             if (!response.ok) {
               throw new Error(
-                "Network response was not ok " + response.statusText
+                "Network response was not ok: " + response.statusText
               );
             }
             return response.json();
@@ -109,7 +113,8 @@
           })
           .catch((error) => {
             console.error("Erro:", error);
-            redirectToError(error);
+            postingMessageElement.textContent = "Erro ao enviar dados"; // Change message on error
+            redirectToError(error.message);
           });
       };
     </script>
