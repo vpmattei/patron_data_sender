@@ -57,6 +57,7 @@
       function simulateProgress() {
         let progress = 0;
         const interval = setInterval(() => {
+          if (progress >= 100) clearInterval(interval);
           if (progress < 90) progress += 10; // Incrementing the progress
           updateLoadingBar(progress);
         }, 3000); // Update every 3000 milliseconds
@@ -98,6 +99,8 @@
 
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
+          document.getElementById("postingMessage").textContent =
+            "Sucesso!";
           finishProgress(); // Start simulating loading progress
 
           setTimeout(() => {
