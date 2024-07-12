@@ -103,7 +103,7 @@
 
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
-          simulateProgress(); // Start simulating loading progress
+          finishProgress(); // Start simulating loading progress
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
@@ -115,7 +115,7 @@
           const remainingTime = Math.max(0, 2000 - elapsedTime);
 
           sessionStorage.setItem("error", error);
-          simulateProgress(); // Start simulating loading progress
+          finishProgress(); // Start simulating loading progress
 
           setTimeout(() => {
             window.location.href = `/error.html?error=${encodeURIComponent(
