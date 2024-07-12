@@ -57,12 +57,17 @@
       function simulateProgress() {
         let progress = 0;
         const interval = setInterval(() => {
-          progress += 10; // Incrementing the progress
+          if (progress < 90) progress += 10; // Incrementing the progress
           updateLoadingBar(progress);
-          if (progress >= 100) {
-            clearInterval(interval);
-          }
-        }, 2000); // Update every 200 milliseconds
+        }, 3000); // Update every 3000 milliseconds
+      }
+      
+      function finishProgress() {
+        let progress = 100;
+        updateLoadingBar(progress);
+        if (progress >= 100) {
+          clearInterval(interval);
+        }
       }
 
       window.onload = function () {
