@@ -95,8 +95,6 @@
         const postStartTime = Date.now();
 
         function redirectToSummary(responseData) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
 
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
@@ -104,13 +102,10 @@
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
-          }, remainingTime);
+          }, 2000);
         }
 
         function redirectToError(error) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
-
           sessionStorage.setItem("error", error);
           finishProgress(); // Start simulating loading progress
 
@@ -118,7 +113,7 @@
             window.location.href = `/error.html?error=${encodeURIComponent(
               error.message
             )}`;
-          }, remainingTime);
+          }, 2000);
         }
 
         fetch(cloudEndpoint + "/planner_json", {
