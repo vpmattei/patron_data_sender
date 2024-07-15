@@ -1,194 +1,191 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Resumo da Missão</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <style>
-      .buttons {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 4rem;
-        flex-direction: row;
-        gap: 1rem;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container" class="container">
-      <div id="missionSummary">
-        <h1>Resumo da Missão</h1>
-        <h2>Missões</h2>
-        <p id="numMissions">Número de Missões:</p>
-        <div id="missionDetails"></div>
-        <div class="buttons">
-          <button onclick="redirectToDataSummary()">
-            Ver resumo dos dados enviados
-          </button>
-          <button onclick="downloadKML()">
-            <i class="fa-solid fa-download"></i> Baixar missão em .KML
-          </button>
-          <button onclick="downloadJSON()">
-            <i class="fa-solid fa-download"></i> Baixar missão em .JSON
-          </button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Resumo da Missão</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <style>
+    body {
+      font-family: Roboto, sans-serif;
+      background-color: #00051e;
+      background: linear-gradient(to top, #00051e, #020b45), no-repeat top center;
+      color: #fff;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 80%;
+      background-color: #00092f;
+      padding: 20px;
+      border-radius: 2rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4rem;
+      flex-direction: row;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="container" class="container">
+    <div id="missionSummary">
+      <h1>Resumo da Missão</h1>
+      <h2>Missões</h2>
+      <p id="numMissions">Número de Missões:</p>
+      <div id="missionDetails"></div>
+      <h2>Informações da Missão</h2>
+      <p id="aircraftInfo"></p>
+      <p id="mosaInfo"></p>
+      <div class="buttons">
+        <button onclick="redirectToDataSummary()">Ver resumo dos dados enviados</button>
+        <button onclick="downloadKML()"><i class="fa-solid fa-download"></i> Baixar missão em .KML</button>
+        <button onclick="downloadJSON()"><i class="fa-solid fa-download"></i> Baixar missão em .JSON</button>
       </div>
     </div>
-    <script>
-      window.onload = function () {
-        // Retrieve the JSON data from local storage
-        const storedData = sessionStorage.getItem("responseData");
-        if (storedData) {
-          const data = JSON.parse(storedData);
+  </div>
+  <script>
+    window.onload = function () {
+      const reponseData = sessionStorage.getItem("responseData");
 
-          // Calculate the distance between two geographical points using the Haversine formula
-          function haversineDistance(coords1, coords2) {
-            const toRad = (x) => (x * Math.PI) / 180;
-            const R = 6371; // Radius of the Earth in km
+      if (reponseData) {
+        const repData = JSON.parse(reponseData);
 
-            const dLat = toRad(coords2.lat - coords1.lat);
-            const dLng = toRad(coords2.lng - coords1.lng);
+        const selectedAircraft = repData.Aircraft;
+        const selectedMosa = repData.MOSA;
 
-            const a =
-              Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(toRad(coords1.lat)) *
-                Math.cos(toRad(coords2.lat)) *
-                Math.sin(dLng / 2) *
-                Math.sin(dLng / 2);
+        // Calculate the distance between two geographical points using the Haversine formula
+        function haversineDistance(coords1, coords2) {
+          const toRad = (x) => (x * Math.PI) / 180;
+          const R = 6371; // Radius of the Earth in km
 
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
+          const dLat = toRad(coords2.lat - coords1.lat);
+          const dLng = toRad(coords2.lng - coords1.lng);
+
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRad(coords1.lat)) * Math.cos(toRad(coords2.lat)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          return R * c;
+        }
+
+        // Extract information about missions
+        const missions = repData.missions || [];
+        const numMissions = missions.length;
+        let missionDetailsHtml = "";
+
+        missions.forEach((mission, index) => {
+          const coords = mission.coords;
+          let totalDistance = 0;
+
+          for (let i = 0; i < coords.length - 1; i++) {
+            totalDistance += haversineDistance(coords[i], coords[i + 1]);
           }
 
-          // Extract information about missions
-          const missions = data.Mission;
-          const numMissions = missions.length;
-          let missionDetailsHtml = "";
+          missionDetailsHtml += `<p>Missão ${index + 1}: ${totalDistance.toFixed(2)} km</p>`;
+        });
 
-          missions.forEach((mission, index) => {
-            const coords = mission.coords;
-            let totalDistance = 0;
+        // Populate mission summary
+        document.getElementById("numMissions").textContent = `Número de Missões: ${numMissions}`;
+        document.getElementById("missionDetails").innerHTML = missionDetailsHtml;
 
-            for (let i = 0; i < coords.length - 1; i++) {
-              totalDistance += haversineDistance(coords[i], coords[i + 1]);
-            }
+        document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${selectedAircraft}`;
+        document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${selectedMosa}`;
 
-            missionDetailsHtml += `<p>Missão ${
-              index + 1
-            }: ${totalDistance.toFixed(2)} km</p>`;
-          });
+        window.redirectToDataSummary = function () {
+          window.location.href = "datasummary.html";
+        };
 
-          // Populate mission summary
-          document.getElementById(
-            "numMissions"
-          ).textContent = `Número de Missões: ${numMissions}`;
-          document.getElementById("missionDetails").innerHTML =
-            missionDetailsHtml;
+        const completeData = {
+          ...repData,
+          Aircraft: selectedAircraft,
+          MOSA: selectedMosa,
+          Version: "0.1.0",
+          MissionTypes: ["Area survey", "Corridor survey"],
+          TargetAltitudes: ["ASL", "HOME", "AGL", "AGL+"],
+          VehicleTypes: ["Copter", "Plane", "VTOL"],
+          Aircrafts: [
+            { "Name":"VT-14", "Type":"VTOL", "CruiseSpeed": 22,"MinSspeed": 22, "MaxSpeed": 22, "TurnRadios":200, "ReturnAltitude": 200, "MinHome":30, "MinAGL":30, "MaxASL":1000, "MaxAGL":400, "FlitTime":240, "TurnaroundDist":50},
+            { "Name":"MR82020", "Type":"Copter", "CruiseSpeed": 21,"MinSspeed": 21, "MaxSpeed": 21, "TurnRadios":201, "ReturnAltitude": 201, "MinHome":31, "MinAGL":31, "MaxASL":1001, "MaxAGL":401, "FlitTime":241, "TurnaroundDist":51}
+          ],
+          MOSAs: [
+            { "Name":"MOSA1", "MissionType":"Area survey", "TargetAltitude":"HOME", "FlightAltitude":100, "WaypointsDist": 40, "LineDist":50 },
+            { "Name":"MOSA2", "MissionType":"Corridor survey", "TargetAltitude":"AGL", "FlightAltitude":99, "WaypointsDist": 41, "LineDist":51 }
+          ]
+        };
 
-          window.redirectToDataSummary = function () {
-            sessionStorage.setItem("responseData", JSON.stringify(data));
-            window.location.href = "/datasummary.html";
-          };
-        } else {
-          console.error("No data found in local storage");
-        }
-      };
-
-      function downloadKML() {
-        const storedData = sessionStorage.getItem("responseData");
-        if (!storedData) {
-          console.error("No data found in local storage");
-          return;
-        }
-
-        const data = JSON.parse(storedData);
-
-        fetch("https://patronrouteplanner.zapto.org/api/services/planner_kml", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-            return response.blob();
+        window.downloadKML = function () {
+          fetch("https://patronrouteplanner.zapto.org/api/services/planner_kml", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(completeData),
           })
-          .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "mission.kml";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok " + response.statusText);
+              }
+              return response.blob();
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = "mission.kml";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+              console.error("There was an error downloading the KML file:", error);
+            });
+        };
+
+        window.downloadJSON = function () {
+          fetch("https://patronrouteplanner.zapto.org/api/services/planner_plan", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(completeData),
           })
-          .catch((error) => {
-            console.error(
-              "There was an error downloading the KML file:",
-              error
-            );
-          });
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok " + response.statusText);
+              }
+              return response.blob();
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const link = document.createElement("a");
+              link.href = url;
+              link.download = "mission.json";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => {
+              console.error("There was an error downloading the JSON file:", error);
+            });
+        };
+      } else {
+        console.error("No reponseData found in session storage");
       }
-
-      function downloadJSON() {
-        const storedData = sessionStorage.getItem("responseData");
-        if (!storedData) {
-          console.error("No data found in local storage");
-          return;
-        }
-
-        const data = JSON.parse(storedData);
-
-        fetch("https://patronrouteplanner.zapto.org/api/services/planner_plan", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(
-                "Network response was not ok " + response.statusText
-              );
-            }
-            return response.blob();
-          })
-          .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "mission.kml";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-          })
-          .catch((error) => {
-            console.error(
-              "There was an error downloading the KML file:",
-              error
-            );
-          });
-      }
-    </script>
-  </body>
+    };
+  </script>
+</body>
 </html>

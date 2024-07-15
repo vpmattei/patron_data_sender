@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sélection de Aircraft et MOSA</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    <style>
+      .selecting-aircraft-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        width: 150%;
+      }
+
+      .aircraft-image {
+        width: 300px;
+        height: auto;
+        display: block;
+        margin: 0 auto 20px auto;
+      }
+
+      .selection-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .selection-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .selection-row label {
+        min-width: 150px;
+        text-align: left;
+      }
+
+      .info-icon {
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #00092f;
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        width: 300px;
+        text-align: left;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .popup h3 {
+        margin-top: 0;
+      }
+
+      .popup p {
+        margin: 5px 0;
+      }
+
+      .popup-close {
+        display: block;
+        text-align: right;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        width: 150%;
+      }
+
+      .fa-arrow-left {
+        font-size: 1.5rem;
+        color: white;
+      }
+
+      #sendButton:disabled {
+        background-color: #d0d3df;
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    </style>
+    <script>
+      const aircrafts = [
+        {
+          Name: "VT-14",
+          Type: "VTOL",
+          CruiseSpeed: 22,
+          MinSspeed: 22,
+          MaxSpeed: 22,
+          TurnRadios: 200,
+          ReturnAltitude: 200,
+          MinHome: 30,
+          MinAGL: 30,
+          MaxASL: 1000,
+          MaxAGL: 400,
+          FlitTime: 240,
+          TurnaroundDist: 50,
+          Image:
+            "https://fr.satuav.com/Content/uploads/2021761228/202104251129323edf13f7694c47d0b8f4e2823cdf40ae.png",
+        },
+        {
+          Name: "MR82020",
+          Type: "Copter",
+          CruiseSpeed: 21,
+          MinSspeed: 21,
+          MaxSpeed: 21,
+          TurnRadios: 201,
+          ReturnAltitude: 201,
+          MinHome: 31,
+          MinAGL: 31,
+          MaxASL: 1001,
+          MaxAGL: 401,
+          FlitTime: 241,
+          TurnaroundDist: 51,
+          Image:
+            "https://guide-images.cdn.ifixit.com/igi/PArTwJRgvPcAQp4J.large",
+        },
+        {
+          Name: "PLN-400",
+          Type: "Plane",
+          CruiseSpeed: 30,
+          MinSspeed: 28,
+          MaxSpeed: 35,
+          TurnRadios: 150,
+          ReturnAltitude: 500,
+          MinHome: 50,
+          MinAGL: 50,
+          MaxASL: 2000,
+          MaxAGL: 500,
+          FlitTime: 360,
+          TurnaroundDist: 100,
+          Image:
+            "https://upload.wikimedia.org/wikipedia/commons/b/b8/USMC-01522.jpg",
+        },
+      ];
+
+      const mosas = [
+        {
+          Name: "MOSA1",
+          MissionType: "Area survey",
+          TargetAltitude: "HOME",
+          FlightAltitude: 100,
+          WaypointsDist: 40,
+          LineDist: 50,
+        },
+        {
+          Name: "MOSA2",
+          MissionType: "Corridor survey",
+          TargetAltitude: "AGL",
+          FlightAltitude: 99,
+          WaypointsDist: 41,
+          LineDist: 51,
+        },
+      ];
+
+      const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
+
+      function setupEventListeners() {
+        document
+          .getElementById("aircraft")
+          .addEventListener("change", validateSelections);
+        document
+          .getElementById("mosa")
+          .addEventListener("change", validateSelections);
+      }
+
+      function displayAircraftImage() {
+        const aircraftSelected = document.getElementById("aircraft");
+        const selectedAircraft = aircraftSelected.value;
+        const aircraftImage = document.getElementById("aircraftImage");
+        const aircraft = aircrafts.find((a) => a.Name === selectedAircraft);
+
+        if (aircraft) {
+          aircraftImage.src = aircraft.Image;
+          aircraftImage.style.display = "block";
+        } else {
+          aircraftImage.style.display = "none";
+        }
+      }
+
+      function showInfo(aircraftName) {
+        const popup = document.getElementById("popup");
+        const popupContent = document.getElementById("popupContent");
+        const aircraft = aircrafts.find((a) => a.Name === aircraftName);
+
+        if (aircraft) {
+          popupContent.innerHTML = `
+          <h3>Informations du Aircraft</h3>
+          <p>Nom: ${aircraft.Name}</p>
+          <p>Type: ${aircraft.Type}</p>
+          <p>Vitesse de croisière: ${aircraft.CruiseSpeed} km/h</p>
+          <p>Vitesse minimale: ${aircraft.MinSspeed} km/h</p>
+          <p>Vitesse maximale: ${aircraft.MaxSpeed} km/h</p>
+          <p>Rayon de virage: ${aircraft.TurnRadios} m</p>
+          <p>Altitude de retour: ${aircraft.ReturnAltitude} m</p>
+          <p>Altitude minimale (HOME): ${aircraft.MinHome} m</p>
+          <p>Altitude minimale (AGL): ${aircraft.MinAGL} m</p>
+          <p>Altitude maximale (ASL): ${aircraft.MaxASL} m</p>
+          <p>Altitude maximale (AGL): ${aircraft.MaxAGL} m</p>
+          <p>Temps de vol: ${aircraft.FlitTime} minutes</p>
+          <p>Distance de demi-tour: ${aircraft.TurnaroundDist} m</p>
+        `;
+          popup.style.display = "block";
+        }
+      }
+
+      function closePopup() {
+        const popup = document.getElementById("popup");
+        popup.style.display = "none";
+      }
+
+      function populateSelectOptions() {
+        const aircraftSelected = document.getElementById("aircraft");
+        aircrafts.forEach((aircraft) => {
+          const option = document.createElement("option");
+          option.value = aircraft.Name;
+          option.textContent = `${aircraft.Name} (${aircraft.Type})`;
+          aircraftSelected.appendChild(option);
+        });
+
+        const mosaSelected = document.getElementById("mosa");
+        mosas.forEach((mosa) => {
+          const option = document.createElement("option");
+          option.value = mosa.Name;
+          option.textContent = `${mosa.Name} (${mosa.MissionType})`;
+          mosaSelected.appendChild(option);
+        });
+
+        validateSelections();
+      }
+
+      function validateSelections() {
+        const aircraft = document.getElementById("aircraft").value;
+        const mosa = document.getElementById("mosa").value;
+        const sendButton = document.getElementById("sendButton");
+        sendButton.disabled = !aircraft || !mosa;
+      }
+
+      function sendData() {
+        const sendButton = document.getElementById("sendButton");
+        const aircraftSelected = document.getElementById("aircraft");
+        const mosaSelected = document.getElementById("mosa");
+
+        const aircraftName = aircraftSelected.value;
+        const mosaName = mosaSelected.value;
+
+        const aircraftMosaData = {
+          Aircraft: aircraftName,
+          MOSA: mosaName,
+        };
+
+        sessionStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
+        sendButton.style.display = "none";
+
+        // Redirection vers sendingdata.html
+        window.location.href = "sendingdata.html";
+      }
+
+      function goBack() {
+        window.location.href = "index.html";
+      }
+
+      window.onload = function () {
+        setupEventListeners();
+        populateSelectOptions();
+        displayAircraftImage();
+      };
+    </script>
+  </head>
+
+  <body>
+    <div class="selecting-aircraft-container">
+      <div class="container">
+        <img
+          id="aircraftImage"
+          src=""
+          alt="Imagem do avião"
+          class="aircraft-image"
+          style="display: none"
+        />
+        <div class="selection-container">
+          <div class="selection-row">
+            <label for="aircraft">Escolha um Aircraft</label>
+            <div style="display: flex; align-items: center">
+              <select name="aircraft" id="aircraft" onchange="displayAircraftImage()">
+                <option value="">Selecione um Aircraft</option>
+              </select>
+              <i
+                class="fa fa-info-circle info-icon"
+                onclick="showInfo(document.getElementById('aircraft').value)"
+              ></i>
+            </div>
+          </div>
+          <div class="selection-row">
+            <label for="mosa">Escolha um MOSA</label>
+            <select name="mosa" id="mosa">
+              <option value="">Selecione um MOSA</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">
+        <button onclick="goBack()">
+          <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <button id="sendButton" onclick="sendData()">Enviar dados</button>
+      </div>
+      <div id="popup" class="popup">
+        <div id="popupContent"></div>
+        <div class="button">
+          <button onclick="closePopup()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

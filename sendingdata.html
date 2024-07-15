@@ -16,67 +16,110 @@
     />
     <link rel="stylesheet" type="text/css" href="main.css" />
     <style>
-      #loader {
-        border: 6px solid #f3f3f3;
-        border-top: 6px solid #1a3cdb;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        animation: spin 1s linear infinite;
-        display: inline-block;
+      .loader {
+        width: 100%;
+        background-color: #ddd;
+        padding: 3px;
+        border-radius: 5px;
+        margin-top: 20px;
       }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+      .loading-bar {
+        height: 20px;
+        width: 0%;
+        background-color: #1a3cdb;
+        border-radius: 5px;
+        transition: width 0.4s ease-in-out;
       }
     </style>
   </head>
   <body>
     <div id="container" class="container">
-      <div id="postingMessage">
-        <p>Enviando dados...</p>
-        <div id="loader"></div>
+      <div>
+        <p id="postingMessage">Enviando dados...</p>
+        <!-- <div id="loader"></div> -->
+        <div id="loader" class="loader" style="display: none">
+          <div id="loadingBar" class="loading-bar"></div>
+        </div>
       </div>
     </div>
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
       const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
-      window.onload = function () {
-        const data = JSON.parse(localStorage.getItem("zonesData"));
+      // Loading bar
+      function updateLoadingBar(percent) {
+        const loadingBar = document.getElementById("loadingBar");
+        loadingBar.style.width = percent + "%";
+      }
 
-        if (!data) {
-          redirectToError("No data found");
+      // Example of incrementally updating the loading bar
+      function simulateProgress() {
+        let progress = 0;
+        const interval = setInterval(() => {
+          if (progress >= 100) {
+            clearInterval(interval);
+            return;
+          }
+          if (progress < 90) progress += 10; // Incrementing the progress
+          updateLoadingBar(progress);
+        }, 3000); // Update every 3000 milliseconds
+      }
+      
+      function finishProgress() {
+        let progress = 100;
+        updateLoadingBar(progress);
+      }
+
+      window.onload = function () {
+        document.getElementById("loader").style.display = "block";
+        simulateProgress(); // Start simulating progress when the page loads
+        const zonesData = JSON.parse(sessionStorage.getItem("zonesData"));
+        const aircraftMosaData = JSON.parse(
+          sessionStorage.getItem("aircraftMosaData")
+        );
+        const requestData = {
+          ...zonesData,
+          ...aircraftMosaData,
+        };
+
+        sessionStorage.setItem("requestData", JSON.stringify(requestData));
+
+        if (!zonesData) {
+          redirectToError("No zonesData found");
           return;
         }
+
+        setTimeout(() => {
+          document.getElementById("postingMessage").textContent =
+            "Calculando missão...";
+          simulateProgress(); // Start simulating loading progress
+        }, 2000);
 
         const postStartTime = Date.now();
 
         function redirectToSummary(responseData) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
 
-          // Store the JSON data in session storage
+          // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
+          document.getElementById("postingMessage").textContent =
+            "Sucesso!";
+          finishProgress(); // Start simulating loading progress
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
-          }, remainingTime);
+          }, 2000);
         }
 
-        function redirectToError(errorMessage) {
-          const elapsedTime = Date.now() - postStartTime;
-          const remainingTime = Math.max(0, 2000 - elapsedTime);
+        function redirectToError(error) {
+          sessionStorage.setItem("error", error);
+          finishProgress(); // Start simulating loading progress
+
           setTimeout(() => {
             window.location.href = `/error.html?error=${encodeURIComponent(
-              errorMessage
+              error.message
             )}`;
-          }, remainingTime);
+          }, 2000);
         }
 
         fetch(cloudEndpoint + "/planner_json", {
@@ -84,7 +127,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(requestData),
         })
           .then((response) => {
             if (!response.ok) {
@@ -100,7 +143,7 @@
           })
           .catch((error) => {
             console.error("Erro:", error);
-            redirectToError(error.message);
+            redirectToError(error);
           });
       };
     </script>
