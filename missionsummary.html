@@ -50,7 +50,7 @@
       <div class="buttons">
         <button onclick="redirectToDataSummary()">Ver resumo dos dados enviados</button>
         <button onclick="downloadKML()"><i class="fa-solid fa-download"></i> Baixar missão em .KML</button>
-        <button onclick="downloadJSON()"><i class="fa-solid fa-download"></i> Baixar missão em .JSON</button>
+        <button onclick="downloadPlan()"><i class="fa-solid fa-download"></i> Baixar missão em .plan</button>
       </div>
     </div>
   </div>
@@ -154,7 +154,7 @@
             });
         };
 
-        window.downloadJSON = function () {
+        window.downloadPlan = function () {
           fetch("https://patronrouteplanner.zapto.org/api/services/planner_plan", {
             method: "POST",
             headers: {
@@ -172,14 +172,14 @@
               const url = window.URL.createObjectURL(blob);
               const link = document.createElement("a");
               link.href = url;
-              link.download = "mission.json";
+              link.download = "mission.plan";
               document.body.appendChild(link);
               link.click();
               document.body.removeChild(link);
               window.URL.revokeObjectURL(url);
             })
             .catch((error) => {
-              console.error("There was an error downloading the JSON file:", error);
+              console.error("There was an error downloading the .plan file:", error);
             });
         };
       } else {
