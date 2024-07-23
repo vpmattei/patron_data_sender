@@ -289,6 +289,7 @@
         const sendButton = document.getElementById("sendButton");
         const aircraftSelected = document.getElementById("aircraft");
         const mosaSelected = document.getElementById("mosa");
+        const optimizationSelected = document.getElementById("optimization");
 
         const aircraftName = aircraftSelected.value;
         const mosaName = mosaSelected.value;
@@ -296,6 +297,7 @@
         const aircraftMosaData = {
           Aircraft: aircraftName,
           MOSA: mosaName,
+          optimization: optimizationSelected
         };
 
         sessionStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
