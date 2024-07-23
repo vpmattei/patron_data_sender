@@ -293,11 +293,12 @@
 
         const aircraftName = aircraftSelected.value;
         const mosaName = mosaSelected.value;
+        const optimizationValue = optimizationSelected.value;
 
         const aircraftMosaData = {
           Aircraft: aircraftName,
           MOSA: mosaName,
-          optimization: optimizationSelected
+          optimization: optimizationValue
         };
 
         sessionStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
