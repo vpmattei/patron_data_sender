@@ -258,9 +258,21 @@
 
         const optimizationSelected = document.getElementById("optimization");
         optimization.forEach((opt) => {
+          let optTextPT;
+          switch(opt) {
+            case "Low":
+              optTextPT = "Baixa"
+            case "Middle":
+              optTextPT = "Média"
+            case "High":
+              optTextPT = "Alta"
+            default:
+              optTextPT = "Alta"
+          }
+
           const option = document.createElement("option");
           option.value = opt;
-          option.textContent = `${opt}`;
+          option.textContent = `${optTextPT}`;
           optimizationSelected.appendChild(option);
         })
 
