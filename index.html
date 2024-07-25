@@ -264,7 +264,7 @@
             polygons: [],
             paths: [],
           },
-          AOIs: {
+          ROIs: {
             polygons: [],
             paths: [],
           },
@@ -272,9 +272,9 @@
             polygons: [],
             paths: [],
           },
-          StartEnd: {
-            start: null,
-            end: null,
+          home: {
+            lat: null,
+            lng: null,
           },
         };
         if (xmlDoc.documentElement.nodeName === "kml") {
@@ -289,17 +289,17 @@
             if (folderName == "NFZs") {
               PlacemarksData.NFZs = getZones(placemarks);
             }
-            // Get all AOIs (Areas of Interest)
-            else if (folderName == "AOIs") {
-              PlacemarksData.AOIs = getZones(placemarks);
+            // Get all ROIs (Regions of Interest)
+            else if (folderName == "ROIs") {
+              PlacemarksData.ROIs = getZones(placemarks);
             }
             // Get all EMZs (Emergency Zones)
             else if (folderName == "EMZs") {
               PlacemarksData.EMZs = getZones(placemarks);
             }
-            // Get Start and End
-            else if (folderName == "Start&End") {
-              PlacemarksData.StartEnd = getStartEnd(placemarks);
+            // Get Home
+            else if (folderName == "Home") {
+              PlacemarksData.home = getHome(placemarks);
             }
           }
         } else {
@@ -384,10 +384,10 @@
         return zones;
       }
 
-      function getStartEnd(placemarks) {
-        const StartEnd = {
-          start: null,
-          end: null,
+      function getHome(placemarks) {
+        const home = {
+          lat: null,
+          lng: null,
         };
         for (let j = 0; j < placemarks.length; j++) {
           const item = placemarks[j];
@@ -421,23 +421,15 @@
               lat: parseFloat(coord[1]),
               lng: parseFloat(coord[0]),
             };
-            if (placeMarkName.toLowerCase().includes("start")) {
-              StartEnd.start = {
-                name: placeMarkName,
-                coords: latLng,
-              };
-            } else if (placeMarkName.toLowerCase().includes("end")) {
-              StartEnd.end = {
-                name: placeMarkName,
-                coords: latLng,
+            if (placeMarkName.toLowerCase().includes("home")) {
+              home = {
+                lat: latLng.lat,
+                lng: latLng.lng,
               };
             }
           }
         }
-        if (StartEnd.start && !StartEnd.end) {
-          StartEnd.end = StartEnd.start;
-        }
-        return StartEnd;
+        return home;
       }
 
       function sendDataToSessionStorage(data) {
