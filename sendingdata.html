@@ -45,7 +45,7 @@
     </div>
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
-      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/v2";
+      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services";
 
       // Loading bar
       function updateLoadingBar(percent) {
@@ -122,7 +122,7 @@
           }, 2000);
         }
 
-        fetch(cloudEndpoint + "/calculate", {
+        fetch(cloudEndpoint + "/planner_json", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
