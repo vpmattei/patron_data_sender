@@ -247,7 +247,7 @@
       }
 
       function parseDocument(file) {
-        const fileReader = new FileReader();
+        let fileReader = new FileReader();
         fileReader.onload = async function (e) {
           let result = await extractGoogleCoords(e.target.result);
           console.log(result);
