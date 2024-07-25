@@ -79,8 +79,8 @@
           sessionStorage.getItem("aircraftMosaData")
         );
         const requestData = {
-          ...zonesData,
           ...aircraftMosaData,
+          ...zonesData,
         };
 
         sessionStorage.setItem("requestData", JSON.stringify(requestData));

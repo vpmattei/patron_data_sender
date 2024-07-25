@@ -265,7 +265,7 @@
             polygons: [],
             paths: [],
           },
-          ROIs: {
+          AOIs: {
             polygons: [],
             paths: [],
           },
@@ -292,7 +292,7 @@
             }
             // Get all ROIs (Regions of Interest)
             else if (folderName == "ROIs") {
-              PlacemarksData.ROIs = getZones(placemarks);
+              PlacemarksData.AOIs = getZones(placemarks);
             }
             // Get all EMZs (Emergency Zones)
             else if (folderName == "EMZs") {
