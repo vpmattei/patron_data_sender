@@ -45,7 +45,8 @@
     </div>
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
-      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/v2/calculate";
+      const cloudEndpoint =
+        "https://patronrouteplanner.zapto.org/api/v2/calculate";
 
       // Loading bar
       function updateLoadingBar(percent) {
@@ -65,7 +66,7 @@
           updateLoadingBar(progress);
         }, 4000); // Update every 3000 milliseconds
       }
-      
+
       function finishProgress() {
         let progress = 100;
         updateLoadingBar(progress);
@@ -96,32 +97,6 @@
           simulateProgress(); // Start simulating loading progress
         }, 2000);
 
-        const postStartTime = Date.now();
-
-        function redirectToSummary(responseData) {
-
-          // Store the JSON zonesData in session storage
-          sessionStorage.setItem("responseData", JSON.stringify(responseData));
-          document.getElementById("postingMessage").textContent =
-            "Sucesso!";
-          finishProgress(); // Start simulating loading progress
-
-          setTimeout(() => {
-            window.location.href = "/datasummary.html";
-          }, 2000);
-        }
-
-        function redirectToError(error) {
-          sessionStorage.setItem("error", error);
-          finishProgress(); // Start simulating loading progress
-
-          setTimeout(() => {
-            window.location.href = `/error.html?error=${encodeURIComponent(
-              error.message
-            )}`;
-          }, 2000);
-        }
-
         fetch(cloudEndpoint, {
           method: "POST",
           headers: {
@@ -143,8 +118,30 @@
           })
           .catch((error) => {
             console.error("Erro:", error);
-            redirectToError(error);
+            //redirectToError(error);
           });
+
+        function redirectToSummary(responseData) {
+          // Store the JSON zonesData in session storage
+          sessionStorage.setItem("responseData", JSON.stringify(responseData));
+          document.getElementById("postingMessage").textContent = "Sucesso!";
+          finishProgress(); // Start simulating loading progress
+
+          setTimeout(() => {
+            window.location.href = "/datasummary.html";
+          }, 2000);
+        }
+
+        function redirectToError(error) {
+          sessionStorage.setItem("error", error);
+          finishProgress(); // Start simulating loading progress
+
+          setTimeout(() => {
+            window.location.href = `/error.html?error=${encodeURIComponent(
+              error.message
+            )}`;
+          }, 2000);
+        }
       };
     </script>
   </body>
