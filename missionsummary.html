@@ -58,6 +58,7 @@
     window.onload = function () {
       const requestData = sessionStorage.getItem("requestData");
       const responseData = sessionStorage.getItem("responseData");
+      const missionKey = sessionStorage.getItem("missionKey");
 
       if (responseData) {
         const reqData = JSON.parse(requestData);
@@ -128,12 +129,11 @@
         };
 
         window.downloadKML = function () {
-          fetch("https://patronrouteplanner.zapto.org/api/services/planner_kml", {
-            method: "POST",
+          fetch("https://patronrouteplanner.zapto.org/api/v2/download_kml/" + missionKey, {
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(completeData),
+            }
           })
             .then((response) => {
               if (!response.ok) {
@@ -157,12 +157,11 @@
         };
 
         window.downloadPlan = function () {
-          fetch("https://patronrouteplanner.zapto.org/api/services/planner_plan", {
-            method: "POST",
+          fetch("https://patronrouteplanner.zapto.org/api/v2/download_plan/" + missionKey, {
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(completeData),
+            }
           })
             .then((response) => {
               if (!response.ok) {
