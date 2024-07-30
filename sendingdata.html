@@ -115,11 +115,11 @@
           })
           .then((result) => {
             console.log("Success:", result);
-            //redirectToSummary(result);
+            redirectToSummary(result);
           })
           .catch((error) => {
             console.error("Erro:", error);
-            //redirectToError(error);
+            redirectToError(error);
           });
 
         function redirectToSummary(responseData) {
