@@ -269,10 +269,6 @@
             polygons: [],
             paths: [],
           },
-          EMZs: {
-            polygons: [],
-            paths: [],
-          },
           home: {
             lat: null,
             lng: null,
@@ -295,9 +291,9 @@
               PlacemarksData.AOIs = getZones(placemarks);
             }
             // Get all EMZs (Emergency Zones)
-            else if (folderName == "EMZs") {
-              PlacemarksData.EMZs = getZones(placemarks);
-            }
+            //else if (folderName == "EMZs") {
+            //  PlacemarksData.EMZs = getZones(placemarks);
+            //}
             // Get Home
             else if (folderName == "Home") {
               PlacemarksData.home = getHome(placemarks);
