@@ -125,7 +125,7 @@
         function redirectToSummary(responseData) {
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
-          sessionStorage.setItem("missionKey", JSON.stringify(responseData.key))
+          sessionStorage.setItem("missionKey", responseData.key)
           document.getElementById("postingMessage").textContent = "Sucesso!";
           finishProgress(); // Start simulating loading progress
 
