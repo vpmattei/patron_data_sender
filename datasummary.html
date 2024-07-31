@@ -107,8 +107,8 @@
         const numNFZsPaths = reqData.NFZs.paths.length;
         const numAOIsZones = reqData.AOIs.polygons.length;
         const numAOIsPaths = reqData.AOIs.paths.length;
-        //const numEMZsZones = reqData.EMZs.polygons.length;
-        //const numEMZsPaths = reqData.EMZs.paths.length;
+        const numEMZsZones = reqData.EMZs.polygons.length;
+        const numEMZsPaths = reqData.EMZs.paths.length;
         const aircraftSelected = reqData.Aircraft;
         const mosaSelected = reqData.MOSA;
 
@@ -118,8 +118,8 @@
         document.getElementById("numNFZsPaths").textContent = `Número de Trajetos: ${numNFZsPaths}`;
         document.getElementById("numAOIsZones").textContent = `Número de Áreas: ${numAOIsZones}`;
         document.getElementById("numAOIsPaths").textContent = `Número de Trajetos: ${numAOIsPaths}`;
-        //document.getElementById("numEMZsZones").textContent = `Número de Áreas: ${numEMZsZones}`;
-        //document.getElementById("numEMZsPaths").textContent = `Número de Trajetos: ${numEMZsPaths}`;
+        document.getElementById("numEMZsZones").textContent = `Número de Áreas: ${numEMZsZones}`;
+        document.getElementById("numEMZsPaths").textContent = `Número de Trajetos: ${numEMZsPaths}`;
         document.getElementById("lat").textContent = "Latitude: " + home.lat;
         document.getElementById("lng").textContent = "Longitude: " + home.lng;
 
