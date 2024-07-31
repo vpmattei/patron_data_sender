@@ -58,13 +58,13 @@
       function simulateProgress() {
         let progress = 0;
         const interval = setInterval(() => {
-          if (progress >= 100) {
+          if (progress >= 90) {
             clearInterval(interval);
             return;
           }
           if (progress < 90) progress += 10; // Incrementing the progress
           updateLoadingBar(progress);
-        }, 4000); // Update every 3000 milliseconds
+        }, 4000); // Update every 4000 milliseconds
       }
 
       function finishProgress() {
