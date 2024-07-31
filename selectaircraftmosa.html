@@ -281,8 +281,9 @@
       function validateSelections() {
         const aircraft = document.getElementById("aircraft").value;
         const mosa = document.getElementById("mosa").value;
+        const optimization = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
-        sendButton.disabled = !aircraft || !mosa;
+        sendButton.disabled = !aircraft || !mosa || !optimization;
       }
 
       function sendData() {
