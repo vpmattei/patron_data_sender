@@ -58,6 +58,7 @@
 
     .home, .end {
       display: flex;
+      flex-direction: column;
       align-items: center;
     }
 
@@ -81,6 +82,7 @@
       <p class="emz" id="numEMZsZones"></p>
       <p class="emz" id="numEMZsPaths"></p>
       <br />
+      <h2>Home</h2>
       <div class="home">
         <i class="fa-solid fa-location-dot" style="font-size: 24px; color: limegreen"></i>
         <p id="lat"></p>
@@ -119,8 +121,8 @@
         document.getElementById("numAOIsPaths").textContent = `Número de Trajetos: ${numAOIsPaths}`;
         //document.getElementById("numEMZsZones").textContent = `Número de Áreas: ${numEMZsZones}`;
         //document.getElementById("numEMZsPaths").textContent = `Número de Trajetos: ${numEMZsPaths}`;
-        document.getElementById("lat").textContent = home.lat;
-        document.getElementById("lng").textContent = home.lng;
+        document.getElementById("lat").textContent = "Latitude: " + home.lat;
+        document.getElementById("lng").textContent = "Longitude: " + home.lng;
 
         document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${aircraftSelected}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${mosaSelected}`;
