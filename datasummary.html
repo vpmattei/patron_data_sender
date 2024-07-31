@@ -56,12 +56,13 @@
       color: rgb(255, 195, 83);
     }
 
-    .start, .end {
+    .home, .end {
       display: flex;
+      flex-direction: column;
       align-items: center;
     }
 
-    .start i, .end i {
+    .home i, .end i {
       margin-right: 10px;
     }
   </style>
@@ -80,15 +81,12 @@
       <h2 class="EMZs">Zonas de Emergência (EMZs)</h2>
       <p class="emz" id="numEMZsZones"></p>
       <p class="emz" id="numEMZsPaths"></p>
+      <h2>Home</h2>
+      <div class="home">
+        <p id="lat"></p>
+        <p id="lng"></p>
+      </div>
       <br />
-      <div class="start">
-        <i class="fa-solid fa-location-dot" style="font-size: 24px; color: limegreen"></i>
-        <p id="startCoords"></p>
-      </div>
-      <div class="end">
-        <i class="fa-solid fa-location-dot" style="font-size: 24px; color: red"></i>
-        <p id="endCoords"></p>
-      </div>
       <h2>Informações da Missão</h2>
       <p id="aircraftInfo"></p>
       <p id="mosaInfo"></p>
@@ -97,29 +95,24 @@
   </div>
   <script>
     window.onload = function () {
-      const reponseData = sessionStorage.getItem("responseData");
+      const requestData = sessionStorage.getItem("requestData");
 
       
-      if (reponseData) {
-        const repData = JSON.parse(reponseData);
+      if (requestData) {
+        const reqData = JSON.parse(requestData);
 
-        console.log("reponse data:", repData);
+        console.log("reponse data:", reqData);
 
-        const numNFZsZones = repData.NFZs.polygons.length;
-        const numNFZsPaths = repData.NFZs.paths.length;
-        const numAOIsZones = repData.AOIs.polygons.length;
-        const numAOIsPaths = repData.AOIs.paths.length;
-        const numEMZsZones = repData.EMZs.polygons.length;
-        const numEMZsPaths = repData.EMZs.paths.length;
-        const aircraftSelected = repData.Aircraft;
-        const mosaSelected = repData.MOSA;
+        const numNFZsZones = reqData.NFZs.polygons.length;
+        const numNFZsPaths = reqData.NFZs.paths.length;
+        const numAOIsZones = reqData.AOIs.polygons.length;
+        const numAOIsPaths = reqData.AOIs.paths.length;
+        const numEMZsZones = reqData.EMZs.polygons.length;
+        const numEMZsPaths = reqData.EMZs.paths.length;
+        const aircraftSelected = reqData.Aircraft;
+        const mosaSelected = reqData.MOSA;
 
-        const start = repData.StartEnd.start
-          ? `Início: ${convertToDMS(repData.StartEnd.start.coords.lat, true)} ${convertToDMS(repData.StartEnd.start.coords.lng, false)}`
-          : "Início: Não definido";
-        const end = repData.StartEnd.end
-          ? `Fim: ${convertToDMS(repData.StartEnd.end.coords.lat, true)} ${convertToDMS(repData.StartEnd.end.coords.lng, false)}`
-          : "Fim: Não definido";
+        const home = reqData.home;
 
         document.getElementById("numNFZsZones").textContent = `Número de Áreas: ${numNFZsZones}`;
         document.getElementById("numNFZsPaths").textContent = `Número de Trajetos: ${numNFZsPaths}`;
@@ -127,8 +120,8 @@
         document.getElementById("numAOIsPaths").textContent = `Número de Trajetos: ${numAOIsPaths}`;
         document.getElementById("numEMZsZones").textContent = `Número de Áreas: ${numEMZsZones}`;
         document.getElementById("numEMZsPaths").textContent = `Número de Trajetos: ${numEMZsPaths}`;
-        document.getElementById("startCoords").textContent = start;
-        document.getElementById("endCoords").textContent = end;
+        document.getElementById("lat").textContent = "Latitude: " + home.lat;
+        document.getElementById("lng").textContent = "Longitude: " + home.lng;
 
         document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${aircraftSelected}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${mosaSelected}`;
