@@ -48,28 +48,29 @@
       const cloudEndpoint =
         "https://patronrouteplanner.zapto.org/api/v2/calculate";
 
+      let loadingBarProgress = 0;
+
       // Loading bar
-      function updateLoadingBar(percent) {
+      function updateLoadingBar() {
         const loadingBar = document.getElementById("loadingBar");
-        loadingBar.style.width = percent + "%";
+        loadingBar.style.width = loadingBarProgress + "%";
       }
 
       // Example of incrementally updating the loading bar
       function simulateProgress() {
-        let progress = 0;
         const interval = setInterval(() => {
-          if (progress >= 90) {
+          if (loadingBarProgress >= 90) {
             clearInterval(interval);
             return;
           }
-          if (progress < 90) progress += 10; // Incrementing the progress
-          updateLoadingBar(progress);
+          if (loadingBarProgress < 90) loadingBarProgress += 10; // Incrementing the loadingBarProgress
+          updateLoadingBar(loadingBarProgress);
         }, 4000); // Update every 4000 milliseconds
       }
 
       function finishProgress() {
-        let progress = 100;
-        updateLoadingBar(progress);
+        loadingBarProgress = 100;
+        updateLoadingBar(loadingBarProgress);
       }
 
       window.onload = function () {
@@ -125,9 +126,9 @@
         function redirectToSummary(responseData) {
           // Store the JSON zonesData in session storage
           sessionStorage.setItem("responseData", JSON.stringify(responseData));
-          sessionStorage.setItem("missionKey", responseData.key)
+          sessionStorage.setItem("missionKey", responseData.key);
           document.getElementById("postingMessage").textContent = "Sucesso!";
-          finishProgress(); // Start simulating loading progress
+          finishProgress(); // Finish loading progress
 
           setTimeout(() => {
             window.location.href = "/datasummary.html";
@@ -135,8 +136,9 @@
         }
 
         function redirectToError(error) {
+          document.getElementById("postingMessage").textContent = "Erro!";
           sessionStorage.setItem("error", error);
-          finishProgress(); // Start simulating loading progress
+          finishProgress(); // Finish loading progress
 
           setTimeout(() => {
             window.location.href = `/error.html?error=${encodeURIComponent(
