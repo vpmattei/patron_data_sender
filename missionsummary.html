@@ -56,13 +56,16 @@
   </div>
   <script>
     window.onload = function () {
-      const reponseData = sessionStorage.getItem("responseData");
+      const requestData = sessionStorage.getItem("requestData");
+      const responseData = sessionStorage.getItem("responseData");
+      const missionKey = sessionStorage.getItem("missionKey");
 
-      if (reponseData) {
-        const repData = JSON.parse(reponseData);
+      if (responseData) {
+        const reqData = JSON.parse(requestData);
+        const repData = JSON.parse(responseData);
 
-        const selectedAircraft = repData.Aircraft;
-        const selectedMosa = repData.MOSA;
+        const selectedAircraft = reqData.Aircraft;
+        const selectedMosa = reqData.MOSA;
 
         // Calculate the distance between two geographical points using the Haversine formula
         function haversineDistance(coords1, coords2) {
@@ -81,7 +84,7 @@
         }
 
         // Extract information about missions
-        const missions = repData.missions || [];
+        const missions = repData.Mission || [];
         const numMissions = missions.length;
         let missionDetailsHtml = "";
 
@@ -126,12 +129,11 @@
         };
 
         window.downloadKML = function () {
-          fetch("https://patronrouteplanner.zapto.org/api/services/planner_kml", {
-            method: "POST",
+          fetch("https://patronrouteplanner.zapto.org/api/v2/download_kml/" + missionKey, {
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(completeData),
+            }
           })
             .then((response) => {
               if (!response.ok) {
@@ -155,12 +157,11 @@
         };
 
         window.downloadPlan = function () {
-          fetch("https://patronrouteplanner.zapto.org/api/services/planner_plan", {
-            method: "POST",
+          fetch("https://patronrouteplanner.zapto.org/api/v2/download_plan/" + missionKey, {
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify(completeData),
+            }
           })
             .then((response) => {
               if (!response.ok) {
@@ -183,7 +184,7 @@
             });
         };
       } else {
-        console.error("No reponseData found in session storage");
+        console.error("No responseData found in session storage");
       }
     };
   </script>

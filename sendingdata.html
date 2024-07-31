@@ -45,30 +45,32 @@
     </div>
     <script>
       const localEndpoint = "http://127.0.0.1:8083/api/services/planner_json";
-      const cloudEndpoint = "https://patronrouteplanner.zapto.org/api/services/planner_json";
+      const cloudEndpoint =
+        "https://patronrouteplanner.zapto.org/api/v2/calculate";
+
+      let loadingBarProgress = 0;
 
       // Loading bar
-      function updateLoadingBar(percent) {
+      function updateLoadingBar() {
         const loadingBar = document.getElementById("loadingBar");
-        loadingBar.style.width = percent + "%";
+        loadingBar.style.width = loadingBarProgress + "%";
       }
 
       // Example of incrementally updating the loading bar
       function simulateProgress() {
-        let progress = 0;
         const interval = setInterval(() => {
-          if (progress >= 100) {
+          if (loadingBarProgress >= 90) {
             clearInterval(interval);
             return;
           }
-          if (progress < 90) progress += 10; // Incrementing the progress
-          updateLoadingBar(progress);
-        }, 4000); // Update every 3000 milliseconds
+          if (loadingBarProgress < 90) loadingBarProgress += 10; // Incrementing the loadingBarProgress
+          updateLoadingBar(loadingBarProgress);
+        }, 4000); // Update every 4000 milliseconds
       }
-      
+
       function finishProgress() {
-        let progress = 100;
-        updateLoadingBar(progress);
+        loadingBarProgress = 100;
+        updateLoadingBar(loadingBarProgress);
       }
 
       window.onload = function () {
@@ -79,9 +81,10 @@
           sessionStorage.getItem("aircraftMosaData")
         );
         const requestData = {
-          ...zonesData,
           ...aircraftMosaData,
+          ...zonesData,
         };
+        console.log(requestData);
 
         sessionStorage.setItem("requestData", JSON.stringify(requestData));
 
@@ -95,32 +98,6 @@
             "Calculando missão...";
           simulateProgress(); // Start simulating loading progress
         }, 2000);
-
-        const postStartTime = Date.now();
-
-        function redirectToSummary(responseData) {
-
-          // Store the JSON zonesData in session storage
-          sessionStorage.setItem("responseData", JSON.stringify(responseData));
-          document.getElementById("postingMessage").textContent =
-            "Sucesso!";
-          finishProgress(); // Start simulating loading progress
-
-          setTimeout(() => {
-            window.location.href = "/datasummary.html";
-          }, 2000);
-        }
-
-        function redirectToError(error) {
-          sessionStorage.setItem("error", error);
-          finishProgress(); // Start simulating loading progress
-
-          setTimeout(() => {
-            window.location.href = `/error.html?error=${encodeURIComponent(
-              error.message
-            )}`;
-          }, 2000);
-        }
 
         fetch(cloudEndpoint, {
           method: "POST",
@@ -145,6 +122,30 @@
             console.error("Erro:", error);
             redirectToError(error);
           });
+
+        function redirectToSummary(responseData) {
+          // Store the JSON zonesData in session storage
+          sessionStorage.setItem("responseData", JSON.stringify(responseData));
+          sessionStorage.setItem("missionKey", responseData.key);
+          document.getElementById("postingMessage").textContent = "Sucesso!";
+          finishProgress(); // Finish loading progress
+
+          setTimeout(() => {
+            window.location.href = "/datasummary.html";
+          }, 2000);
+        }
+
+        function redirectToError(error) {
+          document.getElementById("postingMessage").textContent = "Erro!";
+          sessionStorage.setItem("error", error);
+          finishProgress(); // Finish loading progress
+
+          setTimeout(() => {
+            window.location.href = `/error.html?error=${encodeURIComponent(
+              error.message
+            )}`;
+          }, 2000);
+        }
       };
     </script>
   </body>

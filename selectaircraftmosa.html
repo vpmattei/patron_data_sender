@@ -114,7 +114,7 @@
           Name: "VT-14",
           Type: "VTOL",
           CruiseSpeed: 22,
-          MinSspeed: 22,
+          MinSpeed: 22,
           MaxSpeed: 22,
           TurnRadios: 200,
           ReturnAltitude: 200,
@@ -131,7 +131,7 @@
           Name: "MR82020",
           Type: "Copter",
           CruiseSpeed: 21,
-          MinSspeed: 21,
+          MinSpeed: 21,
           MaxSpeed: 21,
           TurnRadios: 201,
           ReturnAltitude: 201,
@@ -145,10 +145,10 @@
             "https://guide-images.cdn.ifixit.com/igi/PArTwJRgvPcAQp4J.large",
         },
         {
-          Name: "PLN-400",
+          Name: "MavicPro2",
           Type: "Plane",
           CruiseSpeed: 30,
-          MinSspeed: 28,
+          MinSpeed: 28,
           MaxSpeed: 35,
           TurnRadios: 150,
           ReturnAltitude: 500,
@@ -183,6 +183,7 @@
       ];
 
       const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
+      const optimization = ["Low", "Middle", "High"];
 
       function setupEventListeners() {
         document
@@ -190,6 +191,9 @@
           .addEventListener("change", validateSelections);
         document
           .getElementById("mosa")
+          .addEventListener("change", validateSelections);
+        document
+          .getElementById("optimization")
           .addEventListener("change", validateSelections);
       }
 
@@ -218,7 +222,7 @@
           <p>Nom: ${aircraft.Name}</p>
           <p>Type: ${aircraft.Type}</p>
           <p>Vitesse de croisière: ${aircraft.CruiseSpeed} km/h</p>
-          <p>Vitesse minimale: ${aircraft.MinSspeed} km/h</p>
+          <p>Vitesse minimale: ${aircraft.MinSpeed} km/h</p>
           <p>Vitesse maximale: ${aircraft.MaxSpeed} km/h</p>
           <p>Rayon de virage: ${aircraft.TurnRadios} m</p>
           <p>Altitude de retour: ${aircraft.ReturnAltitude} m</p>
@@ -255,33 +259,57 @@
           mosaSelected.appendChild(option);
         });
 
+        const optimizationSelected = document.getElementById("optimization");
+        optimization.forEach((opt) => {
+          let optTextPT;
+          if (opt == "Low") {
+            optTextPT = "Baixa";
+          }
+          else if (opt == "Middle") {
+            optTextPT = "Média";
+          }
+          else if (opt == "High") {
+            optTextPT = "Alta";
+          }
+
+          const option = document.createElement("option");
+          option.value = opt;
+          option.textContent = `${optTextPT}`;
+          optimizationSelected.appendChild(option);
+        })
+
         validateSelections();
       }
 
       function validateSelections() {
         const aircraft = document.getElementById("aircraft").value;
         const mosa = document.getElementById("mosa").value;
+        const opt = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
-        sendButton.disabled = !aircraft || !mosa;
+
+        sendButton.disabled = !aircraft || !mosa || opt == "";
       }
 
       function sendData() {
         const sendButton = document.getElementById("sendButton");
         const aircraftSelected = document.getElementById("aircraft");
         const mosaSelected = document.getElementById("mosa");
+        const optimizationSelected = document.getElementById("optimization");
 
         const aircraftName = aircraftSelected.value;
         const mosaName = mosaSelected.value;
+        const optimizationValue = optimizationSelected.value;
 
         const aircraftMosaData = {
           Aircraft: aircraftName,
           MOSA: mosaName,
+          Optimization: optimizationValue
         };
 
         sessionStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
         sendButton.style.display = "none";
 
-        // Redirection vers sendingdata.html
+        // Redirection to sendingdata.html
         window.location.href = "sendingdata.html";
       }
 
@@ -309,10 +337,10 @@
         />
         <div class="selection-container">
           <div class="selection-row">
-            <label for="aircraft">Escolha um Aircraft</label>
+            <label for="aircraft">Escolha um Drone</label>
             <div style="display: flex; align-items: center">
               <select name="aircraft" id="aircraft" onchange="displayAircraftImage()">
-                <option value="">Selecione um Aircraft</option>
+                <option value="">Selecione um Drone</option>
               </select>
               <i
                 class="fa fa-info-circle info-icon"
@@ -324,6 +352,12 @@
             <label for="mosa">Escolha um MOSA</label>
             <select name="mosa" id="mosa">
               <option value="">Selecione um MOSA</option>
+            </select>
+          </div>
+          <div class="selection-row">
+            <label for="optimization">Escolha o nível de otimização para a missão</label>
+            <select name="optimization" id="optimization">
+              <option value="">Selecione uma otimização</option>
             </select>
           </div>
         </div>
