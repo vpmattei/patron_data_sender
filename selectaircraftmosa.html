@@ -283,7 +283,7 @@
         const mosa = document.getElementById("mosa").value;
         const optimization = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
-        sendButton.disabled = !aircraft || !mosa || !optimization;
+        sendButton.disabled = !aircraft || !mosa || optimization != "";
       }
 
       function sendData() {
@@ -353,7 +353,7 @@
           <div class="selection-row">
             <label for="optimization">Escolha uma otimização para a missão</label>
             <select name="optimization" id="optimization">
-              <option value="">Selecione uma otimização</option>
+              <option value="Middle">Média</option>
             </select>
           </div>
         </div>
