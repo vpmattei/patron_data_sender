@@ -192,6 +192,9 @@
         document
           .getElementById("mosa")
           .addEventListener("change", validateSelections);
+        document
+          .getElementById("optimization")
+          .addEventListener("change", validateSelections);
       }
 
       function displayAircraftImage() {
@@ -281,9 +284,10 @@
       function validateSelections() {
         const aircraft = document.getElementById("aircraft").value;
         const mosa = document.getElementById("mosa").value;
-        const optimization = document.getElementById("optimization").value;
+        const opt = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
-        sendButton.disabled = !aircraft || !mosa || optimization != "";
+
+        sendButton.disabled = !aircraft || !mosa || opt == "";
       }
 
       function sendData() {
@@ -333,10 +337,10 @@
         />
         <div class="selection-container">
           <div class="selection-row">
-            <label for="aircraft">Escolha um Aircraft</label>
+            <label for="aircraft">Escolha um Drone</label>
             <div style="display: flex; align-items: center">
               <select name="aircraft" id="aircraft" onchange="displayAircraftImage()">
-                <option value="">Selecione um Aircraft</option>
+                <option value="">Selecione um Drone</option>
               </select>
               <i
                 class="fa fa-info-circle info-icon"
@@ -351,9 +355,9 @@
             </select>
           </div>
           <div class="selection-row">
-            <label for="optimization">Escolha uma otimização para a missão</label>
+            <label for="optimization">Escolha o nível de otimização para a missão</label>
             <select name="optimization" id="optimization">
-              <option value="Middle">Média</option>
+              <option value="">Selecione uma otimização</option>
             </select>
           </div>
         </div>
