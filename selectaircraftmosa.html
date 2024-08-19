@@ -114,8 +114,9 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: start;
         text-align: center;
+        gap: 1rem;
         max-height: 0;
         overflow: hidden;
         width: -webkit-fill-available;
@@ -141,9 +142,20 @@
         transform: rotate(180deg);
       }
 
+      /* General range input styling for all browsers */
+      input[type="range"] {
+        -webkit-appearance: none; /* Remove default styling */
+        width: 100%;
+        height: 10px; /* Track height */
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+        margin: 20px 0;
+      }
+
       /* Webkit browsers (Chrome, Safari, Edge) */
       input[type="range"]::-webkit-slider-runnable-track {
-        background: linear-gradient(90deg, #00f260, #0575e6);
+        background: linear-gradient(90deg, #ffffff, #0575e6);
         height: 10px; /* Match the track height */
         border-radius: 5px;
       }
@@ -162,7 +174,7 @@
 
       /* Firefox */
       input[type="range"]::-moz-range-track {
-        background: linear-gradient(90deg, #00f260, #0575e6);
+        background: linear-gradient(90deg, #ffffff, #0575e6);
         height: 10px;
         border-radius: 5px;
       }
@@ -187,7 +199,7 @@
       }
 
       input[type="range"]::-ms-fill-lower {
-        background: linear-gradient(90deg, #00f260, #0575e6);
+        background: linear-gradient(90deg, #ffffff, #0575e6);
         border-radius: 5px;
       }
 
@@ -487,15 +499,17 @@
             <label for="rangeInput">
               Escolha a distância de curva para o MOSA:
             </label>
-            <input
-              type="range"
-              id="rangeInput"
-              min="10"
-              max="100"
-              value="50"
-              oninput="updateMosaCurveValue(this.value)"
-            />
-            <span id="rangeMosaCurveValue">50 metros</span>
+            <div>
+              <input
+                type="range"
+                id="rangeInput"
+                min="10"
+                max="100"
+                value="50"
+                oninput="updateMosaCurveValue(this.value)"
+              />
+              <span id="rangeMosaCurveValue">50 metros</span>
+            </div>
           </div>
 
           <div class="selection-row">
