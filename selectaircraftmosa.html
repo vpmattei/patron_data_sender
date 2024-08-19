@@ -121,10 +121,10 @@
         overflow: hidden;
         width: -webkit-fill-available;
         transition: max-height 0.3s ease, padding 0.3s ease;
-        padding: 1rem;
       }
 
       .hidden-menu-selection {
+        padding: 1rem;
         cursor: pointer;
       }
 
@@ -137,6 +137,18 @@
         flex-direction: row;
         align-items: start;
         width: -webkit-fill-available;
+      }
+
+      .range-input-mosa-curve input[type="text"] {
+        width: 60px;
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .range-input-mosa-curve span {
+        font-weight: bold;
       }
 
       .toggle-arrow {
@@ -237,9 +249,14 @@
         }
       }
 
-      function updateMosaCurveValue(value) {
-        document.getElementById("rangeMosaCurveValue").textContent =
-          value + " metros";
+      // Synchronize the range and text input values
+      function updateMosaCurveValueFromRange(value) {
+        document.getElementById("rangeMosaCurveValue").value = value;
+      }
+
+      function updateMosaCurveValueFromInput(value) {
+        const rangeInput = document.getElementById("rangeInput");
+        rangeInput.value = value;
       }
 
       const aircrafts = [
@@ -328,6 +345,17 @@
         document
           .getElementById("optimization")
           .addEventListener("change", validateSelections);
+        document
+          .getElementById("rangeInput")
+          .addEventListener("input", (e) =>
+            updateMosaCurveValueFromRange(e.target.value)
+          );
+
+        document
+          .getElementById("rangeMosaCurveValue")
+          .addEventListener("input", (e) =>
+            updateMosaCurveValueFromInput(e.target.value)
+          );
       }
 
       function displayAircraftImage() {
@@ -513,14 +541,17 @@
                 min="10"
                 max="100"
                 value="50"
-                oninput="updateMosaCurveValue(this.value)"
+                oninput="updateMosaCurveValueFromRange(this.value)"
               />
-              <input
-                type="text"
-                id="rangeMosaCurveValue"
-                value="50 metros"
-                oninput="updateMosaCurveValue(this.value)"
-              />
+              <div>
+                <input
+                  type="text"
+                  id="rangeMosaCurveValue"
+                  value="50"
+                  oninput="updateMosaCurveValueFromInput(this.value)"
+                />
+                <span>metros</span>
+              </div>
             </div>
           </div>
 
