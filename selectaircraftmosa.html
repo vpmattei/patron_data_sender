@@ -50,6 +50,11 @@
         width: 100%;
       }
 
+      .selection-row.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+
       .selection-row label {
         min-width: 150px;
         text-align: left;
@@ -109,13 +114,6 @@
         cursor: not-allowed;
       }
 
-      /* Disabled state styling for the hidden menu */
-      .disabled-menu {
-        pointer-events: none;
-        opacity: 0.5;
-        background-color: #f0f0f0;
-      }
-
       /* Hidden menu styles with transition */
       .hidden-menu {
         display: flex;
@@ -133,7 +131,7 @@
       .hidden-menu-selection {
         cursor: pointer;
       }
-      
+
       .hidden-menu.open {
         padding: 1rem;
         max-height: 6rem; /* Set this to the desired height */
@@ -344,23 +342,20 @@
           );
       }
 
+      // Function to enable or disable the toggle row based on MOSA selection
       function handleMosaSelection() {
         const mosaSelected = document.getElementById("mosa").value;
-        const menuContainer = document.getElementById("hiddenMenuContainer");
-        const hiddenMenu = document.getElementById("hiddenMenu");
+        const toggleRow = document.getElementById("toggleRow");
 
         if (mosaSelected) {
-          // Enable the hidden menu
-          hiddenMenu.classList.remove("disabled-menu");
-          menuContainer.style.pointerEvents = "auto";
+          // Enable the toggle row
+          toggleRow.classList.remove("disabled");
         } else {
-          // Disable the hidden menu and collapse it
-          hiddenMenu.classList.remove("open");
-          hiddenMenu.classList.add("disabled-menu");
-          menuContainer.style.pointerEvents = "none";
+          // Disable the toggle row
+          toggleRow.classList.add("disabled");
         }
       }
-      
+
       function toggleMenu() {
         const menu = document.getElementById("hiddenMenu");
         const arrow = document.getElementById("toggleArrow");
@@ -558,7 +553,11 @@
           </div>
 
           <!-- Toggle menu row -->
-          <div class="selection-row" onclick="toggleMenu()">
+          <div
+            class="selection-ro disabled"
+            id="toggleRow"
+            onclick="toggleMenu()"
+          >
             <label class="hidden-menu-selection" for="toggleMenu"
               >Configurações avançadas para o MOSA</label
             >
@@ -566,7 +565,7 @@
           </div>
 
           <!-- Hidden menu -->
-          <div id="hiddenMenu" class="hidden-menu disabled-menu">
+          <div id="hiddenMenu" class="hidden-menu">
             <label for="rangeInput">
               Escolha a distância de curva para o MOSA:
             </label>
