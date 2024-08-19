@@ -140,6 +140,81 @@
       .toggle-arrow.open {
         transform: rotate(180deg);
       }
+
+      /* General range input styling for all browsers */
+      input[type="range"] {
+        -webkit-appearance: none; /* Remove default styling */
+        width: 100%;
+        height: 10px;
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+        padding: 0;
+        margin: 20px 0;
+      }
+
+      /* Webkit browsers (Chrome, Safari, Edge) */
+      input[type="range"]::-webkit-slider-runnable-track {
+        background: linear-gradient(90deg, #00f260, #0575e6);
+        height: 10px;
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Remove default thumb */
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #4caf50;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #0575e6;
+      }
+
+      /* Firefox */
+      input[type="range"]::-moz-range-track {
+        background: linear-gradient(90deg, #00f260, #0575e6);
+        height: 10px;
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #4caf50;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #0575e6;
+      }
+
+      /* IE and Edge */
+      input[type="range"]::-ms-track {
+        background: transparent;
+        border-color: transparent;
+        border-width: 5px 0;
+        color: transparent;
+        width: 100%;
+        height: 10px;
+      }
+
+      input[type="range"]::-ms-fill-lower {
+        background: linear-gradient(90deg, #00f260, #0575e6);
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-ms-fill-upper {
+        background: #ddd;
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-ms-thumb {
+        width: 20px;
+        height: 20px;
+        background: #4caf50;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #0575e6;
+      }
     </style>
     <script>
       function toggleMenu() {
@@ -155,7 +230,8 @@
       }
 
       function updateMosaCurveValue(value) {
-        document.getElementById("rangeMosaCurveValue").textContent = value + " metros";
+        document.getElementById("rangeMosaCurveValue").textContent =
+          value + " metros";
       }
 
       const aircrafts = [
