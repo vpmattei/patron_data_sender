@@ -324,7 +324,9 @@
           .addEventListener("change", validateSelections);
         document
           .getElementById("mosa")
-          .addEventListener("change", validateSelections)
+          .addEventListener("change", validateSelections);
+        document
+          .getElementById("mosa")
           .addEventListener("change", handleMosaSelection);
         document
           .getElementById("optimization")
@@ -554,7 +556,7 @@
 
           <!-- Toggle menu row -->
           <div
-            class="selection-ro disabled"
+            class="selection-row disabled"
             id="toggleRow"
             onclick="toggleMenu()"
           >
