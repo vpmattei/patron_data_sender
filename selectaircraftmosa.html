@@ -110,6 +110,8 @@
 
       /* Hidden menu styles with transition */
       .hidden-menu {
+        display: flex;
+        flex-direction: row;
         max-height: 0;
         overflow: hidden;
         padding: 0 20px;
@@ -403,10 +405,10 @@
 
           <!-- Toggle menu row -->
           <div
-            class="selection-row hidden-menu-selection"
+            class="selection-row"
             onclick="toggleMenu()"
           >
-            <label for="toggleMenu">Options Menu</label>
+            <label class="hidden-menu-selection" for="toggleMenu">Options Menu</label>
             <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
           </div>
 
