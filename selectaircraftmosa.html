@@ -255,9 +255,18 @@
       }
 
       function updateMosaCurveValueFromInput(value) {
-        if (value > 100) value = 100;
-        if (value < 10) value = 10;
         const rangeInput = document.getElementById("rangeInput");
+        const textInput = document.getElementById("rangeMosaCurveValue");
+
+        // Ensure the value is within bounds (10 - 100)
+        if (value < 10) {
+          value = 10;
+        } else if (value > 100) {
+          value = 100;
+        }
+
+        // Update both inputs to stay in sync
+        textInput.value = value;
         rangeInput.value = value;
       }
 
@@ -550,6 +559,8 @@
                   type="text"
                   id="rangeMosaCurveValue"
                   value="50"
+                  min="10"
+                  max="100"
                   oninput="updateMosaCurveValueFromInput(this.value)"
                 />
                 <span>metros</span>
