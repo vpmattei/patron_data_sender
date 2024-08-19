@@ -155,7 +155,7 @@
       }
 
       function updateMosaCurveValue(value) {
-        document.getElementById("rangeMosaCurveValue").textContent = value;
+        document.getElementById("rangeMosaCurveValue").textContent = value + " metros";
       }
 
       const aircrafts = [
@@ -419,7 +419,9 @@
 
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
-            <label for="rangeInput">Escolha a distância de curva para o MOSA:</label>
+            <label for="rangeInput">
+              Escolha a distância de curva para o MOSA:
+            </label>
             <input
               type="range"
               id="rangeInput"
@@ -428,13 +430,13 @@
               value="50"
               oninput="updateMosaCurveValue(this.value)"
             />
-            <span id="rangeMosaCurveValue">50</span>
+            <span id="rangeMosaCurveValue">50 metros</span>
           </div>
 
           <div class="selection-row">
-            <label for="optimization"
-              >Escolha o nível de otimização para a missão</label
-            >
+            <label for="optimization">
+              Escolha o nível de otimização para a missão
+            </label>
             <select name="optimization" id="optimization">
               <option value="">Selecione uma otimização</option>
             </select>
