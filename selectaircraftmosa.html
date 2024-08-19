@@ -109,6 +109,13 @@
         cursor: not-allowed;
       }
 
+      /* Disabled state styling for the hidden menu */
+      .disabled-menu {
+        pointer-events: none;
+        opacity: 0.5;
+        background-color: #f0f0f0;
+      }
+
       /* Hidden menu styles with transition */
       .hidden-menu {
         display: flex;
@@ -237,39 +244,6 @@
       }
     </style>
     <script>
-      function toggleMenu() {
-        const menu = document.getElementById("hiddenMenu");
-        const arrow = document.getElementById("toggleArrow");
-        if (menu.classList.contains("open")) {
-          menu.classList.remove("open");
-          arrow.classList.remove("open");
-        } else {
-          menu.classList.add("open");
-          arrow.classList.add("open");
-        }
-      }
-
-      // Synchronize the range and text input values
-      function updateMosaCurveValueFromRange(value) {
-        document.getElementById("rangeMosaCurveValue").value = value;
-      }
-
-      function updateMosaCurveValueFromInput(value) {
-        const rangeInput = document.getElementById("rangeInput");
-        const textInput = document.getElementById("rangeMosaCurveValue");
-
-        // Ensure the value is within bounds (10 - 100)
-        if (value < 10) {
-          value = 10;
-        } else if (value > 100) {
-          value = 100;
-        }
-
-        // Update both inputs to stay in sync
-        textInput.value = value;
-        rangeInput.value = value;
-      }
-
       const aircrafts = [
         {
           Name: "VT-14",
@@ -352,7 +326,8 @@
           .addEventListener("change", validateSelections);
         document
           .getElementById("mosa")
-          .addEventListener("change", validateSelections);
+          .addEventListener("change", validateSelections)
+          .addEventListener("change", handleMosaSelection);
         document
           .getElementById("optimization")
           .addEventListener("change", validateSelections);
@@ -367,6 +342,56 @@
           .addEventListener("input", (e) =>
             updateMosaCurveValueFromInput(e.target.value)
           );
+      }
+
+      function handleMosaSelection() {
+        const mosaSelected = document.getElementById("mosa").value;
+        const menuContainer = document.getElementById("hiddenMenuContainer");
+        const hiddenMenu = document.getElementById("hiddenMenu");
+
+        if (mosaSelected) {
+          // Enable the hidden menu
+          hiddenMenu.classList.remove("disabled-menu");
+          menuContainer.style.pointerEvents = "auto";
+        } else {
+          // Disable the hidden menu and collapse it
+          hiddenMenu.classList.remove("open");
+          hiddenMenu.classList.add("disabled-menu");
+          menuContainer.style.pointerEvents = "none";
+        }
+      }
+      
+      function toggleMenu() {
+        const menu = document.getElementById("hiddenMenu");
+        const arrow = document.getElementById("toggleArrow");
+        if (menu.classList.contains("open")) {
+          menu.classList.remove("open");
+          arrow.classList.remove("open");
+        } else {
+          menu.classList.add("open");
+          arrow.classList.add("open");
+        }
+      }
+
+      // Synchronize the range and text input values
+      function updateMosaCurveValueFromRange(value) {
+        document.getElementById("rangeMosaCurveValue").value = value;
+      }
+
+      function updateMosaCurveValueFromInput(value) {
+        const rangeInput = document.getElementById("rangeInput");
+        const textInput = document.getElementById("rangeMosaCurveValue");
+
+        // Ensure the value is within bounds (10 - 100)
+        if (value < 10) {
+          value = 10;
+        } else if (value > 100) {
+          value = 100;
+        }
+
+        // Update both inputs to stay in sync
+        textInput.value = value;
+        rangeInput.value = value;
       }
 
       function displayAircraftImage() {
@@ -541,7 +566,7 @@
           </div>
 
           <!-- Hidden menu -->
-          <div id="hiddenMenu" class="hidden-menu">
+          <div id="hiddenMenu" class="hidden-menu disabled-menu">
             <label for="rangeInput">
               Escolha a distância de curva para o MOSA:
             </label>
