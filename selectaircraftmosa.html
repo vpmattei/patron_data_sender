@@ -133,7 +133,7 @@
 
       .toggle-arrow {
         cursor: pointer;
-        font-size: 1.5rem;
+        font-size: 1rem;
         transition: transform 0.3s ease;
       }
 
@@ -141,34 +141,23 @@
         transform: rotate(180deg);
       }
 
-      /* General range input styling for all browsers */
-      input[type="range"] {
-        -webkit-appearance: none; /* Remove default styling */
-        width: 100%;
-        height: 10px;
-        background: #ddd;
-        border-radius: 5px;
-        outline: none;
-        padding: 0;
-        margin: 20px 0;
-      }
-
       /* Webkit browsers (Chrome, Safari, Edge) */
       input[type="range"]::-webkit-slider-runnable-track {
         background: linear-gradient(90deg, #00f260, #0575e6);
-        height: 10px;
+        height: 10px; /* Match the track height */
         border-radius: 5px;
       }
 
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none; /* Remove default thumb */
         appearance: none;
-        width: 20px;
-        height: 20px;
+        width: 20px; /* Thumb width */
+        height: 20px; /* Thumb height */
         background: #4caf50;
         border-radius: 50%;
         cursor: pointer;
         border: 2px solid #0575e6;
+        margin-top: -5px; /* This centers the thumb */
       }
 
       /* Firefox */
