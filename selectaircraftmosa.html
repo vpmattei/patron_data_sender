@@ -109,6 +109,18 @@
       }
     </style>
     <script>
+      function toggleMenu() {
+        const menu = document.getElementById("hiddenMenu");
+        const arrow = document.getElementById("toggleArrow");
+        if (menu.style.display === "none" || menu.style.display === "") {
+          menu.style.display = "block";
+          arrow.classList.add("open");
+        } else {
+          menu.style.display = "none";
+          arrow.classList.remove("open");
+        }
+      }
+      
       const aircrafts = [
         {
           Name: "VT-14",
@@ -354,6 +366,18 @@
               <option value="">Selecione um MOSA</option>
             </select>
           </div>
+
+          <!-- New toggle menu row -->
+          <div class="selection-row">
+            <label for="toggleMenu">Options Menu</label>
+            <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
+          </div>
+          <div id="hiddenMenu" class="hidden-menu">
+            <!-- Example menu content -->
+            <p>This is the hidden menu content.</p>
+            <p>You can put more information or links here.</p>
+          </div>
+
           <div class="selection-row">
             <label for="optimization">Escolha o nível de otimização para a missão</label>
             <select name="optimization" id="optimization">
