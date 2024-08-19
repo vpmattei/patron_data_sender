@@ -255,6 +255,8 @@
       }
 
       function updateMosaCurveValueFromInput(value) {
+        if (value > 100) value = 100;
+        if (value < 10) value = 10;
         const rangeInput = document.getElementById("rangeInput");
         rangeInput.value = value;
       }
