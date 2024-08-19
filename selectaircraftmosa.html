@@ -113,21 +113,24 @@
       .hidden-menu {
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
         max-height: 0;
         overflow: hidden;
         width: -webkit-fill-available;
         transition: max-height 0.3s ease, padding 0.3s ease;
       }
-      
+
       .hidden-menu-selection {
         cursor: pointer;
       }
-      
+
       .hidden-menu.open {
-        max-height: 3rem; /* Set this to the desired height */
+        max-height: fit-content; /* Set this to the desired height */
         padding: 1rem;
       }
-      
+
       .toggle-arrow {
         cursor: pointer;
         font-size: 1.5rem;
@@ -403,11 +406,10 @@
           </div>
 
           <!-- Toggle menu row -->
-          <div
-            class="selection-row"
-            onclick="toggleMenu()"
-          >
-            <label class="hidden-menu-selection" for="toggleMenu">Options Menu</label>
+          <div class="selection-row" onclick="toggleMenu()">
+            <label class="hidden-menu-selection" for="toggleMenu"
+              >Options Menu</label
+            >
             <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
           </div>
 
