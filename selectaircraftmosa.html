@@ -107,17 +107,44 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+
+      /* Hidden menu styles with transition */
+      .hidden-menu {
+        max-height: 0;
+        overflow: hidden;
+        background-color: #f1f1f1;
+        padding: 0 20px;
+        border-radius: 10px;
+        margin-top: 10px;
+        width: 100%;
+        transition: max-height 0.5s ease, padding 0.5s ease;
+      }
+
+      .hidden-menu.open {
+        max-height: 200px; /* Set this to the desired height */
+        padding: 20px;
+      }
+
+      .toggle-arrow {
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+      }
+
+      .toggle-arrow.open {
+        transform: rotate(180deg);
+      }
     </style>
     <script>
       function toggleMenu() {
         const menu = document.getElementById("hiddenMenu");
         const arrow = document.getElementById("toggleArrow");
-        if (menu.style.display === "none" || menu.style.display === "") {
-          menu.style.display = "block";
-          arrow.classList.add("open");
-        } else {
-          menu.style.display = "none";
+        if (menu.classList.contains("open")) {
+          menu.classList.remove("open");
           arrow.classList.remove("open");
+        } else {
+          menu.classList.add("open");
+          arrow.classList.add("open");
         }
       }
 
@@ -276,11 +303,9 @@
           let optTextPT;
           if (opt == "Low") {
             optTextPT = "Baixa";
-          }
-          else if (opt == "Middle") {
+          } else if (opt == "Middle") {
             optTextPT = "Média";
-          }
-          else if (opt == "High") {
+          } else if (opt == "High") {
             optTextPT = "Alta";
           }
 
@@ -288,7 +313,7 @@
           option.value = opt;
           option.textContent = `${optTextPT}`;
           optimizationSelected.appendChild(option);
-        })
+        });
 
         validateSelections();
       }
@@ -315,10 +340,13 @@
         const aircraftMosaData = {
           Aircraft: aircraftName,
           MOSA: mosaName,
-          Optimization: optimizationValue
+          Optimization: optimizationValue,
         };
 
-        sessionStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
+        sessionStorage.setItem(
+          "aircraftMosaData",
+          JSON.stringify(aircraftMosaData)
+        );
         sendButton.style.display = "none";
 
         // Redirection to sendingdata.html
@@ -351,7 +379,11 @@
           <div class="selection-row">
             <label for="aircraft">Escolha um Drone</label>
             <div style="display: flex; align-items: center">
-              <select name="aircraft" id="aircraft" onchange="displayAircraftImage()">
+              <select
+                name="aircraft"
+                id="aircraft"
+                onchange="displayAircraftImage()"
+              >
                 <option value="">Selecione um Drone</option>
               </select>
               <i
@@ -367,11 +399,13 @@
             </select>
           </div>
 
-          <!-- New toggle menu row -->
+          <!-- Toggle menu row -->
           <div class="selection-row" onclick="toggleMenu()">
             <label for="toggleMenu">Options Menu</label>
             <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
           </div>
+
+          <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
             <!-- Example menu content -->
             <p>This is the hidden menu content.</p>
@@ -379,7 +413,9 @@
           </div>
 
           <div class="selection-row">
-            <label for="optimization">Escolha o nível de otimização para a missão</label>
+            <label for="optimization"
+              >Escolha o nível de otimização para a missão</label
+            >
             <select name="optimization" id="optimization">
               <option value="">Selecione uma otimização</option>
             </select>
