@@ -122,6 +122,13 @@
         width: -webkit-fill-available;
         transition: max-height 0.3s ease, padding 0.3s ease;
       }
+      
+      .range-input-mosa-curve {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        width: -webkit-fill-available;
+      }
 
       .hidden-menu-selection {
         cursor: pointer;
@@ -165,7 +172,7 @@
         appearance: none;
         width: 20px; /* Thumb width */
         height: 20px; /* Thumb height */
-        background: #4caf50;
+        background: #ffffff;
         border-radius: 50%;
         cursor: pointer;
         border: 2px solid #0575e6;
@@ -182,7 +189,7 @@
       input[type="range"]::-moz-range-thumb {
         width: 20px;
         height: 20px;
-        background: #4caf50;
+        background: #ffffff;
         border-radius: 50%;
         cursor: pointer;
         border: 2px solid #0575e6;
@@ -211,7 +218,7 @@
       input[type="range"]::-ms-thumb {
         width: 20px;
         height: 20px;
-        background: #4caf50;
+        background: #ffffff;
         border-radius: 50%;
         cursor: pointer;
         border: 2px solid #0575e6;
@@ -499,7 +506,7 @@
             <label for="rangeInput">
               Escolha a distância de curva para o MOSA:
             </label>
-            <div>
+            <div class="range-input-mosa-curve">
               <input
                 type="range"
                 id="rangeInput"
