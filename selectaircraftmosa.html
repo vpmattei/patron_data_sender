@@ -37,6 +37,7 @@
       .selection-container {
         display: flex;
         flex-direction: column;
+        padding: 0.5rem;
         gap: 20px;
         align-items: flex-start;
       }
@@ -115,6 +116,7 @@
         max-height: 0;
         overflow: hidden;
         background-color: #fff;
+        width: 100%;
         transition: max-height 0.3s ease, padding 0.3s ease;
       }
       
@@ -123,7 +125,6 @@
       }
       
       .hidden-menu.open {
-        width: stretch;
         max-height: 200px; /* Set this to the desired height */
         padding: 20px;
       }
