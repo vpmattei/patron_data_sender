@@ -154,6 +154,10 @@
         }
       }
 
+      function updateMosaCurveValue(value) {
+        document.getElementById("rangeMosaCurveValue").textContent = value;
+      }
+
       const aircrafts = [
         {
           Name: "VT-14",
@@ -408,16 +412,23 @@
           <!-- Toggle menu row -->
           <div class="selection-row" onclick="toggleMenu()">
             <label class="hidden-menu-selection" for="toggleMenu"
-              >Options Menu</label
+              >Configurações avançadas para o MOSA</label
             >
             <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
           </div>
 
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
-            <!-- Example menu content -->
-            <p>This is the hidden menu content.</p>
-            <p>You can put more information or links here.</p>
+            <label for="rangeInput">Escolha a distância de curva para o MOSA:</label>
+            <input
+              type="range"
+              id="rangeInput"
+              min="10"
+              max="100"
+              value="50"
+              oninput="updateMosaCurveValue(this.value)"
+            />
+            <span id="rangeMosaCurveValue">50</span>
           </div>
 
           <div class="selection-row">
