@@ -348,6 +348,8 @@
       function handleMosaSelection() {
         const mosaSelected = document.getElementById("mosa").value;
         const toggleRow = document.getElementById("toggleRow");
+        const menu = document.getElementById("hiddenMenu");
+        const arrow = document.getElementById("toggleArrow");
 
         if (mosaSelected) {
           // Enable the toggle row
@@ -355,6 +357,8 @@
         } else {
           // Disable the toggle row
           toggleRow.classList.add("disabled");
+          menu.classList.remove("open");
+          arrow.classList.remove("open");
         }
       }
 
