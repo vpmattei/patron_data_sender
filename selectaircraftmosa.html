@@ -121,13 +121,7 @@
         overflow: hidden;
         width: -webkit-fill-available;
         transition: max-height 0.3s ease, padding 0.3s ease;
-      }
-      
-      .range-input-mosa-curve {
-        display: flex;
-        flex-direction: row;
-        align-items: start;
-        width: -webkit-fill-available;
+        padding: 1rem;
       }
 
       .hidden-menu-selection {
@@ -136,7 +130,13 @@
 
       .hidden-menu.open {
         max-height: fit-content; /* Set this to the desired height */
-        padding: 1rem;
+      }
+
+      .range-input-mosa-curve {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        width: -webkit-fill-available;
       }
 
       .toggle-arrow {
@@ -515,7 +515,12 @@
                 value="50"
                 oninput="updateMosaCurveValue(this.value)"
               />
-              <span id="rangeMosaCurveValue">50 metros</span>
+              <input
+                type="text"
+                id="rangeMosaCurveValue"
+                value="50 metros"
+                oninput="updateMosaCurveValue(this.value)"
+              />
             </div>
           </div>
 
