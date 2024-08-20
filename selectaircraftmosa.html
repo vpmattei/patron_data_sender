@@ -249,27 +249,32 @@
         {
           Name: "VT-14",
           Type: "VTOL",
-          CruiseSpeed: 22,
+          MavType: 20,
+          CruiseSpeed: 25,
+          HoverSpeed: 25,
           MinSpeed: 22,
           MaxSpeed: 22,
-          TurnRadios: 200,
+          TurnRadios: 40,
           ReturnAltitude: 200,
           MinHome: 30,
           MinAGL: 30,
-          MaxASL: 1000,
+          MaxASL: 1500,
           MaxAGL: 400,
           FlitTime: 240,
           TurnaroundDist: 50,
+          SafetyMarginDist: 10,
           Image:
             "https://fr.satuav.com/Content/uploads/2021761228/202104251129323edf13f7694c47d0b8f4e2823cdf40ae.png",
         },
         {
           Name: "MR82020",
           Type: "Copter",
+          MavType: 2,
           CruiseSpeed: 21,
+          HoverSpeed: 11,
           MinSpeed: 21,
           MaxSpeed: 21,
-          TurnRadios: 201,
+          TurnRadios: 10,
           ReturnAltitude: 201,
           MinHome: 31,
           MinAGL: 31,
@@ -277,23 +282,28 @@
           MaxAGL: 401,
           FlitTime: 241,
           TurnaroundDist: 51,
+          SafetyMarginDist: 10,
           Image:
             "https://guide-images.cdn.ifixit.com/igi/PArTwJRgvPcAQp4J.large",
         },
         {
           Name: "MavicPro2",
-          Type: "Plane",
-          CruiseSpeed: 30,
-          MinSpeed: 28,
-          MaxSpeed: 35,
-          TurnRadios: 150,
-          ReturnAltitude: 500,
-          MinHome: 50,
-          MinAGL: 50,
-          MaxASL: 2000,
-          MaxAGL: 500,
-          FlitTime: 360,
-          TurnaroundDist: 100,
+          Type: "Drone",
+          MavType: 2,
+          CruiseSpeed: 15,
+          HoverSpeed: 5,
+          MinSpeed: 0,
+          MaxSpeed: 20,
+          TurnRadios: 0,
+          ReturnAltitude: 100,
+          MinHome: 31,
+          MinAGL: 31,
+          MaxAGL: 401,
+          MinASL: 1200,
+          MaxASL: 1400,
+          FlitTime: 20,
+          TurnaroundDist: 0,
+          SafetyMarginDist: 1,
           Image:
             "https://upload.wikimedia.org/wikipedia/commons/b/b8/USMC-01522.jpg",
         },
@@ -305,14 +315,14 @@
           TargetAltitude: "HOME",
           FlightAltitude: 100,
           WaypointsDist: 40,
-          LineDist: 50,
+          LineDist: 20,
         },
         {
           Name: "MOSA2",
           TargetAltitude: "AGL",
-          FlightAltitude: 99,
+          FlightAltitude: 120,
           WaypointsDist: 41,
-          LineDist: 51,
+          LineDist: 50,
         },
       ];
 
@@ -602,12 +612,8 @@
 
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
-            <h1>
-              MOSA:
-            </h1>
-            <label for="rangeInput">
-              Largura de curva do drone:
-            </label>
+            <h3>MOSA:</h3>
+            <label for="rangeInput"> Largura de curva do drone: </label>
             <div class="range-input-mosa-curve">
               <input
                 type="range"
