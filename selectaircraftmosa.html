@@ -349,6 +349,9 @@
         ],
       };
 
+      let AircraftNameSelected = "";
+      let MosaNameSelected = "";
+
       function setupEventListeners() {
         document
           .getElementById("aircraft")
@@ -377,12 +380,12 @@
 
       // Function to enable or disable the toggle row based on MOSA selection
       function handleMosaSelection() {
-        const mosaSelected = document.getElementById("mosa").value;
+        MosaNameSelected = document.getElementById("mosa").value;
         const toggleRow = document.getElementById("toggleRow");
         const menu = document.getElementById("hiddenMenu"); //qsd
         const arrow = document.getElementById("toggleArrow");
 
-        if (mosaSelected) {
+        if (MosaNameSelected) {
           // Enable the toggle row
           toggleRow.classList.remove("disabled");
         } else {
@@ -509,28 +512,24 @@
       }
 
       function validateSelections() {
-        const aircraft = document.getElementById("aircraft").value;
-        const mosa = document.getElementById("mosa").value;
+        AircraftNameSelected = document.getElementById("aircraft").value;
+        MosaNameSelected = document.getElementById("mosa").value;
         const opt = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
 
-        sendButton.disabled = !aircraft || !mosa || opt == "";
+        sendButton.disabled = !AircraftNameSelected || !MosaNameSelected || opt == "";
       }
 
       function sendData() {
         const sendButton = document.getElementById("sendButton");
-        const aircraftSelected = document.getElementById("aircraft");
-        const mosaSelected = document.getElementById("mosa");
-        const optimizationSelected = document.getElementById("optimization");
-
-        const aircraftName = aircraftSelected.value;
-        const mosaName = mosaSelected.value;
-        const optimizationValue = optimizationSelected.value;
+        AircraftNameSelected = document.getElementById("aircraft").value;
+        MosaNameSelected = document.getElementById("mosa").value;
+        const optSelected = document.getElementById("optimization").value;
 
         const aircraftMosaData = {
-          Aircraft: aircraftName,
-          MOSA: mosaName,
-          Optimization: optimizationValue,
+          Aircraft: AircraftNameSelected,
+          MOSA: MosaNameSelected,
+          Optimization: optSelected,
         };
 
         sessionStorage.setItem(
