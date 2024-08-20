@@ -522,7 +522,7 @@
 
         // Updating HTML tags
         document.getElementById("mosaNameDisplay").textContent =
-          MosaNameSelected;
+          MosaNameSelected + " :";
       }
 
       function sendData() {
@@ -616,10 +616,7 @@
 
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
-            <h3>
-              <div id="mosaNameDisplay"></div>
-              :
-            </h3>
+            <h3 id="mosaNameDisplay"></h3>
             <label for="rangeInput"> Largura de curva do drone: </label>
             <div class="range-input-mosa-curve">
               <input
