@@ -544,7 +544,8 @@
         if (newMosa != null) {
           newMosa.LineDist = mosaLineDist;
 
-          NewMosaData.MOSAs[i - 1] = newMosa;
+          console.log(NewMosaData.MOSAs[i - 1]);
+          /*NewMosaData.MOSAs[i - 1] = newMosa;
 
           fetch("https://patronrouteplanner.zapto.org/api/v2/set_mosa/", {
             method: "POST",
@@ -567,7 +568,7 @@
             .catch((error) => {
               console.error("Erro:", error);
               redirectToError(error);
-            });
+            });*/
         }
       }
 
