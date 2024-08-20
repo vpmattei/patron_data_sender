@@ -324,19 +324,20 @@
         Aircrafts: aircrafts,
         MOSAs: mosas,
         Optimizations: [
-        {
-          Name: "High",
-          AngleStep: 1
-        },
-        {
-          Name: "Middle",
-          AngleStep: 5
-        },
-        {
-          Name: "Low",
-          AngleStep: 30
-        }]
-      }
+          {
+            Name: "High",
+            AngleStep: 1,
+          },
+          {
+            Name: "Middle",
+            AngleStep: 5,
+          },
+          {
+            Name: "Low",
+            AngleStep: 30,
+          },
+        ],
+      };
 
       function setupEventListeners() {
         document
@@ -578,6 +579,15 @@
             </select>
           </div>
 
+          <div class="selection-row">
+            <label for="optimization">
+              Escolha o nível de otimização para a missão
+            </label>
+            <select name="optimization" id="optimization">
+              <option value="">Selecione uma otimização</option>
+            </select>
+          </div>
+
           <!-- Toggle menu row -->
           <div
             class="selection-row disabled"
@@ -585,15 +595,18 @@
             onclick="toggleMenu()"
           >
             <label class="hidden-menu-selection" for="toggleMenu"
-              >Configurações avançadas para o MOSA</label
+              >Configurações avançadas</label
             >
             <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
           </div>
 
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
+            <h1>
+              MOSA:
+            </h1>
             <label for="rangeInput">
-              Escolha a distância de curva para o MOSA:
+              Largura de curva do drone:
             </label>
             <div class="range-input-mosa-curve">
               <input
@@ -616,15 +629,6 @@
                 <span>metros</span>
               </div>
             </div>
-          </div>
-
-          <div class="selection-row">
-            <label for="optimization">
-              Escolha o nível de otimização para a missão
-            </label>
-            <select name="optimization" id="optimization">
-              <option value="">Selecione uma otimização</option>
-            </select>
           </div>
         </div>
       </div>
