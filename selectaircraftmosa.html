@@ -519,6 +519,10 @@
 
         sendButton.disabled =
           !AircraftNameSelected || !MosaNameSelected || opt == "";
+
+        // Updating HTML tags
+        document.getElementById("mosaNameDisplay").textContent =
+          MosaNameSelected;
       }
 
       function sendData() {
@@ -613,9 +617,7 @@
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
             <h3>
-              <script type="text/javascript">
-                document.write(MosaNameSelected);
-              </script>
+              <div id="mosaNameDisplay"></div>
               :
             </h3>
             <label for="rangeInput"> Largura de curva do drone: </label>
