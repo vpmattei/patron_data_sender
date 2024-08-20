@@ -517,7 +517,8 @@
         const opt = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
 
-        sendButton.disabled = !AircraftNameSelected || !MosaNameSelected || opt == "";
+        sendButton.disabled =
+          !AircraftNameSelected || !MosaNameSelected || opt == "";
       }
 
       function sendData() {
@@ -611,7 +612,12 @@
 
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
-            <h3>{{MosaNameSelected}}:</h3>
+            <h3>
+              <script type="text/javascript">
+                document.write(MosaNameSelected);
+              </script>
+              :
+            </h3>
             <label for="rangeInput"> Largura de curva do drone: </label>
             <div class="range-input-mosa-curve">
               <input
