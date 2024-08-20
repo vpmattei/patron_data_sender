@@ -309,7 +309,7 @@
         },
       ];
 
-      const mosas = [
+      let mosas = [
         {
           Name: "MOSA1",
           TargetAltitude: "HOME",
@@ -366,15 +366,15 @@
           .getElementById("optimization")
           .addEventListener("change", validateSelections);
         document
-          .getElementById("rangeInput")
+          .getElementById("rangeInputMosaLineDist")
           .addEventListener("input", (e) =>
-            updateMosaCurveValueFromRange(e.target.value)
+            updateMosaLineDistFromRange(e.target.value)
           );
 
         document
-          .getElementById("rangeMosaCurveValue")
+          .getElementById("numInputMosaLineDist")
           .addEventListener("input", (e) =>
-            updateMosaCurveValueFromInput(e.target.value)
+            updateMosaLineDistFromNumInput(e.target.value)
           );
       }
 
@@ -409,13 +409,15 @@
       }
 
       // Synchronize the range and text input values
-      function updateMosaCurveValueFromRange(value) {
-        document.getElementById("rangeMosaCurveValue").value = value;
+      function updateMosaLineDistFromRange(value) {
+        document.getElementById("numInputMosaLineDist").value = value;
       }
 
-      function updateMosaCurveValueFromInput(value) {
-        const rangeInput = document.getElementById("rangeInput");
-        const textInput = document.getElementById("rangeMosaCurveValue");
+      function updateMosaLineDistFromNumInput(value) {
+        const rangeInputMosaLineDist = document.getElementById(
+          "rangeInputMosaLineDist"
+        );
+        const textInput = document.getElementById("numInputMosaLineDist");
 
         // Ensure the value is within bounds (10 - 100)
         if (value < 10) {
@@ -426,7 +428,7 @@
 
         // Update both inputs to stay in sync
         textInput.value = value;
-        rangeInput.value = value;
+        rangeInputMosaLineDist.value = value;
       }
 
       function displayAircraftImage() {
@@ -525,6 +527,50 @@
           MosaNameSelected + " :";
       }
 
+      function saveAdvancedConfigurations() {
+        const mosaLineDist = document.getElementById(
+          "numInputMosaLineDist"
+        ).value;
+        let newMosa = null;
+
+        let i = 0;
+        while (i < mosas.length) {
+          if (mosas[i].Name == MosaNameSelected) {
+            newMosa = mosas[i];
+          }
+          i++;
+        }
+
+        if (newMosa != null) {
+          newMosa.LineDist = mosaLineDist;
+
+          NewMosaData.MOSAs[i - 1] = newMosa;
+
+          fetch("https://patronrouteplanner.zapto.org/api/v2/set_mosa/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(NewMosaData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(
+                  "Network response was not ok " + response.statusText
+                );
+              }
+              return response.json();
+            })
+            .then((result) => {
+              console.log("Successfully saved the new configuration:", result);
+            })
+            .catch((error) => {
+              console.error("Erro:", error);
+              redirectToError(error);
+            });
+        }
+      }
+
       function sendData() {
         const sendButton = document.getElementById("sendButton");
         AircraftNameSelected = document.getElementById("aircraft").value;
@@ -617,27 +663,34 @@
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
             <h3 id="mosaNameDisplay"></h3>
-            <label for="rangeInput"> Largura de curva do drone: </label>
+            <label for="rangeInputMosaLineDist">
+              Largura de curva do drone:
+            </label>
             <div class="range-input-mosa-curve">
               <input
                 type="range"
-                id="rangeInput"
+                id="rangeInputMosaLineDist"
                 min="10"
                 max="100"
                 value="50"
-                oninput="updateMosaCurveValueFromRange(this.value)"
+                oninput="updateMosaLineDistFromRange(this.value)"
               />
               <div>
                 <input
                   type="number"
-                  id="rangeMosaCurveValue"
-                  value="50"
+                  id="numInputMosaLineDist"
                   min="10"
                   max="100"
-                  oninput="updateMosaCurveValueFromInput(this.value)"
+                  value="50"
+                  oninput="updateMosaLineDistFromNumInput(this.value)"
                 />
                 <span>metros</span>
               </div>
+            </div>
+            <div class="button">
+              <button onclick="saveAdvancedConfigurations()">
+                Salvar configurações
+              </button>
             </div>
           </div>
         </div>
