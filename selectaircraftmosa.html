@@ -242,6 +242,9 @@
       }
     </style>
     <script>
+      const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
+      const optimization = ["Low", "Middle", "High"];
+
       const aircrafts = [
         {
           Name: "VT-14",
@@ -299,7 +302,6 @@
       const mosas = [
         {
           Name: "MOSA1",
-          MissionType: "Area survey",
           TargetAltitude: "HOME",
           FlightAltitude: 100,
           WaypointsDist: 40,
@@ -307,7 +309,6 @@
         },
         {
           Name: "MOSA2",
-          MissionType: "Corridor survey",
           TargetAltitude: "AGL",
           FlightAltitude: 99,
           WaypointsDist: 41,
@@ -315,8 +316,27 @@
         },
       ];
 
-      const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
-      const optimization = ["Low", "Middle", "High"];
+      let NewMosaData = {
+        Version: "0.1.0",
+        MissionTypes: ["Area survey", "Corridor survey"],
+        TargetAltitudes: targetAltitudes,
+        VehicleTypes: ["Copter", "Plane", "VTOL"],
+        Aircrafts: aircrafts,
+        MOSAs: mosas,
+        Optimizations: [
+        {
+          Name: "High",
+          AngleStep: 1
+        },
+        {
+          Name: "Middle",
+          AngleStep: 5
+        },
+        {
+          Name: "Low",
+          AngleStep: 30
+        }]
+      }
 
       function setupEventListeners() {
         document
@@ -348,7 +368,7 @@
       function handleMosaSelection() {
         const mosaSelected = document.getElementById("mosa").value;
         const toggleRow = document.getElementById("toggleRow");
-        const menu = document.getElementById("hiddenMenu");//qsd
+        const menu = document.getElementById("hiddenMenu"); //qsd
         const arrow = document.getElementById("toggleArrow");
 
         if (mosaSelected) {
