@@ -528,9 +528,9 @@
       }
 
       function saveAdvancedConfigurations() {
-        const mosaLineDist = document.getElementById(
-          "numInputMosaLineDist"
-        ).value;
+        const mosaLineDist = parseInt(
+          document.getElementById("numInputMosaLineDist").value
+        );
 
         let i = 0;
         while (i < mosas.length) {
