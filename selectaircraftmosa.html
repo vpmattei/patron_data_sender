@@ -123,7 +123,7 @@
       }
 
       .button .spinner-container {
-        display: inline-block;
+        display: none;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -566,7 +566,7 @@
         // Disable the button and show the spinner
         saveButton.disabled = true;
         saveButton.textContent = "";
-        spinnerContainer.style.display = "inline-block";
+        spinnerContainer.style.display = "flex";
 
         const mosaLineDist = parseInt(
           document.getElementById("numInputMosaLineDist").value
@@ -731,7 +731,7 @@
             </div>
             <div class="button">
               <button onclick="saveAdvancedConfigurations()">
-                
+                Salvar configurações
               </button>
               <div class="spinner-container">
                 <span class="spinner"></span>
