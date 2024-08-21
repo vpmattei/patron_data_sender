@@ -578,6 +578,27 @@
           MosaNameSelected + " :";
       }
 
+      function getAdvancedConfigurations() {
+        fetch("https://patronrouteplanner.zapto.org/api/v2/get_mosa/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok " + response.statusText);
+            }
+            return response.json();
+          })
+          .then((mosaData) => {
+            console.log(mosaData.MOSAs)
+          })
+          .catch((error) => {
+            console.error("There was an error getting the mosa data:", error);
+          });
+      }
+
       function saveAdvancedConfigurations() {
         const saveButton = document.querySelector(".button button");
         const spinnerContainer =
@@ -759,7 +780,7 @@
               </div>
             </div>
             <div class="button">
-              <button onclick="saveAdvancedConfigurations()">
+              <button onclick="saveAdvancedConfigurations(); getAdvancedConfigurations()">
                 Salvar configurações
               </button>
               <div class="spinner-container">
