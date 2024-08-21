@@ -536,7 +536,8 @@
           mosaSelected.appendChild(option);
         });
 
-        const targetAltitudeSelected = document.getElementById("targetAltitude");
+        const targetAltitudeSelected =
+          document.getElementById("targetAltitude");
         targetAltitudes.forEach((targetAltitude) => {
           const option = document.createElement("option");
           option.value = targetAltitude;
@@ -573,9 +574,23 @@
         sendButton.disabled =
           !AircraftNameSelected || !MosaNameSelected || opt == "";
 
-        // Updating HTML tags
+        updateAdvancedConfigurationsDisplayValues();
+      }
+
+      function updateAdvancedConfigurationsDisplayValues() {
+        const currentMosa = null;
+        let i = 0;
+        while (i < mosas.length) {
+          if (mosas[i].Name == MosaNameSelected) {
+            currentMosa = mosas[i];
+          }
+          i++;
+        }
+        // Updating MOSA display name
         document.getElementById("mosaNameDisplay").textContent =
           MosaNameSelected + " :";
+        document.getElementById("targetAltitude").value = currentMosa?.TargetAltitude;
+        updateMosaLineDistFromNumInput(currentMosa.LineDist);
       }
 
       function getAdvancedConfigurations() {
@@ -583,19 +598,21 @@
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-          }
+          },
         })
           .then((response) => {
             if (!response.ok) {
-              throw new Error("Network response was not ok " + response.statusText);
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
             }
             return response.json();
           })
           .then((mosaData) => {
-            console.log(mosaData.MOSAs)
+            mosas = mosaData.MOSAs;
           })
           .catch((error) => {
-            console.error("There was an error getting the mosa data:", error);
+            console.error("There was an error getting the MOSAs data:", error);
           });
       }
 
@@ -780,7 +797,7 @@
               </div>
             </div>
             <div class="button">
-              <button onclick="getAdvancedConfigurations()">
+              <button onclick="saveAdvancedConfigurations()">
                 Salvar configurações
               </button>
               <div class="spinner-container">
