@@ -536,6 +536,14 @@
           mosaSelected.appendChild(option);
         });
 
+        const targetAltitudeSelected = document.getElementById("mosa");
+        targetAltitudes.forEach((targetAltitude) => {
+          const option = document.createElement("option");
+          option.value = targetAltitude;
+          option.textContent = `${targetAltitude}`;
+          targetAltitudeSelected.appendChild(option);
+        });
+
         const optimizationSelected = document.getElementById("optimization");
         optimization.forEach((opt) => {
           let optTextPT;
@@ -720,6 +728,12 @@
           <!-- Hidden menu -->
           <div id="hiddenMenu" class="hidden-menu">
             <h3 id="mosaNameDisplay"></h3>
+            <div class="selection-row">
+              <label for="targetAltitude">Altitude Alvo</label>
+              <select name="targetAltitude" id="targetAltitude">
+                <option value="">Altitude Alvo</option>
+              </select>
+            </div>
             <label for="rangeInputMosaLineDist">
               Largura de curva do drone:
             </label>
