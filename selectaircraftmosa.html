@@ -531,47 +531,40 @@
         const mosaLineDist = document.getElementById(
           "numInputMosaLineDist"
         ).value;
-        let newMosa = null;
 
         let i = 0;
         while (i < mosas.length) {
           if (mosas[i].Name == MosaNameSelected) {
             console.log(mosas[i].Name, " == ", MosaNameSelected);
-            newMosa = mosas[i];
+            mosas[i].LineDist = mosaLineDist;
           }
           i++;
         }
 
-        if (newMosa != null) {
-          newMosa.LineDist = mosaLineDist;
+        console.log(NewMosaData.MOSAs);
 
-          console.log(NewMosaData.MOSAs);
-          console.log(NewMosaData.MOSAs[i - 1]);
-          /*NewMosaData.MOSAs[i - 1] = newMosa;
-
-          fetch("https://patronrouteplanner.zapto.org/api/v2/set_mosa/", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(NewMosaData),
+        fetch("https://patronrouteplanner.zapto.org/api/v2/set_mosa/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(NewMosaData),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
           })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(
-                  "Network response was not ok " + response.statusText
-                );
-              }
-              return response.json();
-            })
-            .then((result) => {
-              console.log("Successfully saved the new configuration:", result);
-            })
-            .catch((error) => {
-              console.error("Erro:", error);
-              redirectToError(error);
-            });*/
-        }
+          .then((result) => {
+            console.log("Successfully saved the new configuration:", result);
+          })
+          .catch((error) => {
+            console.error("Erro:", error);
+            redirectToError(error);
+          });
       }
 
       function sendData() {
