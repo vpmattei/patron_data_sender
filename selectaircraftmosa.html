@@ -632,12 +632,13 @@
         const mosaLineDist = parseInt(
           document.getElementById("numInputMosaLineDist").value
         );
+        const targetAlt = document.getElementById("targetAltitude").value;
 
         let i = 0;
         while (i < mosas.length) {
           if (mosas[i].Name == MosaNameSelected) {
-            console.log(mosas[i].Name, " == ", MosaNameSelected);
             mosas[i].LineDist = mosaLineDist;
+            mosas[i].TargetAltitude = targetAlt;
           }
           i++;
         }
