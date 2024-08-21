@@ -79,10 +79,10 @@ button:hover {
 /* Popup styles */
 .popup-message {
   position: fixed;
-  top: 20%;
+  top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #333;
+  background-color: #3333337c;
   color: white;
   padding: 15px;
   border-radius: 5px;
