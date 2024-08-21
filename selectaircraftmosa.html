@@ -590,10 +590,10 @@
         document.getElementById("mosaNameDisplay").textContent =
           MosaNameSelected + " :";
         document.getElementById("targetAltitude").value = currentMosa?.TargetAltitude;
-        updateMosaLineDistFromNumInput(currentMosa.LineDist);
+        updateMosaLineDistFromNumInput(currentMosa?.LineDist);
       }
 
-      function getAdvancedConfigurations() {
+      function loadAdvancedConfigurations() {
         fetch("https://patronrouteplanner.zapto.org/api/v2/get_mosa/", {
           method: "GET",
           headers: {
@@ -703,6 +703,7 @@
         setupEventListeners();
         populateSelectOptions();
         displayAircraftImage();
+        loadAdvancedConfigurations();
       };
     </script>
   </head>
