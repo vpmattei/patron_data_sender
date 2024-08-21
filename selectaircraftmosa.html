@@ -507,6 +507,18 @@
         popup.style.display = "none";
       }
 
+      // Function to show and auto-hide the popup
+      function showAutoFadingPopup(message, secondsToFade) {
+        const popup = document.getElementById("popup");
+        popup.textContent = message;
+        popup.classList.add("show");
+
+        // Hide the popup after 1 second
+        setTimeout(() => {
+          popup.classList.remove("show");
+        }, secondsToFade * 1000);
+      }
+
       function populateSelectOptions() {
         const aircraftSelected = document.getElementById("aircraft");
         aircrafts.forEach((aircraft) => {
@@ -610,6 +622,8 @@
             saveButton.disabled = false;
             saveButton.textContent = "Salvar configurações";
             spinnerContainer.style.display = "none";
+
+            showAutoFadingPopup("Configuration saved successfully!", 1000);
           });
       }
 
