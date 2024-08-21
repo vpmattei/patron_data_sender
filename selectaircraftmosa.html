@@ -560,10 +560,12 @@
 
       function saveAdvancedConfigurations() {
         const saveButton = document.querySelector(".button button");
-        const spinnerContainer = saveButton.parentElement.querySelector(".spinner-container");
+        const spinnerContainer =
+          saveButton.parentElement.querySelector(".spinner-container");
 
         // Disable the button and show the spinner
         saveButton.disabled = true;
+        saveButton.textContent = "";
         spinnerContainer.style.display = "inline-block";
 
         const mosaLineDist = parseInt(
@@ -606,6 +608,7 @@
           .finally(() => {
             // Enable the button and hide the spinner after the fetch operation is completed
             saveButton.disabled = false;
+            saveButton.textContent = "Salvar configurações";
             spinnerContainer.style.display = "none";
           });
       }
