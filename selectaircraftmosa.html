@@ -380,13 +380,13 @@
         document
           .getElementById("rangeInputMosaLineDist")
           .addEventListener("input", (e) =>
-            updateMosaLineDistFromRange(e.target.value)
+            syncInputWithValue("rangeInputMosaLineDist", e.target.value, 10, 100)
           );
 
         document
           .getElementById("numInputMosaLineDist")
           .addEventListener("input", (e) =>
-            updateMosaLineDistFromNumInput(e.target.value)
+            syncInputWithValue("numInputMosaLineDist", e.target.value, 10, 100)
           );
       }
 
@@ -577,7 +577,7 @@
         // ..
 
         // Line Distance
-        updateMosaLineDistFromNumInput(currentMosa?.LineDist);
+        syncInputWithValue("rangeInputMosaLineDist", currentMosa?.LineDist, 10, 100);
 
         console.log(currentMosa);
       }
