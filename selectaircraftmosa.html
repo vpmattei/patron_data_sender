@@ -377,16 +377,29 @@
         document
           .getElementById("optimization")
           .addEventListener("change", validateSelections);
+
+        // Line Distance Inputs
         document
           .getElementById("rangeInputMosaLineDist")
           .addEventListener("input", (e) =>
             syncInputWithValue("rangeInputMosaLineDist", e.target.value, 10, 100)
           );
-
         document
           .getElementById("numInputMosaLineDist")
           .addEventListener("input", (e) =>
             syncInputWithValue("numInputMosaLineDist", e.target.value, 10, 100)
+          );
+
+        // Flight Altitude Inputs
+        document
+          .getElementById("rangeInputMosaFlightAltitude")
+          .addEventListener("input", (e) =>
+            syncInputWithValue("rangeInputMosaFlightAltitude", e.target.value, 100, 500)
+          );
+        document
+          .getElementById("numInputMosaFlightAltitude")
+          .addEventListener("input", (e) =>
+            syncInputWithValue("numInputMosaFlightAltitude", e.target.value, 100, 500)
           );
       }
 
