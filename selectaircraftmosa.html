@@ -612,7 +612,7 @@
           500
         );
 
-        // Waypoint Distance?
+        // Waypoint Distance
         // ..
 
         // Line Distance
@@ -808,6 +808,7 @@
                 <option value="">Altitude Alvo</option>
               </select>
             </div>
+            <!-- Flight Altitude -->
             <label for="rangeInputMosaFlightAltitude"> Altitude do vôo: </label>
             <div class="range-input">
               <input
@@ -830,6 +831,30 @@
                 <span>metros</span>
               </div>
             </div>
+            <!-- Photo Interval Distance -->
+            <label for="rangeInputMosaPhotoIntervalDistance"> Intervalo de distância entre fotos: </label>
+            <div class="range-input">
+              <input
+                type="range"
+                id="rangeInputMosaPhotoIntervalDistance"
+                min="5"
+                max="300"
+                value="5"
+                oninput="syncInputWithValue('numInputMosaPhotoIntervalDistance', this.value, 5, 300)"
+              />
+              <div>
+                <input
+                  type="number"
+                  id="numInputMosaPhotoIntervalDistance"
+                  min="5"
+                  max="300"
+                  value="5"
+                  oninput="syncInputWithValue('rangeInputMosaPhotoIntervalDistance', this.value, 5, 300)"
+                />
+                <span>metros</span>
+              </div>
+            </div>
+            <!-- Line Distance -->
             <label for="rangeInputMosaLineDist">
               Largura de curva da aeronave:
             </label>
