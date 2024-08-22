@@ -621,12 +621,14 @@
           document.getElementById("numInputMosaLineDist").value
         );
         const targetAlt = document.getElementById("targetAltitude").value;
+        const flightAlt = document.getElementById("flightAltitude").value;
 
         let i = 0;
         while (i < mosas.length) {
           if (mosas[i].Name == MosaNameSelected) {
             mosas[i].LineDist = mosaLineDist;
             mosas[i].TargetAltitude = targetAlt;
+            mosas[i].FlightAltitude = flightAlt;
           }
           i++;
         }
