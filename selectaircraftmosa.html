@@ -382,7 +382,12 @@
         document
           .getElementById("rangeInputMosaLineDist")
           .addEventListener("input", (e) =>
-            syncInputWithValue("rangeInputMosaLineDist", e.target.value, 10, 100)
+            syncInputWithValue(
+              "rangeInputMosaLineDist",
+              e.target.value,
+              10,
+              100
+            )
           );
         document
           .getElementById("numInputMosaLineDist")
@@ -394,12 +399,22 @@
         document
           .getElementById("rangeInputMosaFlightAltitude")
           .addEventListener("input", (e) =>
-            syncInputWithValue("rangeInputMosaFlightAltitude", e.target.value, 100, 500)
+            syncInputWithValue(
+              "rangeInputMosaFlightAltitude",
+              e.target.value,
+              100,
+              500
+            )
           );
         document
           .getElementById("numInputMosaFlightAltitude")
           .addEventListener("input", (e) =>
-            syncInputWithValue("numInputMosaFlightAltitude", e.target.value, 100, 500)
+            syncInputWithValue(
+              "numInputMosaFlightAltitude",
+              e.target.value,
+              100,
+              500
+            )
           );
       }
 
@@ -584,15 +599,35 @@
           currentMosa?.TargetAltitude;
 
         // Flight Altitude
-        syncInputWithValue("rangeInputMosaFlightAltitude", currentMosa?.FlightAltitude, 100, 500);
-        syncInputWithValue("numInputMosaFlightAltitude", currentMosa?.FlightAltitude, 100, 500);
+        syncInputWithValue(
+          "rangeInputMosaFlightAltitude",
+          currentMosa?.FlightAltitude,
+          100,
+          500
+        );
+        syncInputWithValue(
+          "numInputMosaFlightAltitude",
+          currentMosa?.FlightAltitude,
+          100,
+          500
+        );
 
         // Waypoint Distance?
         // ..
 
         // Line Distance
-        syncInputWithValue("rangeInputMosaLineDist", currentMosa?.LineDist, 10, 100);
-        syncInputWithValue("numInputMosaLineDist", currentMosa?.LineDist, 10, 100);
+        syncInputWithValue(
+          "rangeInputMosaLineDist",
+          currentMosa?.LineDist,
+          10,
+          100
+        );
+        syncInputWithValue(
+          "numInputMosaLineDist",
+          currentMosa?.LineDist,
+          10,
+          100
+        );
 
         console.log(currentMosa);
       }
@@ -630,16 +665,18 @@
         saveButton.textContent = "";
         spinnerContainer.style.display = "flex";
 
-        const mosaLineDist = parseInt(
+        const lineDist = parseInt(
           document.getElementById("numInputMosaLineDist").value
         );
+        const flightAlt = parseInt(
+          document.getElementById("numInputMosaFlightAltitude").value
+        );
         const targetAlt = document.getElementById("targetAltitude").value;
-        const flightAlt = document.getElementById("flightAltitude").value;
 
         let i = 0;
         while (i < mosas.length) {
           if (mosas[i].Name == MosaNameSelected) {
-            mosas[i].LineDist = mosaLineDist;
+            mosas[i].LineDist = lineDist;
             mosas[i].TargetAltitude = targetAlt;
             mosas[i].FlightAltitude = flightAlt;
           }
