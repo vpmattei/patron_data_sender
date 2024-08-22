@@ -7,6 +7,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column; /* Allows vertical stacking */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .container {
