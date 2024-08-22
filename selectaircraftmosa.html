@@ -168,25 +168,6 @@
         max-height: 20rem; /* Set this to the desired height */
       }
 
-      .range-input-mosa-curve {
-        display: flex;
-        flex-direction: row;
-        align-items: start;
-        width: -webkit-fill-available;
-      }
-
-      .range-input-mosa-curve input[type="number"] {
-        width: 60px;
-        text-align: center;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-      }
-
-      .range-input-mosa-curve span {
-        font-weight: bold;
-      }
-
       .toggle-arrow {
         cursor: pointer;
         font-size: 1rem;
@@ -439,7 +420,14 @@
         }
       }
 
-      // Synchronize a given input values within a range
+      /**
+       * Synchronize a given input values within a range.
+       *
+       * @param {string} inputNameId - The name ID of the input to synchronize with the value.
+       * @param {number} value - The value to be set to the input.
+       * @param {number} rangeMin - The minimum value allowed for the input.
+       * @param {number} rangeMax - The maximum value allowed for the input.
+       */
       function syncInputWithValue(inputNameId, value, rangeMin, rangeMax) {
         // Ensure the value is within bounds (rangeMin - rangeMax)
         if (value < rangeMin) {
@@ -448,24 +436,6 @@
           value = rangeMax;
         }
         document.getElementById(inputNameId).value = value;
-      }
-
-      function updateMosaLineDistFromNumInput(value) {
-        const rangeInputMosaLineDist = document.getElementById(
-          "rangeInputMosaLineDist"
-        );
-        const textInput = document.getElementById("numInputMosaLineDist");
-
-        // Ensure the value is within bounds (10 - 100)
-        if (value < 10) {
-          value = 10;
-        } else if (value > 100) {
-          value = 100;
-        }
-
-        // Update both inputs to stay in sync
-        textInput.value = value;
-        rangeInputMosaLineDist.value = value;
       }
 
       function displayAircraftImage() {
@@ -597,7 +567,8 @@
           MosaNameSelected + " :";
 
         // Target Altitude
-        document.getElementById("targetAltitude").value = currentMosa?.TargetAltitude;
+        document.getElementById("targetAltitude").value =
+          currentMosa?.TargetAltitude;
 
         // Flight Altitude
         // ..
@@ -792,10 +763,32 @@
                 <option value="">Altitude Alvo</option>
               </select>
             </div>
+            <label for="rangeInputMosaFlightAltitude"> Altitude do vôo: </label>
+            <div class="range-input">
+              <input
+                type="range"
+                id="rangeInputMosaFlightAltitude"
+                min="100"
+                max="500"
+                value="100"
+                oninput="syncInputWithValue('numInputMosaFlightAltitude', this.value, 100, 500)"
+              />
+              <div>
+                <input
+                  type="number"
+                  id="numInputMosaFlightAltitude"
+                  min="100"
+                  max="500"
+                  value="100"
+                  oninput="syncInputWithValue('rangeInputMosaFlightAltitude', this.value, 100, 500)"
+                />
+                <span>metros</span>
+              </div>
+            </div>
             <label for="rangeInputMosaLineDist">
               Largura de curva do drone:
             </label>
-            <div class="range-input-mosa-curve">
+            <div class="range-input">
               <input
                 type="range"
                 id="rangeInputMosaLineDist"
