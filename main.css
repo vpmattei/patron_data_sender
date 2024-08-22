@@ -10,16 +10,26 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   padding: 20px;
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
   background: #00092f;
   border: 2px solid #0f3460;
   border-radius: 35px;
-  max-width: 500px;
-  width: 90%;
+  max-width: 60vh;
+  max-height: 80vh; /* Maximum height is 80% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  width: 100%;
   text-align: center;
+  
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
-
+.container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Webkit browsers */
+}
 p {
   margin: 10px 0;
   font-size: 16px;
@@ -52,12 +62,32 @@ button {
   font-size: 16px;
   cursor: pointer;
   box-shadow: 0px 0px 15px #000724;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 button:hover {
   background-color: #e94560;
 }
 
+.range-input {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  width: -webkit-fill-available;
+}
+
+.range-input input[type="number"] {
+  width: 60px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.range-input span {
+  font-weight: bold;
+}
 
 @keyframes spin {
   0% {
@@ -70,4 +100,27 @@ button:hover {
 
 .hidden {
   display: none;
+}
+
+/* Popup styles */
+.popup-message {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #3333337c;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease, visibility 0s 1s;
+  z-index: 1000;
+}
+
+/* Show popup with visibility and opacity */
+.popup-message.show {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.5s ease;
 }

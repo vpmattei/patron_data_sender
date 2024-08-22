@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sélection de Aircraft et MOSA</title>
+    <title>Seleção de Aeronave</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -37,6 +37,7 @@
       .selection-container {
         display: flex;
         flex-direction: column;
+        padding: 0.5rem;
         gap: 20px;
         align-items: flex-start;
       }
@@ -47,6 +48,11 @@
         gap: 10px;
         justify-content: space-between;
         width: 100%;
+      }
+
+      .selection-row.disabled {
+        pointer-events: none;
+        opacity: 0.5;
       }
 
       .selection-row label {
@@ -96,6 +102,37 @@
         margin-top: 20px;
         width: 150%;
       }
+      /* Spinner for loading */
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top: 4px solid #ffffff;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      .button {
+        position: relative;
+      }
+
+      .button[disabled] {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .button .spinner-container {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .button.loading .spinner-container {
+        display: block;
+      }
 
       .fa-arrow-left {
         font-size: 1.5rem;
@@ -107,33 +144,149 @@
         opacity: 0.5;
         cursor: not-allowed;
       }
+
+      /* Hidden menu styles with transition */
+      .hidden-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+        text-align: center;
+        gap: 1rem;
+        max-height: 0;
+        overflow: hidden;
+        width: -webkit-fill-available;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+      }
+
+      .hidden-menu-selection {
+        cursor: pointer;
+      }
+
+      .hidden-menu.open {
+        padding: 1rem;
+        max-height: 30rem; /* Set this to the desired height */
+      }
+
+      .toggle-arrow {
+        cursor: pointer;
+        font-size: 1rem;
+        transition: transform 0.3s ease;
+      }
+
+      .toggle-arrow.open {
+        transform: rotate(180deg);
+      }
+
+      /* General range input styling for all browsers */
+      input[type="range"] {
+        -webkit-appearance: none; /* Remove default styling */
+        width: 100%;
+        height: 10px; /* Track height */
+        background: #ddd;
+        border-radius: 5px;
+        outline: none;
+        margin: 20px 0;
+      }
+
+      /* Webkit browsers (Chrome, Safari, Edge) */
+      input[type="range"]::-webkit-slider-runnable-track {
+        background: linear-gradient(90deg, #ffffff, #0575e6);
+        height: 10px; /* Match the track height */
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Remove default thumb */
+        appearance: none;
+        width: 20px; /* Thumb width */
+        height: 20px; /* Thumb height */
+        background: #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #0575e6;
+        margin-top: -5px; /* This centers the thumb */
+      }
+
+      /* Firefox */
+      input[type="range"]::-moz-range-track {
+        background: linear-gradient(90deg, #ffffff, #0575e6);
+        height: 10px;
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #0575e6;
+      }
+
+      /* IE and Edge */
+      input[type="range"]::-ms-track {
+        background: transparent;
+        border-color: transparent;
+        border-width: 5px 0;
+        color: transparent;
+        width: 100%;
+        height: 10px;
+      }
+
+      input[type="range"]::-ms-fill-lower {
+        background: linear-gradient(90deg, #ffffff, #0575e6);
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-ms-fill-upper {
+        background: #ddd;
+        border-radius: 5px;
+      }
+
+      input[type="range"]::-ms-thumb {
+        width: 20px;
+        height: 20px;
+        background: #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #0575e6;
+      }
     </style>
     <script>
+      const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
+      const optimization = ["Low", "Middle", "High"];
+
       const aircrafts = [
         {
           Name: "VT-14",
           Type: "VTOL",
-          CruiseSpeed: 22,
+          MavType: 20,
+          CruiseSpeed: 25,
+          HoverSpeed: 25,
           MinSpeed: 22,
           MaxSpeed: 22,
-          TurnRadios: 200,
+          TurnRadios: 40,
           ReturnAltitude: 200,
           MinHome: 30,
           MinAGL: 30,
-          MaxASL: 1000,
+          MaxASL: 1500,
           MaxAGL: 400,
           FlitTime: 240,
           TurnaroundDist: 50,
+          SafetyMarginDist: 10,
           Image:
             "https://fr.satuav.com/Content/uploads/2021761228/202104251129323edf13f7694c47d0b8f4e2823cdf40ae.png",
         },
         {
           Name: "MR82020",
           Type: "Copter",
+          MavType: 2,
           CruiseSpeed: 21,
+          HoverSpeed: 11,
           MinSpeed: 21,
           MaxSpeed: 21,
-          TurnRadios: 201,
+          TurnRadios: 10,
           ReturnAltitude: 201,
           MinHome: 31,
           MinAGL: 31,
@@ -141,49 +294,75 @@
           MaxAGL: 401,
           FlitTime: 241,
           TurnaroundDist: 51,
+          SafetyMarginDist: 10,
           Image:
             "https://guide-images.cdn.ifixit.com/igi/PArTwJRgvPcAQp4J.large",
         },
         {
           Name: "MavicPro2",
-          Type: "Plane",
-          CruiseSpeed: 30,
-          MinSpeed: 28,
-          MaxSpeed: 35,
-          TurnRadios: 150,
-          ReturnAltitude: 500,
-          MinHome: 50,
-          MinAGL: 50,
-          MaxASL: 2000,
-          MaxAGL: 500,
-          FlitTime: 360,
-          TurnaroundDist: 100,
+          Type: "Drone",
+          MavType: 2,
+          CruiseSpeed: 15,
+          HoverSpeed: 5,
+          MinSpeed: 0,
+          MaxSpeed: 20,
+          TurnRadios: 0,
+          ReturnAltitude: 100,
+          MinHome: 31,
+          MinAGL: 31,
+          MaxAGL: 401,
+          MinASL: 1200,
+          MaxASL: 1400,
+          FlitTime: 20,
+          TurnaroundDist: 0,
+          SafetyMarginDist: 1,
           Image:
-            "https://upload.wikimedia.org/wikipedia/commons/b/b8/USMC-01522.jpg",
+            "https://cdn.lesnumeriques.com/optim/produits/781/45613/dji-mavic-2-pro_fa7cad86ece23c9a__1200_678__overflow.jpg",
         },
       ];
 
-      const mosas = [
+      let mosas = [
         {
           Name: "MOSA1",
-          MissionType: "Area survey",
           TargetAltitude: "HOME",
           FlightAltitude: 100,
           WaypointsDist: 40,
-          LineDist: 50,
+          LineDist: 20,
         },
         {
           Name: "MOSA2",
-          MissionType: "Corridor survey",
           TargetAltitude: "AGL",
-          FlightAltitude: 99,
+          FlightAltitude: 120,
           WaypointsDist: 41,
-          LineDist: 51,
+          LineDist: 50,
         },
       ];
 
-      const targetAltitudes = ["ASL", "HOME", "AGL", "AGL+"];
-      const optimization = ["Low", "Middle", "High"];
+      let NewMosaData = {
+        Version: "0.1.0",
+        MissionTypes: ["Area survey", "Corridor survey"],
+        TargetAltitudes: targetAltitudes,
+        VehicleTypes: ["Copter", "Plane", "VTOL"],
+        Aircrafts: aircrafts,
+        MOSAs: mosas,
+        Optimizations: [
+          {
+            Name: "High",
+            AngleStep: 1,
+          },
+          {
+            Name: "Middle",
+            AngleStep: 5,
+          },
+          {
+            Name: "Low",
+            AngleStep: 30,
+          },
+        ],
+      };
+
+      let AircraftNameSelected = "";
+      let MosaNameSelected = "";
 
       function setupEventListeners() {
         document
@@ -193,8 +372,119 @@
           .getElementById("mosa")
           .addEventListener("change", validateSelections);
         document
+          .getElementById("mosa")
+          .addEventListener("change", handleMosaSelection);
+        document
           .getElementById("optimization")
           .addEventListener("change", validateSelections);
+
+        // Line Distance Inputs
+        document
+          .getElementById("rangeInputMosaLineDist")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "rangeInputMosaLineDist",
+              e.target.value,
+              10,
+              100
+            )
+          );
+        document
+          .getElementById("numInputMosaLineDist")
+          .addEventListener("input", (e) =>
+            syncInputWithValue("numInputMosaLineDist", e.target.value, 10, 100)
+          );
+
+        // Flight Altitude Inputs
+        document
+          .getElementById("rangeInputMosaFlightAltitude")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "rangeInputMosaFlightAltitude",
+              e.target.value,
+              100,
+              500
+            )
+          );
+        document
+          .getElementById("numInputMosaFlightAltitude")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "numInputMosaFlightAltitude",
+              e.target.value,
+              100,
+              500
+            )
+          );
+        // Photo Interval Distance Inputs
+        document
+          .getElementById("rangeInputMosaPhotoIntervalDistance")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "rangeInputMosaPhotoIntervalDistance",
+              e.target.value,
+              5,
+              300
+            )
+          );
+        document
+          .getElementById("numInputMosaPhotoIntervalDistance")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "numInputMosaPhotoIntervalDistance",
+              e.target.value,
+              5,
+              300
+            )
+          );
+      }
+
+      // Function to enable or disable the toggle row based on MOSA selection
+      function handleMosaSelection() {
+        MosaNameSelected = document.getElementById("mosa").value;
+        const toggleRow = document.getElementById("toggleRow");
+        const menu = document.getElementById("hiddenMenu"); //qsd
+        const arrow = document.getElementById("toggleArrow");
+
+        if (MosaNameSelected) {
+          // Enable the toggle row
+          toggleRow.classList.remove("disabled");
+        } else {
+          // Disable the toggle row
+          toggleRow.classList.add("disabled");
+          menu.classList.remove("open");
+          arrow.classList.remove("open");
+        }
+      }
+
+      function toggleMenu() {
+        const menu = document.getElementById("hiddenMenu");
+        const arrow = document.getElementById("toggleArrow");
+        if (menu.classList.contains("open")) {
+          menu.classList.remove("open");
+          arrow.classList.remove("open");
+        } else {
+          menu.classList.add("open");
+          arrow.classList.add("open");
+        }
+      }
+
+      /**
+       * Synchronize a given input values within a range.
+       *
+       * @param {string} inputNameId - The name ID of the input to synchronize with the value.
+       * @param {number} value - The value to be set to the input.
+       * @param {number} rangeMin - The minimum value allowed for the input.
+       * @param {number} rangeMax - The maximum value allowed for the input.
+       */
+      function syncInputWithValue(inputNameId, value, rangeMin, rangeMax) {
+        // Ensure the value is within bounds (rangeMin - rangeMax)
+        if (value < rangeMin) {
+          value = rangeMin;
+        } else if (value > rangeMax) {
+          value = rangeMax;
+        }
+        document.getElementById(inputNameId).value = value;
       }
 
       function displayAircraftImage() {
@@ -242,6 +532,18 @@
         popup.style.display = "none";
       }
 
+      // Function to show and auto-hide the popup
+      function showAutoFadingPopup(message, secondsToFade) {
+        const popup = document.getElementById("popup");
+        popup.textContent = message;
+        popup.classList.add("show");
+
+        // Hide the popup after 1 second
+        setTimeout(() => {
+          popup.classList.remove("show");
+        }, secondsToFade * 1000);
+      }
+
       function populateSelectOptions() {
         const aircraftSelected = document.getElementById("aircraft");
         aircrafts.forEach((aircraft) => {
@@ -255,8 +557,17 @@
         mosas.forEach((mosa) => {
           const option = document.createElement("option");
           option.value = mosa.Name;
-          option.textContent = `${mosa.Name} (${mosa.MissionType})`;
+          option.textContent = `${mosa.Name}`;
           mosaSelected.appendChild(option);
+        });
+
+        const targetAltitudeSelected =
+          document.getElementById("targetAltitude");
+        targetAltitudes.forEach((targetAltitude) => {
+          const option = document.createElement("option");
+          option.value = targetAltitude;
+          option.textContent = `${targetAltitude}`;
+          targetAltitudeSelected.appendChild(option);
         });
 
         const optimizationSelected = document.getElementById("optimization");
@@ -264,11 +575,9 @@
           let optTextPT;
           if (opt == "Low") {
             optTextPT = "Baixa";
-          }
-          else if (opt == "Middle") {
+          } else if (opt == "Middle") {
             optTextPT = "Média";
-          }
-          else if (opt == "High") {
+          } else if (opt == "High") {
             optTextPT = "Alta";
           }
 
@@ -276,37 +585,190 @@
           option.value = opt;
           option.textContent = `${optTextPT}`;
           optimizationSelected.appendChild(option);
-        })
+        });
 
         validateSelections();
       }
 
       function validateSelections() {
-        const aircraft = document.getElementById("aircraft").value;
-        const mosa = document.getElementById("mosa").value;
+        AircraftNameSelected = document.getElementById("aircraft").value;
+        MosaNameSelected = document.getElementById("mosa").value;
         const opt = document.getElementById("optimization").value;
         const sendButton = document.getElementById("sendButton");
 
-        sendButton.disabled = !aircraft || !mosa || opt == "";
+        sendButton.disabled =
+          !AircraftNameSelected || !MosaNameSelected || opt == "";
+
+        updateAdvancedConfigurationsDisplayValues();
+      }
+
+      function updateAdvancedConfigurationsDisplayValues() {
+        let currentMosa = null;
+        let i = 0;
+        while (i < mosas.length) {
+          if (mosas[i].Name == MosaNameSelected) {
+            currentMosa = mosas[i];
+          }
+          i++;
+        }
+        // MOSA display name
+        document.getElementById("mosaNameDisplay").textContent =
+          MosaNameSelected + " :";
+
+        // Target Altitude
+        document.getElementById("targetAltitude").value =
+          currentMosa?.TargetAltitude;
+
+        // Flight Altitude
+        syncInputWithValue(
+          "rangeInputMosaFlightAltitude",
+          currentMosa?.FlightAltitude,
+          100,
+          500
+        );
+        syncInputWithValue(
+          "numInputMosaFlightAltitude",
+          currentMosa?.FlightAltitude,
+          100,
+          500
+        );
+
+        // Photo Interval (Waypoint) Distance
+        syncInputWithValue(
+          "rangeInputMosaPhotoIntervalDistance",
+          currentMosa?.WaypointsDist,
+          5,
+          300
+        );
+        syncInputWithValue(
+          "numInputMosaPhotoIntervalDistance",
+          currentMosa?.WaypointsDist,
+          5,
+          300
+        );
+
+        // Line Distance
+        syncInputWithValue(
+          "rangeInputMosaLineDist",
+          currentMosa?.LineDist,
+          10,
+          100
+        );
+        syncInputWithValue(
+          "numInputMosaLineDist",
+          currentMosa?.LineDist,
+          10,
+          100
+        );
+
+        console.log(currentMosa);
+      }
+
+      function loadAdvancedConfigurations() {
+        fetch("https://patronrouteplanner.zapto.org/api/v2/get_mosa/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((mosaData) => {
+            mosas = mosaData.MOSAs;
+          })
+          .catch((error) => {
+            console.error("There was an error getting the MOSAs data:", error);
+          });
+      }
+
+      function saveAdvancedConfigurations() {
+        const saveButton = document.querySelector(".button button");
+        const spinnerContainer =
+          saveButton.parentElement.querySelector(".spinner-container");
+
+        // Disable the button and show the spinner
+        saveButton.disabled = true;
+        saveButton.textContent = "";
+        spinnerContainer.style.display = "flex";
+
+        const lineDist = parseInt(
+          document.getElementById("numInputMosaLineDist").value
+        );
+        const flightAlt = parseInt(
+          document.getElementById("numInputMosaFlightAltitude").value
+        );
+        const waypointDist = parseInt(
+          document.getElementById("numInputMosaPhotoIntervalDistance").value
+        );
+        const targetAlt = document.getElementById("targetAltitude").value;
+
+        let i = 0;
+        while (i < mosas.length) {
+          if (mosas[i].Name == MosaNameSelected) {
+            mosas[i].LineDist = lineDist;
+            mosas[i].TargetAltitude = targetAlt;
+            mosas[i].FlightAltitude = flightAlt;
+            mosas[i].WaypointsDist = waypointDist;
+          }
+          i++;
+        }
+
+        console.log(NewMosaData.MOSAs);
+
+        fetch("https://patronrouteplanner.zapto.org/api/v2/set_mosa/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(NewMosaData),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((result) => {
+            console.log("Successfully saved the new configuration:", result);
+          })
+          .catch((error) => {
+            console.error("Erro:", error);
+            alert(error);
+          })
+          .finally(() => {
+            // Enable the button and hide the spinner after the fetch operation is completed
+            saveButton.disabled = false;
+            saveButton.textContent = "Salvar configurações";
+            spinnerContainer.style.display = "none";
+
+            showAutoFadingPopup("Configurações salvadas!", 2);
+          });
       }
 
       function sendData() {
         const sendButton = document.getElementById("sendButton");
-        const aircraftSelected = document.getElementById("aircraft");
-        const mosaSelected = document.getElementById("mosa");
-        const optimizationSelected = document.getElementById("optimization");
-
-        const aircraftName = aircraftSelected.value;
-        const mosaName = mosaSelected.value;
-        const optimizationValue = optimizationSelected.value;
+        AircraftNameSelected = document.getElementById("aircraft").value;
+        MosaNameSelected = document.getElementById("mosa").value;
+        const optSelected = document.getElementById("optimization").value;
 
         const aircraftMosaData = {
-          Aircraft: aircraftName,
-          MOSA: mosaName,
-          Optimization: optimizationValue
+          Aircraft: AircraftNameSelected,
+          MOSA: MosaNameSelected,
+          Optimization: optSelected,
         };
 
-        sessionStorage.setItem("aircraftMosaData", JSON.stringify(aircraftMosaData));
+        sessionStorage.setItem(
+          "aircraftMosaData",
+          JSON.stringify(aircraftMosaData)
+        );
         sendButton.style.display = "none";
 
         // Redirection to sendingdata.html
@@ -321,11 +783,13 @@
         setupEventListeners();
         populateSelectOptions();
         displayAircraftImage();
+        loadAdvancedConfigurations();
       };
     </script>
   </head>
 
   <body>
+    <div id="popup" class="popup-message"></div>
     <div class="selecting-aircraft-container">
       <div class="container">
         <img
@@ -337,10 +801,14 @@
         />
         <div class="selection-container">
           <div class="selection-row">
-            <label for="aircraft">Escolha um Drone</label>
+            <label for="aircraft">Escolha uma Aeronave</label>
             <div style="display: flex; align-items: center">
-              <select name="aircraft" id="aircraft" onchange="displayAircraftImage()">
-                <option value="">Selecione um Drone</option>
+              <select
+                name="aircraft"
+                id="aircraft"
+                onchange="displayAircraftImage()"
+              >
+                <option value="">Selecione uma Aeronave</option>
               </select>
               <i
                 class="fa fa-info-circle info-icon"
@@ -354,8 +822,113 @@
               <option value="">Selecione um MOSA</option>
             </select>
           </div>
+
+          <!-- Toggle menu row -->
+          <div
+            class="selection-row disabled"
+            id="toggleRow"
+            onclick="toggleMenu()"
+          >
+            <label class="hidden-menu-selection" for="toggleMenu"
+              >Configurações avançadas MOSA</label
+            >
+            <i id="toggleArrow" class="fa fa-chevron-down toggle-arrow"></i>
+          </div>
+
+          <!-- Hidden menu -->
+          <div id="hiddenMenu" class="hidden-menu">
+            <h3 id="mosaNameDisplay"></h3>
+            <div class="selection-row">
+              <label for="targetAltitude">Altitude Alvo</label>
+              <select name="targetAltitude" id="targetAltitude">
+                <option value="">Altitude Alvo</option>
+              </select>
+            </div>
+            <!-- Flight Altitude -->
+            <label for="rangeInputMosaFlightAltitude"> Altitude do vôo: </label>
+            <div class="range-input">
+              <input
+                type="range"
+                id="rangeInputMosaFlightAltitude"
+                min="100"
+                max="500"
+                value="100"
+                oninput="syncInputWithValue('numInputMosaFlightAltitude', this.value, 100, 500)"
+              />
+              <div>
+                <input
+                  type="number"
+                  id="numInputMosaFlightAltitude"
+                  min="100"
+                  max="500"
+                  value="100"
+                  oninput="syncInputWithValue('rangeInputMosaFlightAltitude', this.value, 100, 500)"
+                />
+                <span>metros</span>
+              </div>
+            </div>
+            <!-- Photo Interval Distance -->
+            <label for="rangeInputMosaPhotoIntervalDistance"> Intervalo de distância entre fotos: </label>
+            <div class="range-input">
+              <input
+                type="range"
+                id="rangeInputMosaPhotoIntervalDistance"
+                min="5"
+                max="300"
+                value="5"
+                oninput="syncInputWithValue('numInputMosaPhotoIntervalDistance', this.value, 5, 300)"
+              />
+              <div>
+                <input
+                  type="number"
+                  id="numInputMosaPhotoIntervalDistance"
+                  min="5"
+                  max="300"
+                  value="5"
+                  oninput="syncInputWithValue('rangeInputMosaPhotoIntervalDistance', this.value, 5, 300)"
+                />
+                <span>metros</span>
+              </div>
+            </div>
+            <!-- Line Distance -->
+            <label for="rangeInputMosaLineDist">
+              Largura de curva da aeronave:
+            </label>
+            <div class="range-input">
+              <input
+                type="range"
+                id="rangeInputMosaLineDist"
+                min="10"
+                max="100"
+                value="50"
+                oninput="syncInputWithValue('numInputMosaLineDist', this.value, 10, 100)"
+              />
+              <div>
+                <input
+                  type="number"
+                  id="numInputMosaLineDist"
+                  min="10"
+                  max="100"
+                  value="50"
+                  oninput="syncInputWithValue('rangeInputMosaLineDist', this.value, 10, 100)"
+                />
+                <span>metros</span>
+              </div>
+            </div>
+            <div class="button">
+              <button onclick="saveAdvancedConfigurations()">
+                Salvar configurações
+              </button>
+              <div class="spinner-container">
+                <span class="spinner"></span>
+              </div>
+            </div>
+          </div>
+
           <div class="selection-row">
-            <label for="optimization">Escolha o nível de otimização para a missão</label>
+            <label for="optimization">
+              Escolha o nível de otimização para a missão
+            </label>
             <select name="optimization" id="optimization">
               <option value="">Selecione uma otimização</option>
             </select>
