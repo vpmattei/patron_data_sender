@@ -7,8 +7,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* Allows vertical stacking */
-  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .container {
@@ -19,7 +17,9 @@ body {
   background: #00092f;
   border: 2px solid #0f3460;
   border-radius: 35px;
-  max-width: 500px;
+  max-width: 40vh;
+  max-height: 80vh; /* Maximum height is 80% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling if content overflows */
   width: 90%;
   text-align: center;
 }
