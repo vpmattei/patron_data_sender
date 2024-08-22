@@ -439,9 +439,15 @@
         }
       }
 
-      // Synchronize the range and text input values
-      function updateMosaLineDistFromRange(value) {
-        document.getElementById("numInputMosaLineDist").value = value;
+      // Synchronize a given input values within a range
+      function syncInputWithValue(inputNameId, value, rangeMin, rangeMax) {
+        // Ensure the value is within bounds (rangeMin - rangeMax)
+        if (value < rangeMin) {
+          value = rangeMin;
+        } else if (value > rangeMax) {
+          value = rangeMax;
+        }
+        document.getElementById(inputNameId).value = value;
       }
 
       function updateMosaLineDistFromNumInput(value) {
@@ -586,12 +592,21 @@
           }
           i++;
         }
-        // Updating MOSA display name
+        // MOSA display name
         document.getElementById("mosaNameDisplay").textContent =
           MosaNameSelected + " :";
+
+        // Target Altitude
         document.getElementById("targetAltitude").value = currentMosa?.TargetAltitude;
+
+        // Flight Altitude
+        // ..
+
+        // Waypoint Distance?
+        // ..
+
+        // Line Distance
         updateMosaLineDistFromNumInput(currentMosa?.LineDist);
-        updateMosaLineDistFromRange(currentMosa?.LineDist);
 
         console.log(currentMosa);
       }
@@ -787,7 +802,7 @@
                 min="10"
                 max="100"
                 value="50"
-                oninput="updateMosaLineDistFromRange(this.value)"
+                oninput="syncInputWithValue('numInputMosaLineDist', this.value, 10, 100)"
               />
               <div>
                 <input
@@ -796,7 +811,7 @@
                   min="10"
                   max="100"
                   value="50"
-                  oninput="updateMosaLineDistFromNumInput(this.value)"
+                  oninput="syncInputWithValue('rangeInputMosaLineDist', this.value, 10, 100)"
                 />
                 <span>metros</span>
               </div>
