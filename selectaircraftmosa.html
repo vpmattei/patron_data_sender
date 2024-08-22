@@ -571,13 +571,15 @@
           currentMosa?.TargetAltitude;
 
         // Flight Altitude
-        // ..
+        syncInputWithValue("rangeInputMosaFlightAltitude", currentMosa?.FlightAltitude, 100, 500);
+        syncInputWithValue("numInputMosaFlightAltitude", currentMosa?.FlightAltitude, 100, 500);
 
         // Waypoint Distance?
         // ..
 
         // Line Distance
         syncInputWithValue("rangeInputMosaLineDist", currentMosa?.LineDist, 10, 100);
+        syncInputWithValue("numInputMosaLineDist", currentMosa?.LineDist, 10, 100);
 
         console.log(currentMosa);
       }
