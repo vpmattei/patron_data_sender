@@ -416,6 +416,27 @@
               500
             )
           );
+        // Photo Interval Distance Inputs
+        document
+          .getElementById("rangeInputMosaPhotoIntervalDistance")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "rangeInputMosaPhotoIntervalDistance",
+              e.target.value,
+              5,
+              300
+            )
+          );
+        document
+          .getElementById("numInputMosaPhotoIntervalDistance")
+          .addEventListener("input", (e) =>
+            syncInputWithValue(
+              "numInputMosaPhotoIntervalDistance",
+              e.target.value,
+              5,
+              300
+            )
+          );
       }
 
       // Function to enable or disable the toggle row based on MOSA selection
@@ -612,8 +633,19 @@
           500
         );
 
-        // Waypoint Distance
-        // ..
+        // Photo Interval (Waypoint) Distance
+        syncInputWithValue(
+          "rangeInputMosaPhotoIntervalDistance",
+          currentMosa?.WaypointsDist,
+          5,
+          300
+        );
+        syncInputWithValue(
+          "numInputMosaPhotoIntervalDistance",
+          currentMosa?.WaypointsDist,
+          5,
+          300
+        );
 
         // Line Distance
         syncInputWithValue(
@@ -671,6 +703,9 @@
         const flightAlt = parseInt(
           document.getElementById("numInputMosaFlightAltitude").value
         );
+        const waypointDist = parseInt(
+          document.getElementById("numInputMosaPhotoIntervalDistance").value
+        );
         const targetAlt = document.getElementById("targetAltitude").value;
 
         let i = 0;
@@ -679,6 +714,7 @@
             mosas[i].LineDist = lineDist;
             mosas[i].TargetAltitude = targetAlt;
             mosas[i].FlightAltitude = flightAlt;
+            mosas[i].WaypointsDist = waypointDist;
           }
           i++;
         }
