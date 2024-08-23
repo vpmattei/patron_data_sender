@@ -210,79 +210,6 @@
                 );
               });
           };
-          window.downloadKML = function () {
-            fetch(
-              "https://patronrouteplanner.zapto.org/api/v2/download_kml/" +
-                missionKey,
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error(
-                    "Network response was not ok " + response.statusText
-                  );
-                }
-                return response.blob();
-              })
-              .then((blob) => {
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = "mission.kml";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-              })
-              .catch((error) => {
-                console.error(
-                  "There was an error downloading the KML file:",
-                  error
-                );
-              });
-          };
-
-          window.downloadPlan = function () {
-            fetch(
-              "https://patronrouteplanner.zapto.org/api/v2/download_plan/" +
-                missionKey,
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error(
-                    "Network response was not ok " + response.statusText
-                  );
-                }
-                return response.blob();
-              })
-              .then((blob) => {
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = "mission.plan";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-              })
-              .catch((error) => {
-                console.error(
-                  "There was an error downloading the .plan file:",
-                  error
-                );
-              });
-          };
         } else {
           console.error("No responseData found in session storage");
         }
@@ -301,10 +228,14 @@
           <button onclick="redirectToDataSummary()">
             Ver resumo dos dados enviados
           </button>
-          <button onclick="downloadKML()">
+          <button
+            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_kml/')"
+          >
             <i class="fa-solid fa-download"></i> Baixar missão em .KML
           </button>
-          <button onclick="downloadPlan()">
+          <button
+            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_plan/')"
+          >
             <i class="fa-solid fa-download"></i> Baixar missão em .plan
           </button>
           <button
