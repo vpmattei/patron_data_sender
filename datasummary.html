@@ -129,7 +129,7 @@
         document.getElementById("aircraftInfo").textContent = `Avião Selecionado: ${aircraftSelected}`;
         document.getElementById("mosaInfo").textContent = `MOSA Selecionado: ${mosaSelected}`;
 
-        function redirectToMissionSummary() {
+        window.redirectToMissionSummary = function () {
           window.location.href = "missionsummary.html";
         };
       } else {
