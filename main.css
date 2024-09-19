@@ -1,6 +1,7 @@
 body {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   font-family: Roboto, sans-serif;
   background: linear-gradient(to top, #00051e, #020b45), no-repeat top center;
   color: #fff;
@@ -66,6 +67,11 @@ button {
   box-shadow: 0px 0px 15px #000724;
   min-height: 44px;
   min-width: 44px;
+
+  &.style2 {
+    background-color: #DBE1FF;
+    color: #1A3CDB;
+  }
 }
 
 button:hover {
