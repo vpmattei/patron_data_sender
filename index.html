@@ -168,10 +168,14 @@
           Você pode arrastar e soltar seu arquivo .kml para fazer upload
         </div>
         <label for="fileInput" class="browse-button">Procurar Arquivo</label>
-        <input type="file" id="fileInput" onchange="updateFileName()" />
+        <input
+          type="file"
+          id="fileInput"
+          onchange="updateFileDisplay(); handleFileSubmission()"
+        />
         <div class="file-name-wrapper">
           <div class="file-name" id="fileName"></div>
-          <button id="removeButton" onclick="removeFile()">X</button>
+          <button id="removeButton" onclick="clearSelectedFile()">X</button>
         </div>
         <div
           class="warning-message"
@@ -181,7 +185,7 @@
           O arquivo selecionado precisa ser um arquivo .kml
         </div>
       </div>
-      <button id="nextPageButton" onclick="fileChanged(event)" disabled>
+      <button id="nextPageButton" onclick="storeDataAndRedirect()" disabled>
         <i class="fa-solid fa-arrow-right"></i>
       </button>
       <a id="hiddenLink" href="#" target="_blank" style="display: none"
@@ -190,14 +194,69 @@
     </div>
 
     <script>
-      // Handle drag and drop events at the document level
-      document.addEventListener("dragover", dragOverHandler);
-      document.addEventListener("dragleave", dragLeaveHandler);
-      document.addEventListener("drop", dropHandler);
-
+      // Global variable to hold the selected file
       let file;
+      // Global variable to hold the zones data object extracted from the .kml file
+      let zonesData;
 
-      function updateFileName() {
+      // Event listeners for drag-and-drop functionality
+      document.addEventListener("dragover", handleDragOver);
+      document.addEventListener("dragleave", handleDragLeave);
+      document.addEventListener("drop", handleFileDrop);
+
+      /**
+       * Handles the dragover event on the document.
+       * Adds a visual cue when a file is dragged over the upload area.
+       * @param {DragEvent} event - The dragover event.
+       */
+      function handleDragOver(event) {
+        event.preventDefault();
+        const uploadContainer = document.getElementById("uploadContainer");
+        uploadContainer.classList.add("dragover");
+      }
+
+      /**
+       * Handles the dragleave event on the document.
+       * Removes the visual cue when a file is dragged away from the upload area.
+       * @param {DragEvent} event - The dragleave event.
+       */
+      function handleDragLeave(event) {
+        const uploadContainer = document.getElementById("uploadContainer");
+        uploadContainer.classList.remove("dragover");
+      }
+
+      /**
+       * Handles the drop event on the document.
+       * Processes the dropped file, updates the UI, and initiates KML file parsing.
+       * @param {DragEvent} event - The drop event.
+       */
+      function handleFileDrop(event) {
+        event.preventDefault();
+        const input = document.getElementById("fileInput");
+        const uploadContainer = document.getElementById("uploadContainer");
+        if (event.dataTransfer.items) {
+          const items = event.dataTransfer.items;
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].kind === "file") {
+              const file = items[i].getAsFile();
+              input.files = event.dataTransfer.files;
+              updateFileDisplay();
+              handleFileSubmission(); // Initiates parsing of the KML file
+            }
+          }
+        } else {
+          input.files = event.dataTransfer.files;
+          updateFileDisplay();
+          handleFileSubmission(); // Initiates parsing of the KML file
+        }
+        uploadContainer.classList.remove("dragover");
+      }
+
+      /**
+       * Updates the UI to display the selected file's name and validates the file type.
+       * Enables or disables buttons based on validation.
+       */
+      function updateFileDisplay() {
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
         const nextPageButton = document.getElementById("nextPageButton");
@@ -227,12 +286,19 @@
         }
       }
 
-      function fileChanged(e) {
+      /**
+       * Handles the file submission when the user uploads a file.
+       * Initiates the KML file parsing process and stores the data in a global variable.
+       */
+      function handleFileSubmission() {
         file = document.getElementById("fileInput").files[0];
-        parseDocument(file);
+        parseKMLFile(file);
       }
 
-      function removeFile() {
+      /**
+       * Clears the selected file, resets the UI elements, and clears the stored zones data.
+       */
+      function clearSelectedFile() {
         const input = document.getElementById("fileInput");
         const fileNameDiv = document.getElementById("fileName");
         const nextPageButton = document.getElementById("nextPageButton");
@@ -244,28 +310,55 @@
         removeButton.style.display = "none";
         warningMessage.style.display = "none";
         file = null;
+        zonesData = null; // Clear the parsed zones data
       }
 
-      function parseDocument(file) {
+      /**
+       * Reads the selected KML file and initiates parsing of its content.
+       * Stores the extracted data in the global variable `zonesData`.
+       * @param {File} file - The KML file to be parsed.
+       */
+      function parseKMLFile(file) {
         const fileReader = new FileReader();
         fileReader.onload = async function (e) {
           console.log(e.target.result);
-          const result = await extractGoogleCoords(e.target.result);
-          console.log(result);
-          sendDataToSessionStorage(result);
+          zonesData = await parseKMLContent(e.target.result);
+          console.log(zonesData);
+          // Data is now stored in zonesData, ready for use upon clicking "Next Page"
+          alertUserOfMissingZones();
         };
         fileReader.readAsText(file);
       }
 
-      async function extractGoogleCoords(plainText) {
+      function alertUserOfMissingZones() {
+        if (zonesData.NFZs.polygons.length == 0 && zonesData.NFZs.paths.length == 0) {
+          alert("Nenhuma 'No-Fly Zone' detectada, tem certeza que quer continuar?");
+        }
+        if (zonesData.ROIs.polygons.length == 0 && zonesData.ROIs.paths.length == 0) {
+          alert("Nenhuma região de interesse detectada, tem certeza que quer continuar?");
+        }
+        if (zonesData.EMZs.polygons.length == 0 && zonesData.EMZs.paths.length == 0) {
+          alert("Nenhuma zona de emergência detectada, tem certeza que quer continuar?");
+        }
+        if (zonesData.home.lat == null || zonesData.home.lng == null ) {
+          alert("O ponto de início da missão não foi detectado, tem certeza que quer continuar?");
+        }
+      }
+
+      /**
+       * Parses the content of the KML file and extracts zones and home location data.
+       * @param {string} plainText - The content of the KML file as plain text.
+       * @returns {Object} An object containing the extracted data.
+       */
+      async function parseKMLContent(plainText) {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(plainText, "text/xml");
-        const PlacemarksData = {
+        const placemarksData = {
           NFZs: {
             polygons: [],
             paths: [],
           },
-          AOIs: {
+          ROIs: {
             polygons: [],
             paths: [],
           },
@@ -286,30 +379,35 @@
               .getElementsByTagName("name")[0]
               .textContent.trim();
             const placemarks = folder.getElementsByTagName("Placemark");
-            // Get all NFZs (No-Fly-Zones)
+            // Get all NFZs (No-Fly Zones)
             if (folderName == "NFZs") {
-              PlacemarksData.NFZs = getZones(placemarks);
+              placemarksData.NFZs = extractZones(placemarks);
             }
             // Get all ROIs (Regions of Interest)
             else if (folderName == "ROIs") {
-              PlacemarksData.AOIs = getZones(placemarks);
+              placemarksData.ROIs = extractZones(placemarks);
             }
             // Get all EMZs (Emergency Zones)
             else if (folderName == "EMZs") {
-              PlacemarksData.EMZs = getZones(placemarks);
+              placemarksData.EMZs = extractZones(placemarks);
             }
-            // Get Home
+            // Get Home location
             else if (folderName == "Home") {
-              PlacemarksData.home = getHome(placemarks);
+              placemarksData.home = extractHomeLocation(placemarks);
             }
           }
         } else {
           throw new Error("Error while parsing");
         }
-        return PlacemarksData;
+        return placemarksData;
       }
 
-      function getZones(placemarks) {
+      /**
+       * Extracts zone data (polygons and paths) from placemarks.
+       * @param {HTMLCollection} placemarks - Collection of Placemark elements.
+       * @returns {Object} An object containing arrays of polygons and paths.
+       */
+      function extractZones(placemarks) {
         const zones = {
           polygons: [],
           paths: [],
@@ -385,7 +483,12 @@
         return zones;
       }
 
-      function getHome(placemarks) {
+      /**
+       * Extracts the home location from placemarks.
+       * @param {HTMLCollection} placemarks - Collection of Placemark elements.
+       * @returns {Object} An object containing latitude and longitude of the home location.
+       */
+      function extractHomeLocation(placemarks) {
         let home = {
           lat: null,
           lng: null,
@@ -433,40 +536,12 @@
         return home;
       }
 
-      function sendDataToSessionStorage(data) {
-        sessionStorage.setItem("zonesData", JSON.stringify(data));
+      /**
+       * Stores the extracted data from `zonesData` in session storage and redirects to the next page.
+       */
+      function storeDataAndRedirect() {
+        sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
         window.location.href = "selectaircraftmosa.html";
-      }
-
-      function dropHandler(event) {
-        event.preventDefault();
-        const input = document.getElementById("fileInput");
-        const uploadContainer = document.getElementById("uploadContainer");
-        if (event.dataTransfer.items) {
-          const items = event.dataTransfer.items;
-          for (let i = 0; i < items.length; i++) {
-            if (items[i].kind === "file") {
-              const file = items[i].getAsFile();
-              input.files = event.dataTransfer.files;
-              updateFileName();
-            }
-          }
-        } else {
-          input.files = event.dataTransfer.files;
-          updateFileName();
-        }
-        uploadContainer.classList.remove("dragover");
-      }
-
-      function dragOverHandler(event) {
-        event.preventDefault();
-        const uploadContainer = document.getElementById("uploadContainer");
-        uploadContainer.classList.add("dragover");
-      }
-
-      function dragLeaveHandler(event) {
-        const uploadContainer = document.getElementById("uploadContainer");
-        uploadContainer.classList.remove("dragover");
       }
     </script>
   </body>

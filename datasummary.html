@@ -40,7 +40,7 @@
       color: tomato;
     }
 
-    .AOIs {
+    .ROIs {
       color: limegreen;
     }
 
@@ -75,9 +75,9 @@
       <h2 class="NFZs">No-Fly-Zones (NFZs)</h2>
       <p class="nfz" id="numNFZsZones"></p>
       <p class="nfz" id="numNFZsPaths"></p>
-      <h2 class="AOIs">Regiões de Interesse</h2>
-      <p class="aoi" id="numAOIsZones"></p>
-      <p class="aoi" id="numAOIsPaths"></p>
+      <h2 class="ROIs">Regiões de Interesse</h2>
+      <p class="aoi" id="numROIsZones"></p>
+      <p class="aoi" id="numROIsPaths"></p>
       <h2 class="EMZs">Zonas de Emergência (EMZs)</h2>
       <p class="emz" id="numEMZsZones"></p>
       <p class="emz" id="numEMZsPaths"></p>
@@ -93,6 +93,9 @@
       <button onclick="redirectToMissionSummary()">Ver missão</button>
     </div>
   </div>
+  <button class="style2" onclick="goBackToStart()">
+    Voltar ao início
+  </button>
   <script>
     window.onload = function () {
       const requestData = sessionStorage.getItem("requestData");
@@ -105,8 +108,8 @@
 
         const numNFZsZones = reqData.NFZs.polygons.length;
         const numNFZsPaths = reqData.NFZs.paths.length;
-        const numAOIsZones = reqData.AOIs.polygons.length;
-        const numAOIsPaths = reqData.AOIs.paths.length;
+        const numROIsZones = reqData.ROIs.polygons.length;
+        const numROIsPaths = reqData.ROIs.paths.length;
         const numEMZsZones = reqData.EMZs.polygons.length;
         const numEMZsPaths = reqData.EMZs.paths.length;
         const aircraftSelected = reqData.Aircraft;
@@ -116,8 +119,8 @@
 
         document.getElementById("numNFZsZones").textContent = `Número de Áreas: ${numNFZsZones}`;
         document.getElementById("numNFZsPaths").textContent = `Número de Trajetos: ${numNFZsPaths}`;
-        document.getElementById("numAOIsZones").textContent = `Número de Áreas: ${numAOIsZones}`;
-        document.getElementById("numAOIsPaths").textContent = `Número de Trajetos: ${numAOIsPaths}`;
+        document.getElementById("numROIsZones").textContent = `Número de Áreas: ${numROIsZones}`;
+        document.getElementById("numROIsPaths").textContent = `Número de Trajetos: ${numROIsPaths}`;
         document.getElementById("numEMZsZones").textContent = `Número de Áreas: ${numEMZsZones}`;
         document.getElementById("numEMZsPaths").textContent = `Número de Trajetos: ${numEMZsPaths}`;
         document.getElementById("lat").textContent = "Latitude: " + home.lat;
@@ -142,6 +145,10 @@
       const direction = decimalDegree >= 0 ? (isLat ? "N" : "E") : isLat ? "S" : "W";
 
       return `${degree}°${minutes}'${seconds}" ${direction}`;
+    }
+
+    function goBackToStart() {
+      window.location.href = "index.html";
     }
   </script>
 </body>
