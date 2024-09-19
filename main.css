@@ -1,6 +1,7 @@
 body {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   font-family: Roboto, sans-serif;
   background: linear-gradient(to top, #00051e, #020b45), no-repeat top center;
   color: #fff;
