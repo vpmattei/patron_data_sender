@@ -20,7 +20,8 @@
     <div id="container" class="container">
       <p class="error">Erro ao enviar os dados</p>
       <p id="errorMessage"></p>
-      <button onclick="goBack()">Tentar novamente</button>
+      <button onclick="tryAgain()">Tentar novamente</button>
+      <button onclick="goBackToStart()">Voltar ao início</button>
     </div>
     <script>
       window.onload = function () {
@@ -32,8 +33,12 @@
         console.log(data)
       };
 
-      function goBack() {
+      function tryAgain() {
         window.history.back();
+      }
+
+      function goBackToStart() {
+        window.location.href = "index.html";
       }
     </script>
   </body>
