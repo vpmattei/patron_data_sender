@@ -67,7 +67,7 @@ button {
   box-shadow: 0px 0px 15px #000724;
   min-height: 44px;
   min-width: 44px;
-
+  
   &.style2 {
     background-color: #DBE1FF;
     color: #1A3CDB;
@@ -76,6 +76,7 @@ button {
 
 button:hover {
   background-color: #e94560;
+  color: #fff;
 }
 
 .range-input {
