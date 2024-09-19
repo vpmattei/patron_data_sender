@@ -325,20 +325,24 @@
           zonesData = await parseKMLContent(e.target.result);
           console.log(zonesData);
           // Data is now stored in zonesData, ready for use upon clicking "Next Page"
-          if (zonesData.NFZs.polygons.length == 0 && zonesData.NFZs.paths.length == 0) {
-            alert("Nenhuma 'No-Fly Zone' detectada, tem certeza que quer continuar?");
-          }
-          if (zonesData.ROIs.polygons.length == 0 && zonesData.ROIs.paths.length == 0) {
-            alert("Nenhuma região de interesse detectada, tem certeza que quer continuar?");
-          }
-          if (zonesData.EMZs.polygons.length == 0 && zonesData.EMZs.paths.length == 0) {
-            alert("Nenhuma zona de emergência detectada, tem certeza que quer continuar?");
-          }
-          if (zonesData.home.lat == null || zonesData.home.lng == null ) {
-            alert("O ponto de início da missão não foi detectado, tem certeza que quer continuar?");
-          }
+          alertUserOfMissingZones();
         };
         fileReader.readAsText(file);
+      }
+
+      function alertUserOfMissingZones() {
+        if (zonesData.NFZs.polygons.length == 0 && zonesData.NFZs.paths.length == 0) {
+          alert("Nenhuma 'No-Fly Zone' detectada, tem certeza que quer continuar?");
+        }
+        if (zonesData.ROIs.polygons.length == 0 && zonesData.ROIs.paths.length == 0) {
+          alert("Nenhuma região de interesse detectada, tem certeza que quer continuar?");
+        }
+        if (zonesData.EMZs.polygons.length == 0 && zonesData.EMZs.paths.length == 0) {
+          alert("Nenhuma zona de emergência detectada, tem certeza que quer continuar?");
+        }
+        if (zonesData.home.lat == null || zonesData.home.lng == null ) {
+          alert("O ponto de início da missão não foi detectado, tem certeza que quer continuar?");
+        }
       }
 
       /**
