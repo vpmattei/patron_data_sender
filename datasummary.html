@@ -93,7 +93,7 @@
       <button onclick="redirectToMissionSummary()">Ver missão</button>
     </div>
   </div>
-  <button onclick="window.location.href = 'index.html';" disabled>
+  <button onclick="goBackToStart()" disabled>
     Voltar ao início
   </button>
   <script>
@@ -145,6 +145,10 @@
       const direction = decimalDegree >= 0 ? (isLat ? "N" : "E") : isLat ? "S" : "W";
 
       return `${degree}°${minutes}'${seconds}" ${direction}`;
+    }
+
+    function goBackToStart() {
+      window.location.href = 'index.html';
     }
   </script>
 </body>

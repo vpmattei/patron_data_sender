@@ -48,6 +48,41 @@
     </style>
   </head>
   <body>
+    <div id="container" class="container">
+      <div id="missionSummary">
+        <h1>Resumo da Missão</h1>
+        <h2>Missões</h2>
+        <p id="numMissions">Número de Missões:</p>
+        <div id="missionDetails"></div>
+        <h2>Informações da Missão</h2>
+        <p id="aircraftInfo"></p>
+        <p id="mosaInfo"></p>
+        <div class="buttons">
+          <button onclick="redirectToDataSummary()">
+            Ver resumo dos dados enviados
+          </button>
+          <button
+            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_kml/')"
+          >
+            <i class="fa-solid fa-download"></i> Baixar missão em .KML
+          </button>
+          <button
+            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_plan/')"
+          >
+            <i class="fa-solid fa-download"></i> Baixar missão em .plan
+          </button>
+          <button
+            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_waypoint/')"
+          >
+            <i class="fa-solid fa-download"></i> Baixar missão em .plan com
+            <i>Turnaround</i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button onclick="goBackToStart()" disabled>
+      Voltar ao início
+    </button>
     <script>
       window.onload = function () {
         const requestData = sessionStorage.getItem("requestData");
@@ -214,41 +249,10 @@
           console.error("No responseData found in session storage");
         }
       };
+
+      function goBackToStart() {
+        window.location.href = 'index.html';
+      }
     </script>
-    <div id="container" class="container">
-      <div id="missionSummary">
-        <h1>Resumo da Missão</h1>
-        <h2>Missões</h2>
-        <p id="numMissions">Número de Missões:</p>
-        <div id="missionDetails"></div>
-        <h2>Informações da Missão</h2>
-        <p id="aircraftInfo"></p>
-        <p id="mosaInfo"></p>
-        <div class="buttons">
-          <button onclick="redirectToDataSummary()">
-            Ver resumo dos dados enviados
-          </button>
-          <button
-            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_kml/')"
-          >
-            <i class="fa-solid fa-download"></i> Baixar missão em .KML
-          </button>
-          <button
-            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_plan/')"
-          >
-            <i class="fa-solid fa-download"></i> Baixar missão em .plan
-          </button>
-          <button
-            onclick="downloadFile('https://patronrouteplanner.zapto.org/api/v2/download_waypoint/')"
-          >
-            <i class="fa-solid fa-download"></i> Baixar missão em .plan com
-            <i>Turnaround</i>
-          </button>
-        </div>
-      </div>
-    </div>
-    <button onclick="window.location.href = 'index.html';" disabled>
-      Voltar ao início
-    </button>
   </body>
 </html>
