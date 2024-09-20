@@ -185,10 +185,14 @@
     <div id="missingZonesModal" class="modal">
       <div class="modal-content">
         <span class="close-button" onclick="closeModal()">&times;</span>
-        <h2>Missing Zones Information</h2>
+        <h2>Zonas não encontradas</h2>
         <p id="missingZonesMessage"></p>
+        <button onclick="openGoogleEarth()" class="adjust-button">
+          Ajustar zonas no Google Earth
+        </button>
         <button onclick="proceedAnyway()" class="proceed-button">
-          Proceed Anyway
+          Proceder mesmo assim
+          <i class="fa-solid fa-arrow-right"></i>
         </button>
       </div>
     </div>
@@ -327,63 +331,6 @@
           console.log(zonesData);
         };
         fileReader.readAsText(file);
-      }
-
-      /**
-       * Displays a modal popup if there are missing zones.
-       * Shows which zones are missing.
-       * @param {boolean} missingNFZ - Indicates if NFZs are missing.
-       * @param {boolean} missingROI - Indicates if ROIs are missing.
-       * @param {boolean} missingEMZ - Indicates if EMZs are missing.
-       * @param {boolean} missingHome - Indicates if Home location is missing.
-       */
-      function showPopupIfMissingZones(
-        missingNFZ,
-        missingROI,
-        missingEMZ,
-        missingHome
-      ) {
-        // Prepare the message to display
-        let message = "<p>Tem certeza que quer continuar? <br/>As seguintes zonas não foram encontradas:</p><ul>";
-        if (missingNFZ) message += "<li>No-Fly Zones (NFZs)</li>";
-        if (missingROI) message += "<li>Areas de Interesse (ROIs)</li>";
-        if (missingEMZ) message += "<li>Zonas de Emergência (EMZs)</li>";
-        if (missingHome) message += "<li>Local de início (Home)</li>";
-        message += "</ul>";
-
-        // Set the message in the modal
-        document.getElementById("missingZonesMessage").innerHTML = message;
-
-        // Show the modal
-        const modal = document.getElementById("missingZonesModal");
-        modal.style.display = "block";
-
-        // Close the modal when clicking outside of it
-        window.onclick = function (event) {
-          if (event.target == modal) {
-            closeModal();
-          }
-        };
-      }
-
-      /**
-       * Closes the modal popup.
-       */
-      function closeModal() {
-        const modal = document.getElementById("missingZonesModal");
-        modal.style.display = "none";
-        // Remove the window onclick listener
-        window.onclick = null;
-      }
-
-      /**
-       * Proceeds to store data and redirect even if zones are missing.
-       */
-      function proceedAnyway() {
-        closeModal();
-        // Store data and redirect
-        sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
-        window.location.href = "selectaircraftmosa.html";
       }
 
       /**
@@ -597,7 +544,7 @@
 
         if (missingNFZ || missingROI || missingEMZ || missingHome) {
           // Show the popup with missing zones information
-          showPopupIfMissingZones(
+          showPopupOfMissingZones(
             missingNFZ,
             missingROI,
             missingEMZ,
@@ -608,6 +555,72 @@
           sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
           window.location.href = "selectaircraftmosa.html";
         }
+      }
+
+      /**
+       * Displays a modal popup of the missing zones.
+       * Shows which zones are missing.
+       * @param {boolean} missingNFZ - Indicates if NFZs are missing.
+       * @param {boolean} missingROI - Indicates if ROIs are missing.
+       * @param {boolean} missingEMZ - Indicates if EMZs are missing.
+       * @param {boolean} missingHome - Indicates if Home location is missing.
+       */
+      function showPopupOfMissingZones(
+        missingNFZ,
+        missingROI,
+        missingEMZ,
+        missingHome
+      ) {
+        // Prepare the message to display
+        let message =
+          "<p>Tem certeza que quer continuar? <br/>As seguintes zonas não foram encontradas:</p><ul>";
+        if (missingNFZ) message += "<li>No-Fly Zones (NFZs)</li>";
+        if (missingROI) message += "<li>Areas de Interesse (ROIs)</li>";
+        if (missingEMZ) message += "<li>Zonas de Emergência (EMZs)</li>";
+        if (missingHome) message += "<li>Local de início (Home)</li>";
+        message +=
+          "</ul><p>Por favor adicione as zonas não encontradas dentro do Google Earth ou prossiga assim mesmo.</p>";
+
+        // Set the message in the modal
+        document.getElementById("missingZonesMessage").innerHTML = message;
+
+        // Show the modal
+        const modal = document.getElementById("missingZonesModal");
+        modal.style.display = "block";
+
+        // Close the modal when clicking outside of it
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            closeModal();
+          }
+        };
+      }
+
+      /**
+       * Closes the modal popup.
+       */
+      function closeModal() {
+        const modal = document.getElementById("missingZonesModal");
+        modal.style.display = "none";
+        // Remove the window onclick listener
+        window.onclick = null;
+      }
+
+      /**
+       * Proceeds to store data and redirect even if zones are missing.
+       */
+      function proceedAnyway() {
+        closeModal();
+        // Store data and redirect
+        sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
+        window.location.href = "selectaircraftmosa.html";
+      }
+
+      /**
+       * Opens a new tab to Google Earth for the user to adjust the missing zones.
+       */
+      function openGoogleEarth() {
+        window.open("https://earth.google.com/", "_blank");
       }
     </script>
   </body>

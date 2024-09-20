@@ -176,7 +176,15 @@ button:hover {
   text-decoration: none;
 }
 
-/* Proceed button in the modal */
+/* Buttons container */
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Adjust button in the modal */
+.adjust-button,
 .proceed-button {
   padding: 10px 20px;
   background-color: #1a3cdb;
@@ -185,9 +193,10 @@ button:hover {
   border-radius: 50px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 20px;
+  margin: 0 10px;
 }
 
+.adjust-button:hover,
 .proceed-button:hover {
   background-color: #e94560;
 }
@@ -197,4 +206,3 @@ button:hover {
   color: #d0d3df;
   text-align: left;
 }
-
