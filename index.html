@@ -344,7 +344,7 @@
         missingHome
       ) {
         // Prepare the message to display
-        let message = "<p>Tem certeza que quer continuar?<br/>As seguintes zonas não foram encontradas:</p><ul>";
+        let message = "<p>Tem certeza que quer continuar? <br/>As seguintes zonas não foram encontradas:</p><ul>";
         if (missingNFZ) message += "<li>No-Fly Zones (NFZs)</li>";
         if (missingROI) message += "<li>Areas de Interesse (ROIs)</li>";
         if (missingEMZ) message += "<li>Zonas de Emergência (EMZs)</li>";
@@ -587,8 +587,8 @@
           zonesData.NFZs.polygons.length === 0 &&
           zonesData.NFZs.paths.length === 0;
         const missingROI =
-          zonesData.AOIs.polygons.length === 0 &&
-          zonesData.AOIs.paths.length === 0;
+          zonesData.ROIs.polygons.length === 0 &&
+          zonesData.ROIs.paths.length === 0;
         const missingEMZ =
           zonesData.EMZs.polygons.length === 0 &&
           zonesData.EMZs.paths.length === 0;
