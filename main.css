@@ -133,3 +133,68 @@ button:hover {
   opacity: 1;
   transition: opacity 0.5s ease;
 }
+
+/* Modal container - hidden by default */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+/* Modal content box */
+.modal-content {
+  background-color: #00092f;
+  margin: 15% auto; /* Centered vertically and horizontally */
+  padding: 20px;
+  border: 1px solid #0f3460;
+  width: 80%;
+  max-width: 500px; /* Maximum width */
+  position: relative;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+}
+
+/* Close button */
+.close-button {
+  color: #e94560;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Proceed button in the modal */
+.proceed-button {
+  padding: 10px 20px;
+  background-color: #1a3cdb;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.proceed-button:hover {
+  background-color: #e94560;
+}
+
+#missingZonesMessage {
+  font-size: 16px;
+  color: #d0d3df;
+  text-align: left;
+}
+

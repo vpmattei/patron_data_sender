@@ -12,20 +12,8 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="main.css" />
     <style>
-      body {
-        font-family: Roboto, sans-serif;
-        background: linear-gradient(to top, #00051e, #020b45),
-          no-repeat top center;
-        color: #fff;
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
       .data-handler-container {
         display: flex;
         flex-direction: column;
@@ -193,6 +181,18 @@
       >
     </div>
 
+    <!-- Modal Structure -->
+    <div id="missingZonesModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" onclick="closeModal()">&times;</span>
+        <h2>Missing Zones Information</h2>
+        <p id="missingZonesMessage"></p>
+        <button onclick="proceedAnyway()" class="proceed-button">
+          Proceed Anyway
+        </button>
+      </div>
+    </div>
+
     <script>
       // Global variable to hold the selected file
       let file;
@@ -322,27 +322,68 @@
         const fileReader = new FileReader();
         fileReader.onload = async function (e) {
           console.log(e.target.result);
+          // Data is now stored in zonesData, ready for use upon clicking "Next Page"
           zonesData = await parseKMLContent(e.target.result);
           console.log(zonesData);
-          // Data is now stored in zonesData, ready for use upon clicking "Next Page"
-          alertUserOfMissingZones();
         };
         fileReader.readAsText(file);
       }
 
-      function alertUserOfMissingZones() {
-        if (zonesData.NFZs.polygons.length == 0 && zonesData.NFZs.paths.length == 0) {
-          alert("Nenhuma 'No-Fly Zone' detectada, tem certeza que quer continuar?");
-        }
-        if (zonesData.ROIs.polygons.length == 0 && zonesData.ROIs.paths.length == 0) {
-          alert("Nenhuma região de interesse detectada, tem certeza que quer continuar?");
-        }
-        if (zonesData.EMZs.polygons.length == 0 && zonesData.EMZs.paths.length == 0) {
-          alert("Nenhuma zona de emergência detectada, tem certeza que quer continuar?");
-        }
-        if (zonesData.home.lat == null || zonesData.home.lng == null ) {
-          alert("O ponto de início da missão não foi detectado, tem certeza que quer continuar?");
-        }
+      /**
+       * Displays a modal popup if there are missing zones.
+       * Shows which zones are missing.
+       * @param {boolean} missingNFZ - Indicates if NFZs are missing.
+       * @param {boolean} missingROI - Indicates if ROIs are missing.
+       * @param {boolean} missingEMZ - Indicates if EMZs are missing.
+       * @param {boolean} missingHome - Indicates if Home location is missing.
+       */
+      function showPopupIfMissingZones(
+        missingNFZ,
+        missingROI,
+        missingEMZ,
+        missingHome
+      ) {
+        // Prepare the message to display
+        let message = "<p>Tem certeza que quer continuar?<br/>As seguintes zonas não foram encontradas:</p><ul>";
+        if (missingNFZ) message += "<li>No-Fly Zones (NFZs)</li>";
+        if (missingROI) message += "<li>Areas de Interesse (ROIs)</li>";
+        if (missingEMZ) message += "<li>Zonas de Emergência (EMZs)</li>";
+        if (missingHome) message += "<li>Local de início (Home)</li>";
+        message += "</ul>";
+
+        // Set the message in the modal
+        document.getElementById("missingZonesMessage").innerHTML = message;
+
+        // Show the modal
+        const modal = document.getElementById("missingZonesModal");
+        modal.style.display = "block";
+
+        // Close the modal when clicking outside of it
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            closeModal();
+          }
+        };
+      }
+
+      /**
+       * Closes the modal popup.
+       */
+      function closeModal() {
+        const modal = document.getElementById("missingZonesModal");
+        modal.style.display = "none";
+        // Remove the window onclick listener
+        window.onclick = null;
+      }
+
+      /**
+       * Proceeds to store data and redirect even if zones are missing.
+       */
+      function proceedAnyway() {
+        closeModal();
+        // Store data and redirect
+        sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
+        window.location.href = "selectaircraftmosa.html";
       }
 
       /**
@@ -538,10 +579,35 @@
 
       /**
        * Stores the extracted data from `zonesData` in session storage and redirects to the next page.
+       * Before redirecting, it checks for missing zones and shows a popup if necessary.
        */
       function storeDataAndRedirect() {
-        sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
-        window.location.href = "selectaircraftmosa.html";
+        // Check for missing zones before proceeding
+        const missingNFZ =
+          zonesData.NFZs.polygons.length === 0 &&
+          zonesData.NFZs.paths.length === 0;
+        const missingROI =
+          zonesData.AOIs.polygons.length === 0 &&
+          zonesData.AOIs.paths.length === 0;
+        const missingEMZ =
+          zonesData.EMZs.polygons.length === 0 &&
+          zonesData.EMZs.paths.length === 0;
+        const missingHome =
+          zonesData.home.lat === null || zonesData.home.lng === null;
+
+        if (missingNFZ || missingROI || missingEMZ || missingHome) {
+          // Show the popup with missing zones information
+          showPopupIfMissingZones(
+            missingNFZ,
+            missingROI,
+            missingEMZ,
+            missingHome
+          );
+        } else {
+          // If no zones are missing, proceed to store data and redirect
+          sessionStorage.setItem("zonesData", JSON.stringify(zonesData));
+          window.location.href = "selectaircraftmosa.html";
+        }
       }
     </script>
   </body>
